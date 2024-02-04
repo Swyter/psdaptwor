@@ -2018,6 +2018,11 @@
     (uuid ff860a20-2712-488c-8aac-f4f36766dc61)
   )
 
+  (text "Half-duplex M-LVDS transceivers >1Mbps\n- SN65MLVD204A - Multipoint-LVDS Line Driver and Receiver (100 Mbps / 50 MHz)\n- NB3N200S     - 3.3 V Differential Multipoint Low Voltage M-LVDS Driver Receiver (200 Mbps / 100 MHz)\n- ADN4690E     - 3.3 V, 100 Mbps (50 MHz), Half-Duplex, High Speed M-LVDS Transceiver"
+    (at 90.17 24.13 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid cf326370-fd6b-4b4a-aca0-590332f097aa)
+  )
   (text "DFP_D Type-C receptacle pin assignments - DP_BR - 2-lane\n           [D]    [D flipped]       [F]    [F flipped]\nA11-A10    ML0    SSRX              ML0    SSRX\nA02-A03    SSTX   ML1               SSTX   ML1\nB11-B10    SSRX   ML0               SSRX   ML0\nB02-B03    ML1    SSTX              ML1    SSTX"
     (at 173.99 76.2 0)
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold) (justify left bottom))

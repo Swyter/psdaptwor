@@ -672,11 +672,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiKCIsICJDYXBSaWdodENob2ljZSI6ICIvIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIjUuNiIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJ0ZXN0IiwgIlBhZGRpbmdCb3R0b21DdHJsIjogIjUiLCAiUGFkZGluZ0xlZnRDdHJsIjogIjUiLCAiUGFkZGluZ1JpZ2h0Q3RybCI6ICI1IiwgIlBhZGRpbmdUb3BDdHJsIjogIjUiLCAiV2lkdGhDdHJsIjogIiJ9")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-65BD64CF" (at 0 -7.958243) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 63a92165-a613-4907-b615-ff14cb251824)
     )
     (fp_text value "G***" (at 0 7.958243) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 5fff3d4f-9f5d-4176-b54c-cc1dbe08288a)
     )
     (fp_poly
@@ -888,5 +888,24 @@
 
       (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS") (tstamp 7c098e28-eae0-43f2-ad88-2f05730bbc5a))
   )
+
+  (gr_line (start 109.22 55.88) (end 109.22 40.64)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 0575aec8-3ca9-418e-a2c6-0ea4aa9d54be))
+  (gr_line (start 91.44 38.1) (end 91.44 53.34)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 4bf842a0-dd5f-44fa-b0bd-fd66f127be4c))
+  (gr_line (start 139.7 20.32) (end 127 12.7)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 531496d5-6c75-4eb5-a78a-b592ea5487cd))
+  (gr_line (start 109.22 40.64) (end 91.44 38.1)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 933d8546-4874-4139-af22-251630cb1b03))
+  (gr_line (start 124.46 73.66) (end 139.7 20.32)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp ae3fec87-ebac-49c9-b386-53a094281a6a))
+  (gr_line (start 12.7 12.7) (end 12.7 71.12)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp d4b5f311-6807-4c1a-81c7-d2fbdf8291fd))
+  (gr_line (start 127 12.7) (end 12.7 12.7)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp db7c81f8-4453-40d3-a515-7178e66a6e28))
+  (gr_line (start 12.7 71.12) (end 124.46 73.66)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp e2caa245-e3b3-4168-a2a6-f71c2adfcb73))
+  (gr_line (start 91.44 53.34) (end 109.22 55.88)
+    (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp ef347aca-7907-4f24-9f1d-6cd80b8a2608))
 
 )
