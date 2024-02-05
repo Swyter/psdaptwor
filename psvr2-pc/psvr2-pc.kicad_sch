@@ -2802,7 +2802,7 @@
     (property "Value" "USB3_B_Micro" (at 24.13 80.01 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Samacsys:2169900002" (at 31.75 91.44 0)
+    (property "Footprint" "Samacsys:692622030100" (at 31.75 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 31.75 90.17 0)
