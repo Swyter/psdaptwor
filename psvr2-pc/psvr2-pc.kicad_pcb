@@ -9788,6 +9788,8 @@
     )
 
     (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS") (tstamp 739e00ea-9104-4b21-9549-5d3c4b00f3d8))
+  (gr_line (start 72.88 25.07) (end 37.85 25.07)
+    (stroke (width 0.1) (type default)) (layer "F.SilkS") (tstamp 8580734c-3b37-444b-aa54-7d9eb464224b))
   (gr_poly
     (pts
       (xy 92.467396 72.924929)
