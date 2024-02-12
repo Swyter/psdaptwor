@@ -467,7 +467,7 @@
       },
       {
         "netclass": "High speed differential",
-        "pattern": "/SSTX*"
+        "pattern": "/SS*"
       }
     ]
   },
