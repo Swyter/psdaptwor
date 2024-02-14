@@ -2790,12 +2790,12 @@
     (effects (font (size 1.27 1.27) (thickness 0.254) bold) (justify left bottom))
     (uuid 18483078-1057-4e67-97e3-01e3dec7aeb9)
   )
-  (text "DISPLAYPORT AUX CHANNEL\nM-LVDS TO TTL CONVERSION\n(MAN-IN-THE-MIDDLE)"
-    (at 325.755 127.635 0)
+  (text "DISPLAYPORT AUX CHANNEL\nM-LVDS TO TTL CONVERSION BY @JX35\n(MAN-IN-THE-MIDDLE)"
+    (at 323.215 127.635 0)
     (effects (font (size 1.27 1.27) bold) (justify left bottom))
     (uuid 27140eba-9e63-49c8-b564-f5868473b18a)
   )
-  (text "swy: we need to cross over RX<-TX in the board\n     do it at this point, each cable at either side also does this\n     keep in mind that +/- *can* be swapped to make routing easier"
+  (text "swy: we need to cross over RX<-TX in the adapter board because we work as a third cable\n     do it at this point, each cable at either side also does this, so we cancel it out\n     keep in mind that +/- *can* be swapped to make routing easier"
     (at 56.515 101.6 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 2d69393d-ec11-434f-a3ae-b29e2e3f2162)
@@ -2817,7 +2817,7 @@
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold) (justify left bottom))
     (uuid 575b7909-0cf5-40ec-a753-2d98f9a35722)
   )
-  (text "ONLY TOGGLE 5V WHEN A DEVICE GETS PLUGGED\nONLY RAISE IT TO 12V AFTER POWER DELIVERY NEGOTIATION"
+  (text "ONLY TOGGLE 5V WHEN A USB DEVICE GETS PLUGGED IN PSVR2 PORT\nONLY RAISE IT TO 12V AFTER POWER DELIVERY NEGOTIATION"
     (at 178.435 125.73 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid a22886f4-8e74-4942-825f-f6f938f55029)
@@ -2831,7 +2831,7 @@
     (effects (font (size 1.27 1.27) (thickness 0.254) bold) (justify left bottom))
     (uuid caaf1b02-fb76-4b3a-ba83-bcce2f7c331a)
   )
-  (text "Pin/DP source side   DP sink side\n    recep.  plug     plug  recept.\n 1  ML0_P   ML0_P    ML3_N   ML3_N  (hi-speed lanes in cable are crossed over)\n 3  ML0_N   ML0_N    ML3_P   ML3_P\n 4  ML1_P   ML1_P    ML2_N   ML2_N\n 6  ML1_N   ML1_N    ML2_P   ML2_P\n 7  ML2_P   ML2_P    ML1_N   ML1_N\n 9  ML2_N   ML2_N    ML1_P   ML1_P\n10  ML3_P   ML3_P    ML0_N   ML0_N\n12  ML3_N   ML3_N    ML0_P   ML0_P\n15  AUX_P   AUX_P    AUX_P   AUX_P  (AUX ones aren't crossed here, but are in the USB-C cable)\n17  AUX_N   AUX_N    AUX_N   AUX_N\n18    HPD     HPD      HPD     HPD"
+  (text "Pin/DP source side   DP sink side\n    recep.  plug     plug  recept.\n 1  ML0_P   ML0_P    ML3_N   ML3_N  (hi-speed lanes in cable are crossed over)\n 3  ML0_N   ML0_N    ML3_P   ML3_P\n 4  ML1_P   ML1_P    ML2_N   ML2_N\n 6  ML1_N   ML1_N    ML2_P   ML2_P\n 7  ML2_P   ML2_P    ML1_N   ML1_N\n 9  ML2_N   ML2_N    ML1_P   ML1_P\n10  ML3_P   ML3_P    ML0_N   ML0_N\n12  ML3_N   ML3_N    ML0_P   ML0_P\n15  AUX_P   AUX_P    AUX_P   AUX_P  (AUX ones aren't crossed here, but are in the USB-C cable)\n17  AUX_N   AUX_N    AUX_N   AUX_N\n18    HPD     HPD      HPD     HPD  NOTE: unlike USB3, +/- can't be swapped in DP to make routing easier"
     (at 57.15 68.58 0)
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold italic) (justify left bottom))
     (uuid cc7b274c-a697-448f-bb68-2cfad02e582e)
@@ -2868,7 +2868,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 06988ceb-e7e0-4c88-bae2-f119552f8ddc)
   )
-  (label "DP_BUS{AUX_P AUX_N ML0_P ML0_N ML1_P ML1_N}" (at 66.04 77.47 0) (fields_autoplaced)
+  (label "DP_BUS{PC_AUX_P PC_AUX_N ML0_P ML0_N ML1_P ML1_N}" (at 66.04 77.47 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 070ca322-4642-46cf-83ea-d2e89e6209fd)
   )
