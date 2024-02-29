@@ -4651,7 +4651,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid ed054381-2db4-4dd3-937e-c4d6b77ec331)
   )
-  (label "PWR_12V_VOLT_SENSE" (at 208.915 149.225 90) (fields_autoplaced)
+  (label "DC_JACK_VOLT_SENSE" (at 208.915 149.225 90) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid ed3f5e41-f4e5-4e70-abca-a812c51cce99)
   )
