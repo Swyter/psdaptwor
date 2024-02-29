@@ -6225,7 +6225,7 @@
   )
 
   (symbol (lib_id "Connector:Conn_01x02_Pin") (at 208.915 205.105 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 77f3e167-5f16-4cd2-aca1-dbd0671a7f26)
     (property "Reference" "J5" (at 205.74 208.915 90)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6233,7 +6233,7 @@
     (property "Value" "Conn_01x02_Pin" (at 205.74 206.375 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Connector:Banana_Jack_2Pin" (at 208.915 205.105 0)
+    (property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical" (at 208.915 205.105 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 208.915 205.105 0)
