@@ -488,7 +488,7 @@
       },
       {
         "netclass": "Power",
-        "pattern": "/DC*"
+        "pattern": "/DC_JACK_12V*"
       },
       {
         "netclass": "Power",
