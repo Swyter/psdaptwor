@@ -5260,7 +5260,7 @@
     (property "Value" "SW_Push" (at 143.51 231.14 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Button_Switch_SMD:SW_Tactile_SPST_NO_Straight_CK_PTS636Sx25SMTRLFS" (at 143.51 231.14 0)
+    (property "Footprint" "JLC2KiCad_lib:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2" (at 143.51 231.14 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 143.51 231.14 0)
