@@ -79,7 +79,7 @@
   (pad "14" smd rect (at 1.449962 1.337567 180) (size 1.8 1.9) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp ecf03ce1-74c3-4882-a110-b2cda0a088b3))
   (pad "15" smd rect (at 3.950089 1.337567) (size 1.8 1.9) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 629583eb-5450-474c-b0d7-5a3669647374))
   (pad "16" smd rect (at 6.550038 1.337567) (size 2.3 1.9) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 4233ffa2-3158-4c0d-a82c-925bbd243982))
-  (model "./JLC2KiCad_lib/footprint/packages3d/USB-SMD_692622030100.step"
+  (model "./JLC2KiCad_lib.pretty/packages3d/USB-SMD_692622030100.step"
     (offset (xyz 0.39 -1.3 1.3))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

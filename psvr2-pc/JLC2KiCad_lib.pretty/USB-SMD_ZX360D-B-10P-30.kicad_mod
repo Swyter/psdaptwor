@@ -42,7 +42,7 @@
   (fp_text user REF** (at 0.005004 8.21999) (layer F.Fab)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (model ./JLC2KiCad_lib/footprint/packages3d/USB-SMD_ZX360D-B-10P-30.step
+  (model ./JLC2KiCad_lib.pretty/packages3d/USB-SMD_ZX360D-B-10P-30.step
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
