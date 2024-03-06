@@ -18,3 +18,8 @@ No, it is not a typo. I needed something that could be unique and searchable, an
 Sony products (like the memory card USB one) seem to call their adapters adaptors, so I follow their naming scheme.  
 
 You can call it the *pee ess virtual adaptor*. :)
+
+# Credits and acknowledgements
+* *`@JX35`*: For the *DisplayPort AUX emulator* board this is heavily based on, and uncountable references, ideas and suggestions.
+* *`@mrandTX`*: Hardware reviews, many suggestions, things I wouldn't have even thought about and encouragement.
+* *`@thaytan`, `@ivry.vr` and many others around the Monado project*: Crucial research and development about how the PS®VR2 hardware and software actually functions. Standing on the shoulders of giants, this just cobbles stuff together. Many thanks.
