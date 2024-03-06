@@ -11,3 +11,10 @@ The final aim of the project is that one assembled adapter should cost less than
 More or less like this, the dimensions are around *6.3 x 10.2 centimeters*; much tinier than it looks like here:
 
 ![imagen](https://github.com/Swyter/psvadaptwor/assets/690187/e1b8fb57-2e93-4819-80d6-2b483eae86f4)
+
+# What is that name? Do you know how to spell?
+
+No, it is not a typo. I needed something that could be unique and searchable, and contained `PS`, `VR` and `two` somewhere.
+Sony products (like the memory card USB one) seem to call their adapters adaptors, so I follow their naming scheme.  
+
+You can call it the *pee ess virtual adaptor*. :)
