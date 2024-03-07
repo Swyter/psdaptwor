@@ -1,4 +1,4 @@
-# What is `psvadaptwor`?
+# What is `psdaptwor`?
 An experimental PC adapter for EPCOT —the PlayStation®VR2 headset— that splits USB Type-C® into DisplayPort video, USB 3 data and power. Intercepting its DP-AUX/SBU and CC side channels.
 
 > **Important**: *This is my first electronics project and I am still ironing the whole thing out, I have gotten here with a lot of hints and reviews from people who actually know what they are doing, but it should be considered non-functional, for now.*
@@ -10,7 +10,7 @@ The final aim of the project is that one assembled adapter should cost less than
 # What does it look like?
 More or less like this, the dimensions are around *6.3 x 10.2 centimeters*; much tinier than it looks like here:
 
-![imagen](https://github.com/Swyter/psvadaptwor/assets/690187/e1b8fb57-2e93-4819-80d6-2b483eae86f4)
+![imagen](https://github.com/Swyter/psdaptwor/assets/690187/e1b8fb57-2e93-4819-80d6-2b483eae86f4)
 
 # What is that name? Do you know how to spell?
 
