@@ -6556,7 +6556,7 @@
   )
 
   (symbol (lib_id "Connector:Conn_01x03_Pin") (at 208.915 205.105 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp yes)
     (uuid 77f3e167-5f16-4cd2-aca1-dbd0671a7f26)
     (property "Reference" "J5" (at 205.74 208.915 90)
       (effects (font (size 1.27 1.27)) (justify left))
