@@ -4361,7 +4361,7 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 083a58a5-eb62-4f48-9e63-ffa6b3cfae6c)
   )
-  (text "(forward volt=2.1V, forward current=15mA)\n~= Resistor Value 80Ω (aiming for 40% relative lumin.)"
+  (text "(forward volt=2.1V, current at ~40% luminance=15mA)\n~= resistor value 80Ω "
     (at 376.555 23.495 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 087c0860-2475-47e1-9967-7291b366e9f0)
@@ -4442,12 +4442,12 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 8cb89fdd-def8-4297-a2d2-590790a9b06b)
   )
-  (text "(forward volt=2.0V, forward current=15mA)\n~= Resistor Value 80Ω (aiming for 40% relative lumin.)"
+  (text "(forward volt=2.0V, current at ~40% luminance=15mA)\n~= resistor value 86Ω "
     (at 377.19 49.53 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 9414d994-e8d4-425d-9fcb-22e5a8831330)
   )
-  (text "(forward volt=2.7V, forward current=10mA)\n~= Resistor Value 60Ω (aiming for 40% relative lumin.)"
+  (text "(forward volt=2.7V, current at ~40% luminance=10mA)\n~= resistor value 60Ω"
     (at 376.555 36.195 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 9714eeb6-c491-4e9b-8db7-3f79b9e8c0fb)
