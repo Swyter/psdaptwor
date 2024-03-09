@@ -5587,7 +5587,7 @@
   )
 
   (symbol (lib_id "Connector:TestPoint_Small") (at 161.29 118.11 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp yes) (fields_autoplaced)
     (uuid 2f41e9f5-6057-4635-a84f-022ab7ea0b29)
     (property "Reference" "TP1" (at 162.56 119.38 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
@@ -8188,7 +8188,7 @@
   )
 
   (symbol (lib_id "Connector:TestPoint_Small") (at 161.29 114.935 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp yes) (fields_autoplaced)
     (uuid c8287574-1fd4-4a23-8f8d-1568302f3330)
     (property "Reference" "TP2" (at 162.56 116.205 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
