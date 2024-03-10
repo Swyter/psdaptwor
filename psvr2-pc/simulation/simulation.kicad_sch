@@ -2830,72 +2830,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 36.83 73.66 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "41262563-89e1-448d-b7f3-b47617e17b92")
-		(property "Reference" "#PWR018"
-			(at 36.83 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 36.83 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 36.83 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 36.83 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 36.83 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "2e3bd783-18da-41a1-bdcd-2186b8bb6dba")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "#PWR018")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 116.84 33.02 0)
 		(mirror x)
@@ -3225,17 +3159,8 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "PMOS"
+		(property "Sim.Device" "SUBCKT"
 			(at 106.68 116.205 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 106.68 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3245,6 +3170,24 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 106.68 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 106.68 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
+			(at 106.68 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3322,17 +3265,8 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "PMOS"
+		(property "Sim.Device" "SUBCKT"
 			(at 109.855 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 111.76 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3342,6 +3276,24 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 107.95 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 92.71 97.79 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
+			(at 92.71 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3620,17 +3572,8 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "PMOS"
+		(property "Sim.Device" "SUBCKT"
 			(at 87.63 47.625 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 87.63 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3640,6 +3583,24 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 87.63 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 87.63 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
+			(at 87.63 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4224,7 +4185,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "NPN"
+		(property "Sim.Device" "SUBCKT"
 			(at 139.7 146.05 0)
 			(effects
 				(font
@@ -4233,7 +4194,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Type" "GUMMELPOON"
+		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 139.7 146.05 0)
 			(effects
 				(font
@@ -4242,7 +4203,16 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Pins" "1=C 2=B 3=E"
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 139.7 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
 			(at 139.7 146.05 0)
 			(effects
 				(font
@@ -4497,72 +4467,6 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "Q3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 36.83 57.15 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "cf577adf-f1b0-4163-ad80-dcc83d30b768")
-		(property "Reference" "#PWR017"
-			(at 36.83 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 36.83 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b158cff6-151b-45cf-baf0-c39709cb3353")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -5086,17 +4990,8 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "PMOS"
+		(property "Sim.Device" "SUBCKT"
 			(at 116.205 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 118.11 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5106,6 +5001,24 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 114.3 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 99.06 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
+			(at 99.06 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5415,17 +5328,8 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "PMOS"
+		(property "Sim.Device" "SUBCKT"
 			(at 109.855 110.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 111.76 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5435,6 +5339,24 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 107.95 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\si2301cds_ps_revb\\si2301cds_ps Rev B.lib"
+			(at 92.71 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "Si2301CDS"
+			(at 92.71 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
