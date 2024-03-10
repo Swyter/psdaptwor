@@ -425,266 +425,6 @@
 				)
 			)
 		)
-		(symbol "PCM_Transistor_MOSFET_AKL:Si2301CDS"
-			(pin_names hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "Q"
-				(at 5.08 1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "Si2301CDS"
-				(at 5.08 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD_AKL:SOT-23"
-				(at 5.08 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://www.tme.eu/Document/519498819e90b407235adccdceba4014/SI2301CDS-T1-GE3.pdf"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "SOT-23 P-MOSFET enchancement mode transistor, 20V, 3.1A, 1.6W, Alternate KiCAD Library"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "enchancement mosfet pmosfet p-mosfet pmos p-mos emos emosfet Si2301CDS"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Si2301CDS_0_1"
-				(polyline
-					(pts
-						(xy 0.254 -1.905) (xy 0.254 1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.254 1.27) (xy -2.54 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 -2.286) (xy 0.762 -1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 -1.778) (xy 2.54 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 -0.508) (xy 0.762 0.508)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 1.27) (xy 0.762 2.286)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 1.778) (xy 2.54 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 2.54 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 0) (xy 0.762 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.286 0) (xy 1.27 -0.381) (xy 1.27 0.381) (xy 2.286 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-			)
-			(symbol "Si2301CDS_1_1"
-				(circle
-					(center 1.651 0)
-					(radius 2.794)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(circle
-					(center 2.54 1.778)
-					(radius 0.1778)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(pin input line
-					(at -3.81 1.27 0)
-					(length 2.54)
-					(name "G"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "S"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "D"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Simulation_SPICE:PMOS"
 			(pin_numbers hide)
 			(pin_names
@@ -1542,16 +1282,22 @@
 		(uuid "1a32450a-000d-49f1-a593-cabd089b729b")
 	)
 	(junction
-		(at 137.16 127)
+		(at 85.09 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "1d3e103c-bb1c-456c-b0c8-eaab45389aa5")
+		(uuid "2d5a9178-152a-4e76-96c8-0c3e5252ec14")
 	)
 	(junction
-		(at 85.725 95.25)
+		(at 137.16 128.27)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "2831dfe0-ecc5-4693-965b-b1bff15f1a56")
+		(uuid "49d0fcc8-8f9c-407e-938a-c183fa1a8890")
+	)
+	(junction
+		(at 85.09 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4b112b0a-1713-4382-bfa4-e3d2ceeac2d3")
 	)
 	(junction
 		(at 85.725 57.785)
@@ -1560,16 +1306,16 @@
 		(uuid "6a3eea76-b6f2-4991-bdb0-98b4af333b39")
 	)
 	(junction
-		(at 104.14 112.395)
+		(at 76.835 113.03)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "764d0b86-6b98-4ee7-b423-95d7ed947713")
+	)
+	(junction
+		(at 104.14 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7e7ad15c-ec5f-48e7-b708-6dbb3780c43c")
-	)
-	(junction
-		(at 76.835 112.395)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "864f767f-c0e9-406c-b27a-6df1f1b7b345")
 	)
 	(junction
 		(at 107.95 29.21)
@@ -1588,12 +1334,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c272f096-3b02-4dd8-8ec2-023962769d15")
-	)
-	(junction
-		(at 85.725 112.395)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "da6cc958-0b74-4b7b-8a2b-7b2e728c36d7")
 	)
 	(junction
 		(at 107.95 21.59)
@@ -1627,6 +1367,16 @@
 	)
 	(wire
 		(pts
+			(xy 85.09 106.68) (xy 85.09 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08de96bd-b723-44de-8277-e39430898c19")
+	)
+	(wire
+		(pts
 			(xy 85.725 21.59) (xy 73.025 21.59)
 		)
 		(stroke
@@ -1647,16 +1397,6 @@
 	)
 	(wire
 		(pts
-			(xy 93.345 102.235) (xy 93.345 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "136ddefd-495a-4315-85d7-a1b738f9b7ef")
-	)
-	(wire
-		(pts
 			(xy 73.025 31.75) (xy 73.025 33.02)
 		)
 		(stroke
@@ -1664,6 +1404,26 @@
 			(type default)
 		)
 		(uuid "17e9f131-769b-4296-9d8c-2bc527a59898")
+	)
+	(wire
+		(pts
+			(xy 99.06 163.83) (xy 99.06 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d694ee1-520a-4027-83c6-091a4351669b")
+	)
+	(wire
+		(pts
+			(xy 97.79 113.03) (xy 104.14 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "23a72585-9191-431e-b8d0-3ae38e83fee9")
 	)
 	(wire
 		(pts
@@ -1677,13 +1437,13 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 133.35) (xy 144.78 132.715)
+			(xy 137.16 125.73) (xy 137.16 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2a4c2626-9b8e-4b11-ab7f-975f4b49017c")
+		(uuid "298352ed-cf50-4a21-a394-e0b810d7cb81")
 	)
 	(wire
 		(pts
@@ -1697,16 +1457,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.835 113.03) (xy 76.835 112.395)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "307510ea-4dfa-451c-8582-c1bcfdef582c")
-	)
-	(wire
-		(pts
 			(xy 95.885 21.59) (xy 107.95 21.59)
 		)
 		(stroke
@@ -1717,7 +1467,7 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 112.395) (xy 104.14 95.25)
+			(xy 104.14 113.03) (xy 104.14 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1737,17 +1487,7 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 122.555) (xy 104.14 120.015)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3c14f9ff-f756-4c08-a59a-3fe2635cdc8e")
-	)
-	(wire
-		(pts
-			(xy 152.4 133.35) (xy 160.02 133.35)
+			(xy 153.67 133.35) (xy 160.02 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1757,7 +1497,7 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 126.365) (xy 110.49 126.365)
+			(xy 120.65 128.27) (xy 111.76 128.27)
 		)
 		(stroke
 			(width 0)
@@ -1784,26 +1524,6 @@
 			(type default)
 		)
 		(uuid "49b8b019-2e96-4b3b-adf1-6ad977baaa8b")
-	)
-	(wire
-		(pts
-			(xy 100.33 148.59) (xy 102.235 132.715)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4ac4a725-a987-457c-afb5-3a30b7c744d8")
-	)
-	(wire
-		(pts
-			(xy 160.02 133.35) (xy 160.02 132.715)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4b8314b4-9241-49ea-885f-3a39344c586e")
 	)
 	(wire
 		(pts
@@ -1834,16 +1554,6 @@
 			(type default)
 		)
 		(uuid "5378678b-53da-45d1-9b43-d9e2b2f254e8")
-	)
-	(wire
-		(pts
-			(xy 85.725 95.25) (xy 86.995 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e7dabec-bf48-4fee-bfe1-02cab38f1c1b")
 	)
 	(wire
 		(pts
@@ -1887,7 +1597,7 @@
 	)
 	(wire
 		(pts
-			(xy 97.155 95.25) (xy 104.14 95.25)
+			(xy 97.79 95.25) (xy 104.14 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1917,7 +1627,27 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 93.98) (xy 43.18 93.98)
+			(xy 76.835 111.76) (xy 76.835 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75ff05b6-ac66-4c86-90eb-9444de733bd7")
+	)
+	(wire
+		(pts
+			(xy 92.71 105.41) (xy 88.9 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75ffbcf1-f5f5-46cd-8aeb-e4e0020fc637")
+	)
+	(wire
+		(pts
+			(xy 21.59 115.57) (xy 24.13 115.57)
 		)
 		(stroke
 			(width 0)
@@ -1927,17 +1657,17 @@
 	)
 	(wire
 		(pts
-			(xy 137.16 127) (xy 137.16 127.635)
+			(xy 104.14 133.35) (xy 104.14 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "78709a28-8bad-4587-9c51-825b3531ec91")
+		(uuid "80cfde9c-35a8-465f-b71d-941a0f0cee44")
 	)
 	(wire
 		(pts
-			(xy 102.235 132.715) (xy 104.14 132.715)
+			(xy 101.6 134.62) (xy 104.14 134.62)
 		)
 		(stroke
 			(width 0)
@@ -1977,23 +1707,23 @@
 	)
 	(wire
 		(pts
-			(xy 93.345 104.775) (xy 93.345 106.045)
+			(xy 104.14 120.015) (xy 104.14 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "888f6b2c-6f9e-4408-9216-ff4dcf5f3d9b")
+		(uuid "88838455-1b6c-4cf3-9d14-b2fb89608172")
 	)
 	(wire
 		(pts
-			(xy 104.14 112.395) (xy 97.155 112.395)
+			(xy 85.09 95.25) (xy 87.63 95.25)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8f87b1d2-2205-4d46-8cef-61c409e2bb27")
+		(uuid "8fcfd770-f001-44f2-8456-5c5e0d145a28")
 	)
 	(wire
 		(pts
@@ -2004,6 +1734,16 @@
 			(type default)
 		)
 		(uuid "902f4ed8-74a6-457e-897c-3a55b194639f")
+	)
+	(wire
+		(pts
+			(xy 101.6 134.62) (xy 101.6 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "907fc53a-7b97-4223-9d59-aa00099a09af")
 	)
 	(wire
 		(pts
@@ -2037,27 +1777,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.725 95.25) (xy 85.725 100.965)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "989c48c4-c7d0-4cc6-b405-298fe713dc47")
-	)
-	(wire
-		(pts
-			(xy 85.725 106.68) (xy 85.725 112.395)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9eb6bb79-49db-40aa-8b83-67e8f4a60919")
-	)
-	(wire
-		(pts
-			(xy 123.19 127) (xy 137.16 127)
+			(xy 125.73 128.27) (xy 137.16 128.27)
 		)
 		(stroke
 			(width 0)
@@ -2067,13 +1787,13 @@
 	)
 	(wire
 		(pts
-			(xy 93.345 104.775) (xy 85.725 100.965)
+			(xy 88.9 105.41) (xy 85.09 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ae990a92-ac5c-439b-94c1-0ca056ee128a")
+		(uuid "a1618fda-6e3f-4833-9c4b-2b2896f559c9")
 	)
 	(wire
 		(pts
@@ -2097,7 +1817,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 133.35) (xy 144.78 133.35)
+			(xy 148.59 133.35) (xy 144.78 133.35)
 		)
 		(stroke
 			(width 0)
@@ -2117,17 +1837,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.835 111.76) (xy 76.835 112.395)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bec5a657-49d7-4e31-a9f6-988f57ac9308")
-	)
-	(wire
-		(pts
-			(xy 104.14 112.395) (xy 104.14 120.015)
+			(xy 104.14 113.03) (xy 104.14 120.015)
 		)
 		(stroke
 			(width 0)
@@ -2137,37 +1847,17 @@
 	)
 	(wire
 		(pts
-			(xy 93.345 102.235) (xy 85.725 106.68)
+			(xy 101.6 156.21) (xy 99.06 158.75)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c9070816-a468-4651-8197-ea399591b575")
+		(uuid "cef659fe-45e3-4d34-aeb0-de3e68ffb1c6")
 	)
 	(wire
 		(pts
-			(xy 85.725 112.395) (xy 86.995 112.395)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cb2f445c-07b7-49ba-9e10-d706d7ddbe3d")
-	)
-	(wire
-		(pts
-			(xy 137.16 125.73) (xy 137.16 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cc1223eb-c490-4d92-abc5-3edc34efd8ed")
-	)
-	(wire
-		(pts
-			(xy 76.835 95.25) (xy 85.725 95.25)
+			(xy 76.835 95.25) (xy 85.09 95.25)
 		)
 		(stroke
 			(width 0)
@@ -2187,7 +1877,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.195 132.715) (xy 160.02 132.715)
+			(xy 171.45 133.35) (xy 160.02 133.35)
 		)
 		(stroke
 			(width 0)
@@ -2217,13 +1907,43 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 127) (xy 116.84 126.365)
+			(xy 85.09 95.25) (xy 85.09 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e06a89cc-de1b-4e0d-98f0-707fbcab67e5")
+		(uuid "e40d1e61-f1ca-4dc1-95cb-5104fac08085")
+	)
+	(wire
+		(pts
+			(xy 85.09 106.68) (xy 88.9 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea1d75fa-9e6d-4599-8902-6a3cd864c9d4")
+	)
+	(wire
+		(pts
+			(xy 92.71 102.87) (xy 88.9 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f42dc5ef-a4a3-49b1-959b-430dc081f204")
+	)
+	(wire
+		(pts
+			(xy 85.09 113.03) (xy 87.63 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f51937ae-cf09-49f8-95a8-55c45f86fa03")
 	)
 	(wire
 		(pts
@@ -2257,7 +1977,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.835 112.395) (xy 85.725 112.395)
+			(xy 76.835 113.03) (xy 85.09 113.03)
 		)
 		(stroke
 			(width 0)
@@ -2320,7 +2040,7 @@
 		(uuid "98dbca08-ea1f-48e7-b987-5f8701550402")
 	)
 	(label "PC_VBUS_5V"
-		(at 43.18 93.98 0)
+		(at 24.13 115.57 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2408,7 +2128,7 @@
 		(uuid "82de1a90-69df-4502-a7fc-669418d2809c")
 	)
 	(label "HMD_VBUS"
-		(at 100.33 148.59 180)
+		(at 99.06 175.26 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2430,7 +2150,7 @@
 		(uuid "b8482f5d-303c-46fe-bcfb-e07a1ee1d643")
 	)
 	(label "HMD_ENABLE_VBUS"
-		(at 163.195 132.715 0)
+		(at 171.45 133.35 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2461,140 +2181,6 @@
 			(justify right bottom)
 		)
 		(uuid "d5322be9-8503-4179-853c-15ebb3f33428")
-	)
-	(symbol
-		(lib_id "PCM_Transistor_MOSFET_AKL:Si2301CDS")
-		(at 92.075 97.79 270)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "061551bc-bc91-4e69-bb6e-a847a9105c37")
-		(property "Reference" "Q2"
-			(at 98.425 97.155 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Si2301CDS"
-			(at 98.425 99.695 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 89.535 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.tme.eu/Document/519498819e90b407235adccdceba4014/SI2301CDS-T1-GE3.pdf"
-			(at 92.075 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 92.075 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "JLCPCB Rotation Offset" "180"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part #" "C10487"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Mfr. Part #" "SI2301CDS-T1-GE3"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" "1=D 2=G 3=S"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 92.075 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c6e468ef-b4cc-4e96-93e5-5a2788fce1c5")
-		)
-		(pin "2"
-			(uuid "ccb264d6-09f8-45ab-8074-9b78fc47b205")
-		)
-		(pin "3"
-			(uuid "09a0f14f-0aa8-4637-891a-3c8d5268e2fe")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "Q2")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "Device:R_Small")
@@ -2665,35 +2251,17 @@
 		)
 	)
 	(symbol
-		(lib_id "PCM_Transistor_BJT_AKL:PN2222A")
-		(at 139.7 132.715 0)
-		(mirror y)
+		(lib_id "power:+3V3")
+		(at 21.59 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "15b05d4f-1b23-4101-8503-3ae7dbc1697a")
-		(property "Reference" "Q7"
-			(at 134.62 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PN2222A"
-			(at 134.62 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 134.62 130.175 0)
+		(fields_autoplaced yes)
+		(uuid "0d1d22d5-2add-4ce6-a31e-798a13c597ac")
+		(property "Reference" "#PWR013"
+			(at 21.59 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2701,8 +2269,16 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.tme.eu/Document/6fc4d4bda1f7e53502c9939019a00d3f/PN2222ABU.pdf"
-			(at 139.7 132.715 0)
+		(property "Value" "+5V"
+			(at 21.59 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 21.59 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2710,8 +2286,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 139.7 132.715 0)
+		(property "Datasheet" ""
+			(at 21.59 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2719,64 +2295,22 @@
 				(hide yes)
 			)
 		)
-		(property "JLCPCB Rotation Offset" "180"
-			(at 139.7 132.715 0)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 21.59 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 139.7 132.715 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 139.7 132.715 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" "1=D 2=G 3=S"
-			(at 139.7 132.715 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 139.7 132.715 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "3"
-			(uuid "57ff5baf-ebbc-4256-8d8f-989ff4a5b33d")
 		)
 		(pin "1"
-			(uuid "65a3195d-68f8-41e3-84fd-203ec86e3d85")
-		)
-		(pin "2"
-			(uuid "262d362e-0197-49ca-affb-a79089621506")
+			(uuid "81fa0adf-d250-424d-a9e8-57ea8123d835")
 		)
 		(instances
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "Q7")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -2947,7 +2481,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 149.86 133.35 90)
+		(at 151.13 133.35 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2956,7 +2490,7 @@
 		(dnp no)
 		(uuid "2bfbd627-c2aa-43b4-8b95-a4c6ce99067e")
 		(property "Reference" "R11"
-			(at 149.86 135.89 90)
+			(at 151.13 135.89 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2964,7 +2498,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 149.86 131.445 90)
+			(at 151.13 131.445 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2972,7 +2506,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 149.86 133.35 0)
+			(at 151.13 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2981,7 +2515,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 149.86 133.35 0)
+			(at 151.13 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2990,7 +2524,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 149.86 133.35 0)
+			(at 151.13 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3228,7 +2762,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 22.86 90.17 0)
+		(at 21.59 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3237,7 +2771,7 @@
 		(fields_autoplaced yes)
 		(uuid "585bc450-8465-40b9-bc80-623fb6b140ca")
 		(property "Reference" "#PWR014"
-			(at 22.86 93.98 0)
+			(at 21.59 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3246,7 +2780,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 22.86 85.09 0)
+			(at 21.59 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3254,7 +2788,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 22.86 90.17 0)
+			(at 21.59 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3263,7 +2797,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 22.86 90.17 0)
+			(at 21.59 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3272,7 +2806,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 22.86 90.17 0)
+			(at 21.59 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3287,6 +2821,72 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "#PWR014")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 36.83 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5bb9c232-b514-4e24-9657-8d300ee06197")
+		(property "Reference" "#PWR08"
+			(at 36.83 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 36.83 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 36.83 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ea720a20-6787-4404-8ca8-d6c4deb70dfa")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -3360,41 +2960,32 @@
 		)
 	)
 	(symbol
-		(lib_id "PCM_Transistor_MOSFET_AKL:Si2301CDS")
-		(at 92.075 109.855 270)
+		(lib_id "Simulation_SPICE:PMOS")
+		(at 106.68 128.27 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "66f23642-6577-417d-a28d-2d0d2387e461")
+		(uuid "5eae1f96-33e2-406c-9328-8c99b284a8a0")
 		(property "Reference" "Q5"
-			(at 98.425 109.22 90)
+			(at 97.79 128.27 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Si2301CDS"
-			(at 98.425 106.68 90)
+		(property "Value" "PMOS"
+			(at 100.33 128.27 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 89.535 114.935 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.tme.eu/Document/519498819e90b407235adccdceba4014/SI2301CDS-T1-GE3.pdf"
-			(at 92.075 109.855 0)
+		(property "Footprint" ""
+			(at 101.6 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3402,8 +2993,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 92.075 109.855 0)
+		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs"
+			(at 106.68 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3411,26 +3002,8 @@
 				(hide yes)
 			)
 		)
-		(property "JLCPCB Rotation Offset" "180"
-			(at 92.075 109.855 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part #" "C10487"
-			(at 92.075 109.855 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Mfr. Part #" "SI2301CDS-T1-GE3"
-			(at 92.075 109.855 90)
+		(property "Description" "P-MOSFET transistor, drain/source/gate"
+			(at 106.68 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3439,7 +3012,7 @@
 			)
 		)
 		(property "Sim.Device" "PMOS"
-			(at 92.075 109.855 90)
+			(at 106.68 111.125 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3448,7 +3021,7 @@
 			)
 		)
 		(property "Sim.Type" "VDMOS"
-			(at 92.075 109.855 90)
+			(at 106.68 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3457,7 +3030,186 @@
 			)
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
-			(at 92.075 109.855 90)
+			(at 106.68 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "aaa4ba1f-12fb-4e79-801b-83512a6c126e")
+		)
+		(pin "3"
+			(uuid "18a36cc8-0c92-4f2a-9d80-60d08a7d71aa")
+		)
+		(pin "1"
+			(uuid "982a65a7-de66-4085-b455-f48d31a1c89b")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "Q5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "PCM_Transistor_BJT_AKL:PN2222A")
+		(at 139.7 133.35 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5ed682d3-9825-4831-9163-50f338986748")
+		(property "Reference" "Q6"
+			(at 134.62 133.985 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PN2222A"
+			(at 134.62 136.525 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 134.62 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.tme.eu/Document/6fc4d4bda1f7e53502c9939019a00d3f/PN2222ABU.pdf"
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "NPN"
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" "GUMMELPOON"
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=C 2=B 3=E"
+			(at 139.7 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "0f3c768d-e1b8-48d6-822e-db94ee035e6f")
+		)
+		(pin "1"
+			(uuid "1edf65a9-bec4-4a4c-952b-c289542742e7")
+		)
+		(pin "2"
+			(uuid "fc507a75-46e0-4c32-8d09-4a2f13846323")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "Q6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Simulation_SPICE:PMOS")
+		(at 92.71 97.79 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "624d346a-bbdb-4e92-bc74-44aaf0f7ea57")
+		(property "Reference" "Q8"
+			(at 92.71 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PMOS"
+			(at 92.71 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 90.17 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs"
+			(at 105.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "P-MOSFET transistor, drain/source/gate"
+			(at 92.71 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3466,7 +3218,7 @@
 			)
 		)
 		(property "Sim.Device" "PMOS"
-			(at 92.075 109.855 90)
+			(at 109.855 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3474,19 +3226,37 @@
 				(hide yes)
 			)
 		)
-		(pin "1"
-			(uuid "f5cd6e23-854a-4da4-904c-9323ac8aac1b")
+		(property "Sim.Type" "VDMOS"
+			(at 111.76 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=D 2=G 3=S"
+			(at 107.95 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "2"
-			(uuid "c0151476-c2e8-4066-8490-aa4b50234635")
+			(uuid "a3d98dfe-1ff1-4271-8fed-996c055e0a41")
 		)
 		(pin "3"
-			(uuid "45fcb352-2a16-4bed-8152-9291bc923cc4")
+			(uuid "82e9f505-8a96-4d5c-b50b-b7d5f3cc1a32")
+		)
+		(pin "1"
+			(uuid "0b6b0ddd-0337-41f7-a1fa-85732ed4eae7")
 		)
 		(instances
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "Q5")
+					(reference "Q8")
 					(unit 1)
 				)
 			)
@@ -3555,6 +3325,72 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 36.83 57.15 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6ee186c7-e741-49e7-a629-1f09ce3d14d3")
+		(property "Reference" "#PWR016"
+			(at 36.83 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 36.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 36.83 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "41f6b48c-a740-4459-b3ca-479d2217d1b7")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -3860,7 +3696,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 120.65 127 90)
+		(at 123.19 128.27 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3869,7 +3705,7 @@
 		(dnp no)
 		(uuid "8747bef1-05e5-4d84-af1d-7728df738fd4")
 		(property "Reference" "R9"
-			(at 120.65 129.54 90)
+			(at 123.19 130.81 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3877,7 +3713,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 120.65 125.095 90)
+			(at 123.19 126.365 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3885,7 +3721,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 120.65 127 0)
+			(at 123.19 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3894,7 +3730,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 120.65 127 0)
+			(at 123.19 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3903,7 +3739,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 120.65 127 0)
+			(at 123.19 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4105,7 +3941,7 @@
 	)
 	(symbol
 		(lib_id "Simulation_SPICE:VDC")
-		(at 22.86 95.25 0)
+		(at 21.59 92.71 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4113,7 +3949,7 @@
 		(dnp no)
 		(uuid "8f0866c3-d3f4-41bd-a1cb-b08abdef8f74")
 		(property "Reference" "V3"
-			(at 26.67 93.8501 0)
+			(at 25.4 91.3101 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4122,7 +3958,7 @@
 			)
 		)
 		(property "Value" "5"
-			(at 26.67 96.3901 0)
+			(at 25.4 93.8501 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4131,7 +3967,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4140,7 +3976,7 @@
 			)
 		)
 		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#sec_Independent_Sources_for"
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4149,7 +3985,7 @@
 			)
 		)
 		(property "Description" "Voltage source, DC"
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4158,7 +3994,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=+ 2=-"
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4167,7 +4003,7 @@
 			)
 		)
 		(property "Sim.Type" "DC"
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4176,7 +4012,7 @@
 			)
 		)
 		(property "Sim.Device" "V"
-			(at 22.86 95.25 0)
+			(at 21.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4261,6 +4097,74 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "#PWR04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 99.06 161.29 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b1361707-7b53-4441-96fe-78ee8177638e")
+		(property "Reference" "R13"
+			(at 104.775 161.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 102.235 161.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 99.06 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 99.06 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 99.06 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "35b3ad41-3cb5-49cf-b21e-f3b9f90c7069")
+		)
+		(pin "2"
+			(uuid "0d32f7d7-e068-4a65-aa85-92ca75b53d30")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -4401,210 +4305,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 36.83 57.15 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d38345a6-213b-4ca5-9d84-bf773941e6b5")
-		(property "Reference" "#PWR08"
-			(at 36.83 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 36.83 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 36.83 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c738ef5e-35cb-49b3-b5fe-0e09bac053df")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "#PWR08")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "PCM_Transistor_MOSFET_AKL:Si2301CDS")
-		(at 106.68 127.635 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d3ef36bf-b13b-41bd-b150-51b94c9407dd")
-		(property "Reference" "Q6"
-			(at 100.33 126.365 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Si2301CDS"
-			(at 100.33 128.905 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 101.6 130.175 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.tme.eu/Document/519498819e90b407235adccdceba4014/SI2301CDS-T1-GE3.pdf"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "JLCPCB Rotation Offset" "180"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part #" "C10487"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Mfr. Part #" "SI2301CDS-T1-GE3"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "VDMOS"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" "1=D 2=G 3=S"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "PMOS"
-			(at 106.68 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "7a559ecd-2948-4911-a74f-ed088c4acf97")
-		)
-		(pin "3"
-			(uuid "efb53252-8a1e-46bb-ac8a-020379db3692")
-		)
-		(pin "1"
-			(uuid "c95161e5-acd8-4bc6-a287-d0286b5353d5")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "Q6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
-		(at 22.86 100.33 0)
+		(at 21.59 97.79 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4613,7 +4315,7 @@
 		(fields_autoplaced yes)
 		(uuid "d40e814a-5201-4a01-8e9a-ce419cb0e363")
 		(property "Reference" "#PWR015"
-			(at 22.86 106.68 0)
+			(at 21.59 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4622,7 +4324,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 22.86 105.41 0)
+			(at 21.59 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4630,7 +4332,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 22.86 100.33 0)
+			(at 21.59 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4639,7 +4341,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 22.86 100.33 0)
+			(at 21.59 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4648,7 +4350,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 22.86 100.33 0)
+			(at 21.59 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5264,7 +4966,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 137.16 137.795 0)
+		(at 137.16 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5273,7 +4975,7 @@
 		(fields_autoplaced yes)
 		(uuid "f2c7313d-74d3-418d-a313-5bcc19cd5f81")
 		(property "Reference" "#PWR011"
-			(at 137.16 144.145 0)
+			(at 137.16 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5282,7 +4984,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 137.16 142.875 0)
+			(at 137.16 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5290,7 +4992,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 137.16 137.795 0)
+			(at 137.16 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5299,7 +5001,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 137.16 137.795 0)
+			(at 137.16 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5308,7 +5010,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 137.16 137.795 0)
+			(at 137.16 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5323,6 +5025,104 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "#PWR011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Simulation_SPICE:PMOS")
+		(at 92.71 110.49 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f4bb79c9-847e-4a0d-b798-b1b96cfd05f5")
+		(property "Reference" "Q2"
+			(at 92.71 119.38 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PMOS"
+			(at 92.71 116.84 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 90.17 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs"
+			(at 105.41 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "P-MOSFET transistor, drain/source/gate"
+			(at 92.71 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "PMOS"
+			(at 109.855 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" "VDMOS"
+			(at 111.76 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=D 2=G 3=S"
+			(at 107.95 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d15024e9-eec2-43b4-a749-83b14543183a")
+		)
+		(pin "3"
+			(uuid "52b7bcdc-baec-403f-8e00-d50e21fc2364")
+		)
+		(pin "1"
+			(uuid "d43ccf1e-1f29-425c-b474-ea0273c65da9")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "Q2")
 					(unit 1)
 				)
 			)
