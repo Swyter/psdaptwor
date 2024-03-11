@@ -4523,6 +4523,11 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 4821bf33-df83-4ac2-9836-1bcee62de01e)
   )
+  (text "FIXME: MAKE SURE THAT THE LENGTH BETWEEN BOTH DP LANES IS IDENTICAL,\nMAKE SURE THE DISTANCE BETWEEN PAIRS IS GOOD, KEEP IMPEDANCE IN CHECK."
+    (at 85.725 83.82 0)
+    (effects (font (size 1.27 1.27) (color 255 0 0 1)) (justify left bottom))
+    (uuid 50313e33-fd06-4368-b668-cd679018808f)
+  )
   (text "<TO PSVR2>" (at 352.425 205.74 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 566f9971-1657-45a1-a378-6cf4ca0406fd)
@@ -4583,6 +4588,11 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid bd1761ac-a189-42d9-a3a1-a8624d9793e3)
   )
+  (text "FIXME: CHOOSE A REAL NPN COMPONENT,\nADD GATE RESISTOR DIVIDERS LIKE IN THE SIMULATION,\n\nSIMULATE TVS NEXT TO DC JACK:\nhttps://jlcpcb.com/partdetail/ProtekDevices-PSM712_LFT7/C32677\n\nhttps://discord.com/channels/556527313823596604/711640844222070836/1216596755655819304"
+    (at 63.5 224.79 0)
+    (effects (font (size 1.27 1.27) (color 255 0 0 1)) (justify left bottom))
+    (uuid c247035e-6bd0-4195-a680-ff7f342b7cff)
+  )
   (text "PSVR2\nUSB 2.0\n(OPTIONAL)" (at 184.15 133.985 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid ca40e888-9273-46e7-84ba-a559a3da3d5b)
@@ -4596,6 +4606,11 @@
     (at 57.15 68.58 0)
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold italic) (justify left bottom))
     (uuid cc7b274c-a697-448f-bb68-2cfad02e582e)
+  )
+  (text "FIXME: MAKE VALUES BIGGER/DIMMER\n\nhttps://discord.com/channels/556527313823596604/711640844222070836/1215877059121774693"
+    (at 364.49 60.96 0)
+    (effects (font (size 1.27 1.27) (color 255 0 0 1)) (justify left bottom))
+    (uuid ce6c0b5a-1306-4b05-a5d0-78757ea434b2)
   )
   (text "Half-duplex M-LVDS transceivers >1Mbps, 3.3 LVTTL\n- SN65MLVD200A - 100 Mbps, Clock Frequencies up to 50 MHz\n- SN65MLVD204A - Multipoint-LVDS Line Driver and Receiver (100 Mbps / 50 MHz)\n- SN65MLVD204B - 100 Mbps, Clock Frequencies up to 50 MHz, Type-2 Receiver Provides an Offset Threshold to Detect Open-Circuit and Idle-Bus Conditions\n- SN65MLVD206B - 200 Mbps, clock frequencies up to 100 MHz\n- NB3N200S     - 3.3 V Differential Multipoint Low Voltage M-LVDS Driver Receiver (200 Mbps / 100 MHz)\n- ADN4690E     - 3.3 V, 100 Mbps (50 MHz), Half-Duplex, High Speed M-LVDS Transceiver"
     (at 77.47 30.48 0)

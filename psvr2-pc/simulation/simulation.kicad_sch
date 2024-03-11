@@ -5,6 +5,151 @@
 	(uuid "f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Device:D_Zener"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "D_Zener"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Zener diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "D_Zener_0_1"
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.27) (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_Zener_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Device:R"
 			(pin_numbers hide)
 			(pin_names
@@ -1382,6 +1527,12 @@
 		(uuid "764d0b86-6b98-4ee7-b423-95d7ed947713")
 	)
 	(junction
+		(at 81.28 21.59)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "83308c51-3619-4677-a3e8-a7b3f3603a30")
+	)
+	(junction
 		(at 116.84 29.21)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1461,7 +1612,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 21.59) (xy 93.98 21.59)
+			(xy 68.58 21.59) (xy 81.28 21.59)
 		)
 		(stroke
 			(width 0)
@@ -1588,6 +1739,16 @@
 			(type default)
 		)
 		(uuid "3b41a9d4-1ae2-4c74-9460-bee9a926f613")
+	)
+	(wire
+		(pts
+			(xy 77.47 10.16) (xy 81.28 10.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b420861-341f-4c99-906a-a9c63d9c8e2e")
 	)
 	(wire
 		(pts
@@ -1841,6 +2002,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 19.05) (xy 81.28 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a02776a-2bd0-405e-9cda-7cc712d15496")
+	)
+	(wire
+		(pts
 			(xy 85.09 78.74) (xy 85.09 83.82)
 		)
 		(stroke
@@ -1908,6 +2079,26 @@
 			(type default)
 		)
 		(uuid "b80d7c98-3831-45ee-be99-661901096887")
+	)
+	(wire
+		(pts
+			(xy 81.28 10.16) (xy 81.28 11.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b99b2539-bd32-4b73-813d-0c11d82496fa")
+	)
+	(wire
+		(pts
+			(xy 81.28 21.59) (xy 93.98 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c78cb0b1-259c-4ee7-ac1e-5d9a34f00fd2")
 	)
 	(wire
 		(pts
@@ -2099,6 +2290,16 @@
 			(justify left bottom)
 		)
 		(uuid "52f80fc4-bd8d-4d7d-8271-d35e05fa18ac")
+	)
+	(text "Add a resistor voltage divider like this to protect the gate and avoid Vgs (gate-source pin difference)\ngetting too big and burning the MOSFET, usually the Vds limit (-30V) is bigger than the Vgs one (here ±12V):\nThat way we can withstand until 30V, in theory.\n\nhttps://electronics.stackexchange.com/a/61699/196330\nhttps://aosmd.com/sites/default/files/res/datasheets/AO3401A.pdf"
+		(exclude_from_sim no)
+		(at 64.516 27.94 0)
+		(effects
+			(font
+				(size 0.7 0.7)
+			)
+		)
+		(uuid "70c34298-2700-4585-b294-51e573cc400b")
 	)
 	(text "High-side switch; VBUS is off by\ndefault until USB is plugged-in."
 		(exclude_from_sim no)
@@ -2605,6 +2806,72 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 77.47 10.16 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "28383cbf-df46-453c-89b3-b8c394de3a36")
+		(property "Reference" "#PWR018"
+			(at 77.47 16.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 77.47 10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 77.47 10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3dcf30e5-4183-4863-9f13-3cc49e8859aa")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -4146,6 +4413,94 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener")
+		(at 81.28 15.24 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8826916f-06d6-4f0b-8e36-a32346c629a6")
+		(property "Reference" "D1"
+			(at 83.82 13.9699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "D_Zener"
+			(at 83.82 16.5099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode"
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=K, 2=A"
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b5400603-0612-485e-819c-dbbfb15493eb")
+		)
+		(pin "1"
+			(uuid "16deba23-7426-4578-8751-8f19fce94477")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small")
 		(at 119.38 55.88 0)
 		(mirror x)
@@ -4163,7 +4518,7 @@
 				)
 			)
 		)
-		(property "Value" "10K"
+		(property "Value" "20K"
 			(at 122.555 55.88 90)
 			(effects
 				(font
