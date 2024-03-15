@@ -3229,7 +3229,7 @@
 				)
 			)
 		)
-		(property "Value" "7500"
+		(property "Value" "7K5"
 			(at 120.015 33.02 90)
 			(effects
 				(font
@@ -4415,15 +4415,15 @@
 	(symbol
 		(lib_id "Device:D_Zener")
 		(at 81.28 15.24 270)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "8826916f-06d6-4f0b-8e36-a32346c629a6")
 		(property "Reference" "D1"
-			(at 83.82 13.9699 90)
+			(at 83.82 16.5101 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4432,7 +4432,7 @@
 			)
 		)
 		(property "Value" "D_Zener"
-			(at 83.82 16.5099 90)
+			(at 83.82 13.9701 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4449,7 +4449,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://protekdevices.com/wp-content/uploads/datasheets/psm712.pdf"
 			(at 81.28 15.24 0)
 			(effects
 				(font
@@ -4458,7 +4458,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Zener diode"
+		(property "Description" "TVS ARRAY"
 			(at 81.28 15.24 0)
 			(effects
 				(font
@@ -4476,7 +4476,16 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Pins" "1=K, 2=A"
+		(property "Sim.Pins" "1=A 2=K"
+			(at 81.28 15.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Params" "m=0.33 is=1e-13 rs=0.40 n=1 tt=1E vj=.6 cjp=1.23e-10 eg=1.11 bv=13.3 ibv=0.001"
 			(at 81.28 15.24 0)
 			(effects
 				(font
