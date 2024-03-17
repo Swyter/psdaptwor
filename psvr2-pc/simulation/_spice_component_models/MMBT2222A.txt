@@ -1,0 +1,92 @@
+***********************************************************
+*
+* MMBT2222A
+*
+* Nexperia
+*
+* Switching NPN Transistor
+* IC   = 600 mA
+* VCEO = 40 V 
+* hFE  = min. 40 @ 10V/500mA
+*
+*
+*
+*
+* Package pinning does not match Spice model pinning.
+* Package: SOT 23
+* 
+* Package Pin 1: Base
+* Package Pin 2: Emitter
+* Package Pin 3: Collector
+*
+*
+* Extraction date (week/year): 08/2022
+* Spicemodel includes temperature dependency
+*
+**********************************************************
+*#
+* Please note: Diode D1, Transistor Q2 and Resistor RQ
+* are dedicated to improve modeling of quasi
+* saturation area and reverse mode operation
+* and do not reflect physical devices.
+*
+.SUBCKT MMBT2222A 1 2 3
+Q1 1 2 3 MAIN 0.8689
+RQ 1 11 38.53
+Q2 11 2 3 MAIN 0.1311
+D1 2 1 DIODE
+*
+.MODEL MAIN NPN
++ IS = 1.739E-14
++ NF = 0.9609
++ ISE = 7.98E-15
++ NE = 1.339
++ BF = 260
++ IKF = 0.1527
++ VAF = 10.21
++ NR = 0.9577
++ ISC = 2.882E-15
++ NC = 1.268
++ BR = 5.7
++ IKR = 1.527
++ VAR = 25
++ RB = 58
++ IRB = 0.0003
++ RBM = 2.5
++ RE = 0.2044
++ RC = 0.3651
++ XTB = 0.3793
++ EG = 1.11
++ XTI = -7.536
++ CJE = 2.521E-11
++ VJE = 0.6848
++ MJE = 0.3217
++ TF = 4.303E-10
++ XTF = 10.53
++ VTF = 2
++ ITF = 0.68
++ PTF = 0
++ CJC = 5.958E-12
++ VJC = 0.6251
++ MJC = 0.3364
++ XCJC = 1
++ TR = 7E-08
++ CJS = 0
++ VJS = 0.75
++ MJS = 0.333
++ FC = 0.9552
+.MODEL DIODE D
++ IS = 8.947E-13
++ N = 1.113
++ BV = 1000
++ IBV = 0.001
++ RS = 159.3
++ CJO = 0
++ VJ = 1
++ M = 0.5
++ FC = 0
++ TT = 0
++ EG = 1.11
++ XTI = 3
+.ENDS
+*

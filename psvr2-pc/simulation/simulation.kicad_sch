@@ -2427,6 +2427,16 @@
 		)
 		(uuid "fd2a8391-127d-4c26-9d13-54c5cb455b4e")
 	)
+	(text "Remove the 3V3 symbol from either/both to toggle each pin and\nclick on the play button in the DC operating point\nsimulation or -48 to +48V DC sweep. Requires KiCad v8+."
+		(exclude_from_sim no)
+		(at 54.102 62.484 0)
+		(effects
+			(font
+				(size 0.7 0.7)
+			)
+		)
+		(uuid "0cd2bc76-869e-4bb2-9dab-4822ac7ace9e")
+	)
 	(text "Voltage divider from 24V to 3.3V,\nso that we can measure it via RP2040 ADC:\nhttps://damien.douxchamps.net/elec/resdiv/"
 		(exclude_from_sim no)
 		(at 125.095 32.385 0)
@@ -2776,7 +2786,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "13"
+		(property "Value" "12.6"
 			(at 25.4 32.8901 0)
 			(effects
 				(font
@@ -3226,7 +3236,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\MMBT2222A.txt"
+		(property "Sim.Library" "./_spice_component_models/MMBT2222A.txt"
 			(at 143.51 146.05 0)
 			(effects
 				(font
@@ -3728,7 +3738,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\AO3401A.mod"
+		(property "Sim.Library" "./_spice_component_models/AO3401A.mod"
 			(at 106.68 133.35 0)
 			(effects
 				(font
@@ -3852,7 +3862,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\AO3401A.mod"
+		(property "Sim.Library" "./_spice_component_models/AO3401A.mod"
 			(at 92.71 97.79 90)
 			(effects
 				(font
@@ -4141,7 +4151,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\AO3401A.mod"
+		(property "Sim.Library" "./_spice_component_models/AO3401A.mod"
 			(at 87.63 64.77 0)
 			(effects
 				(font
@@ -5374,7 +5384,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\MMBT2222A.txt"
+		(property "Sim.Library" "./_spice_component_models/MMBT2222A.txt"
 			(at 121.92 78.74 0)
 			(effects
 				(font
@@ -6113,7 +6123,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\AO3401A.mod"
+		(property "Sim.Library" "./_spice_component_models/AO3401A.mod"
 			(at 99.06 24.13 0)
 			(effects
 				(font
@@ -6354,7 +6364,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\AO3401A.mod"
+		(property "Sim.Library" "./_spice_component_models/AO3401A.mod"
 			(at 92.71 110.49 0)
 			(effects
 				(font
