@@ -10,7 +10,7 @@ The final aim of the project is that one assembled adapter should cost less than
 # What does it look like?
 More or less like this, the dimensions are around *6.3 x 10.2 centimeters*; much tinier than it looks like here:
 
-![imagen](https://github.com/Swyter/psdaptwor/assets/690187/e1b8fb57-2e93-4819-80d6-2b483eae86f4)
+![imagen](./psvr2-pc/psvr2-pc.png)
 
 # What is that name? Do you know how to spell?
 
