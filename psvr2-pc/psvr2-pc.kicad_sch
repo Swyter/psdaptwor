@@ -4605,6 +4605,11 @@
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold) (justify left bottom))
     (uuid 575b7909-0cf5-40ec-a753-2d98f9a35722)
   )
+  (text "Use gate resistor dividers to withstand\nbigger voltage ranges between pins."
+    (at 35.56 151.765 0)
+    (effects (font (size 0.5 0.5)) (justify left bottom))
+    (uuid 59d8f08c-54be-4ace-a551-b89104735a0e)
+  )
   (text "High-side switch; 12V is off by default,\nonly letting 5V through until our headset\nasks for more via Power Delivery."
     (at 62.865 169.545 0)
     (effects (font (size 0.8 0.8)) (justify left bottom))
@@ -4615,7 +4620,7 @@
     (uuid 74337c13-b7cb-428f-838a-4aed59397286)
   )
   (text "Use gate resistor dividers to withstand\nbigger voltage ranges between pins."
-    (at 60.325 224.79 0)
+    (at 59.69 224.79 0)
     (effects (font (size 0.5 0.5)) (justify left bottom))
     (uuid 7d0b75a4-fc8a-4c49-8561-4a94d940c298)
   )
@@ -4661,9 +4666,9 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid bd1761ac-a189-42d9-a3a1-a8624d9793e3)
   )
-  (text "FIXME: SIMULATE TVS NEXT TO DC JACK:\nhttps://jlcpcb.com/partdetail/ProtekDevices-PSM712_LFT7/C32677\n\nhttps://discord.com/channels/556527313823596604/711640844222070836/1216596755655819304"
+  (text "FIXME: SIMULATE TVS DIODE NEXT TO DC JACK AND SEE IF IT FITS HERE:\nhttps://jlcpcb.com/partdetail/ProtekDevices-PSM712_LFT7/C32677\n\nhttps://discord.com/channels/556527313823596604/711640844222070836/1216596755655819304"
     (at 16.51 269.875 0)
-    (effects (font (size 1.27 1.27) (thickness 0.254) bold italic (color 255 0 0 1)) (justify left bottom))
+    (effects (font (size 1.27 1.27) (color 255 0 0 1)) (justify left bottom))
     (uuid c247035e-6bd0-4195-a680-ff7f342b7cff)
   )
   (text "PSVR2\nUSB 2.0\n(OPTIONAL)" (at 184.15 133.985 0)
