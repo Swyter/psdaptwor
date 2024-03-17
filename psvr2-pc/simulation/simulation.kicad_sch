@@ -405,6 +405,167 @@
 				)
 			)
 		)
+		(symbol "Simulation_SPICE:D"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "D"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Diode for simulation or PCB"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Device" "D"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Pins" "1=K 2=A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "simulation"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "D_0_1"
+				(polyline
+					(pts
+						(xy -1.27 1.27) (xy -1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Simulation_SPICE:NPN"
 			(pin_numbers hide)
 			(pin_names
@@ -1527,16 +1688,10 @@
 		(uuid "4b112b0a-1713-4382-bfa4-e3d2ceeac2d3")
 	)
 	(junction
-		(at 72.39 38.1)
+		(at 116.84 21.59)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "4bd99b61-8822-4ee4-97a9-f38d9c203ac4")
-	)
-	(junction
-		(at 72.39 21.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "574e3779-934a-4495-ab91-df1dc485a2f7")
+		(uuid "4def326a-ebbd-436b-bfdf-83d4bac4fba6")
 	)
 	(junction
 		(at 99.06 38.1)
@@ -1569,12 +1724,6 @@
 		(uuid "c272f096-3b02-4dd8-8ec2-023962769d15")
 	)
 	(junction
-		(at 116.84 21.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e9bea691-34bf-47df-a797-de7d673c9154")
-	)
-	(junction
 		(at 104.14 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1600,7 +1749,7 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 133.35) (xy 140.97 133.35)
+			(xy 128.27 133.35) (xy 140.97 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1650,6 +1799,16 @@
 	)
 	(wire
 		(pts
+			(xy 116.84 21.59) (xy 124.46 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "237222e6-1281-436a-b052-fbb314f7f9be")
+	)
+	(wire
+		(pts
 			(xy 97.79 113.03) (xy 104.14 113.03)
 		)
 		(stroke
@@ -1680,7 +1839,7 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 64.77) (xy 92.71 64.77)
+			(xy 101.6 64.77) (xy 92.71 64.77)
 		)
 		(stroke
 			(width 0)
@@ -1700,7 +1859,7 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 133.35) (xy 125.73 133.35)
+			(xy 111.76 133.35) (xy 123.19 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1717,16 +1876,6 @@
 			(type default)
 		)
 		(uuid "38a3289d-5152-454c-a02d-7f7a8c7ece9b")
-	)
-	(wire
-		(pts
-			(xy 116.84 21.59) (xy 124.46 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "39d1a81d-2f7f-4f65-93bb-643ef83bb44a")
 	)
 	(wire
 		(pts
@@ -1820,7 +1969,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 21.59) (xy 72.39 21.59)
+			(xy 68.58 21.59) (xy 78.74 21.59)
 		)
 		(stroke
 			(width 0)
@@ -1880,7 +2029,7 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 38.1) (xy 99.06 38.1)
+			(xy 93.98 38.1) (xy 99.06 38.1)
 		)
 		(stroke
 			(width 0)
@@ -1940,16 +2089,6 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 21.59) (xy 93.98 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8175363b-f622-49b8-ac26-852f08421edc")
-	)
-	(wire
-		(pts
 			(xy 66.04 113.03) (xy 68.58 113.03)
 		)
 		(stroke
@@ -1980,7 +2119,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 38.1) (xy 92.71 38.1)
+			(xy 82.55 38.1) (xy 88.9 38.1)
 		)
 		(stroke
 			(width 0)
@@ -2040,7 +2179,7 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 64.77) (xy 119.38 64.77)
+			(xy 106.68 64.77) (xy 119.38 64.77)
 		)
 		(stroke
 			(width 0)
@@ -2060,7 +2199,7 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 38.1) (xy 77.47 38.1)
+			(xy 68.58 38.1) (xy 77.47 38.1)
 		)
 		(stroke
 			(width 0)
@@ -2087,16 +2226,6 @@
 			(type default)
 		)
 		(uuid "b80d7c98-3831-45ee-be99-661901096887")
-	)
-	(wire
-		(pts
-			(xy 72.39 33.02) (xy 72.39 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd1de858-9cfd-4c59-84a8-acf284d88e33")
 	)
 	(wire
 		(pts
@@ -2180,23 +2309,33 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 21.59) (xy 72.39 25.4)
+			(xy 83.82 21.59) (xy 93.98 21.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dd875af8-ffae-44f6-8cbd-4ba09679d306")
+		(uuid "de5e87b9-d7a1-4a26-8be7-5a29b1de22d2")
 	)
 	(wire
 		(pts
-			(xy 99.06 29.21) (xy 99.06 38.1)
+			(xy 99.06 29.21) (xy 99.06 30.48)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "df8ee57b-50b5-4efe-9bba-23c120d8b46f")
+	)
+	(wire
+		(pts
+			(xy 99.06 35.56) (xy 99.06 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1aba784-1039-4c39-adc5-69c8cb7db556")
 	)
 	(wire
 		(pts
@@ -2260,16 +2399,6 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 38.1) (xy 72.39 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9aa62da-5208-4ea9-b606-a45cd2b83e16")
-	)
-	(wire
-		(pts
 			(xy 116.84 29.21) (xy 139.065 29.21)
 		)
 		(stroke
@@ -2311,7 +2440,7 @@
 	)
 	(text "Add a resistor voltage divider like this to protect the gate and avoid Vgs (gate-source pin difference)\ngetting too big and burning the MOSFET, usually the Vds limit (-30V) is bigger than the Vgs one (here ±12V):\nThat way we can withstand until 30V, in theory.\n\nhttps://electronics.stackexchange.com/a/61699/196330\nhttps://aosmd.com/sites/default/files/res/datasheets/AO3401A.pdf"
 		(exclude_from_sim no)
-		(at 40.894 2.54 0)
+		(at 66.802 31.242 0)
 		(effects
 			(font
 				(size 0.7 0.7)
@@ -2647,7 +2776,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "12"
+		(property "Value" "13"
 			(at 25.4 32.8901 0)
 			(effects
 				(font
@@ -2708,15 +2837,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Sim.Params" "ac=0 ph=0 portnum=0 z0=1"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 				(hide yes)
 			)
 		)
@@ -3088,7 +3208,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "NPN"
+		(property "Sim.Device" "SUBCKT"
 			(at 143.51 146.05 0)
 			(effects
 				(font
@@ -3097,7 +3217,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Type" "GUMMELPOON"
+		(property "Sim.Pins" "1=1 2=2 3=3"
 			(at 143.51 146.05 0)
 			(effects
 				(font
@@ -3106,7 +3226,16 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Pins" "1=C 2=B 3=E"
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\MMBT2222A.txt"
+			(at 143.51 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "MMBT2222A"
 			(at 143.51 146.05 0)
 			(effects
 				(font
@@ -4352,7 +4481,7 @@
 				)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "7K"
 			(at 107.188 29.21 90)
 			(effects
 				(font
@@ -4404,16 +4533,16 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 128.27 133.35 90)
+		(at 125.73 133.35 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "8747bef1-05e5-4d84-af1d-7728df738fd4")
 		(property "Reference" "R9"
-			(at 128.27 135.89 90)
+			(at 125.73 135.89 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4421,7 +4550,7 @@
 			)
 		)
 		(property "Value" "0"
-			(at 128.27 131.445 90)
+			(at 125.73 131.445 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4429,7 +4558,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 128.27 133.35 0)
+			(at 125.73 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4438,7 +4567,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 128.27 133.35 0)
+			(at 125.73 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4447,7 +4576,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 128.27 133.35 0)
+			(at 125.73 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4471,103 +4600,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode:SMAJ12CA")
-		(at 58.42 30.48 270)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "896d1b9b-de49-4974-8eed-70dbec67ea8d")
-		(property "Reference" "D1"
-			(at 60.96 31.7501 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PSM712"
-			(at 60.96 29.2101 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 53.34 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://protekdevices.com/wp-content/uploads/datasheets/psm712.pdf"
-			(at 58.42 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
-			(at 58.42 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "D"
-			(at 58.42 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" "1=A 2=K"
-			(at 58.42 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Params" "m=0.33 is=1e-13 rs=0.40 n=1 tt=1E vj=.6 cjp=1.23e-10 eg=1.11 bv=13.3 ibv=0.001"
-			(at 58.42 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "ca23ab91-367d-4916-8eb4-004c24f1e682")
-		)
-		(pin "1"
-			(uuid "1e347679-4522-45da-a9d5-8a982c2efc4d")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "D1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small")
 		(at 119.38 55.88 0)
 		(mirror x)
@@ -4585,7 +4617,7 @@
 				)
 			)
 		)
-		(property "Value" "20K"
+		(property "Value" "10K"
 			(at 122.555 55.88 90)
 			(effects
 				(font
@@ -5002,7 +5034,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 95.25 38.1 90)
+		(at 91.44 38.1 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5011,15 +5043,15 @@
 		(dnp no)
 		(uuid "b13a57d2-2286-4484-a37d-ab112acc20ea")
 		(property "Reference" "R17"
-			(at 95.25 42.164 90)
+			(at 91.44 42.164 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "80k"
-			(at 95.25 40.132 90)
+		(property "Value" "10K"
+			(at 91.44 40.132 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5027,7 +5059,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 95.25 38.1 0)
+			(at 91.44 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5036,7 +5068,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 95.25 38.1 0)
+			(at 91.44 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5045,7 +5077,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 95.25 38.1 0)
+			(at 91.44 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5201,6 +5233,74 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small")
+		(at 81.28 21.59 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "c5ad8a9a-0b52-4ded-b1aa-ce2052447f8d")
+		(property "Reference" "R22"
+			(at 81.28 25.654 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 81.28 23.622 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 81.28 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 81.28 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 81.28 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eb4a9657-e2c6-4928-8bc7-6ca9291d7ffe")
+		)
+		(pin "2"
+			(uuid "1dda88cd-6c14-424b-8ff8-36c3386bc442")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "R22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Simulation_SPICE:NPN")
 		(at 121.92 78.74 0)
 		(mirror y)
@@ -5256,7 +5356,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Device" "NPN"
+		(property "Sim.Device" "SUBCKT"
 			(at 121.92 78.74 0)
 			(effects
 				(font
@@ -5265,7 +5365,7 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Type" "GUMMELPOON"
+		(property "Sim.Pins" "1=1 2=2 3=3"
 			(at 121.92 78.74 0)
 			(effects
 				(font
@@ -5274,7 +5374,16 @@
 				(hide yes)
 			)
 		)
-		(property "Sim.Pins" "1=C 2=B 3=E"
+		(property "Sim.Library" "C:\\Users\\Usuario\\Downloads\\MMBT2222A.txt"
+			(at 121.92 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Name" "MMBT2222A"
 			(at 121.92 78.74 0)
 			(effects
 				(font
@@ -5503,13 +5612,81 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
+		(at 99.06 33.02 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "d8bc780a-7286-44ca-a93b-bb445dc88496")
+		(property "Reference" "R23"
+			(at 103.124 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 101.092 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 99.06 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 99.06 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 99.06 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c89fa69c-6283-4132-8cd7-007cd4b9570d")
+		)
+		(pin "2"
+			(uuid "53f22a38-81c6-4fbb-a3e4-43fcb060f90b")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
 		(at 80.01 38.1 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "dd35ca9f-1961-49e6-903d-8110dc20ba2c")
 		(property "Reference" "R21"
 			(at 80.01 42.164 90)
@@ -5770,6 +5947,103 @@
 		)
 	)
 	(symbol
+		(lib_id "Simulation_SPICE:D")
+		(at 96.52 -10.16 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eac241e7-efe9-4fb0-ada4-a6d2e3f4a163")
+		(property "Reference" "D1"
+			(at 99.06 -13.9701 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "D"
+			(at 99.06 -11.4301 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 96.52 -10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 96.52 -10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 96.52 -10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 99.06 -8.8901 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 99.06 -6.3501 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Sim.Params" "bv=5 ibv=0.001"
+			(at 96.52 -10.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "74dc475f-032f-4f19-ad4d-ec4e17015718")
+		)
+		(pin "2"
+			(uuid "b02fdcf6-e18a-48f1-b8f9-cade1ad3d9c0")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Simulation_SPICE:PMOS")
 		(at 99.06 24.13 90)
 		(unit 1)
@@ -5877,16 +6151,16 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 110.49 64.77 90)
+		(at 104.14 64.77 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "f143e70a-f790-4a02-a26e-d498208fb9b0")
 		(property "Reference" "R3"
-			(at 110.49 67.31 90)
+			(at 104.14 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5894,7 +6168,7 @@
 			)
 		)
 		(property "Value" "0"
-			(at 110.49 62.865 90)
+			(at 104.14 62.865 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5902,7 +6176,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 110.49 64.77 0)
+			(at 104.14 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5911,7 +6185,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 110.49 64.77 0)
+			(at 104.14 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5920,7 +6194,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 110.49 64.77 0)
+			(at 104.14 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6183,6 +6457,103 @@
 		)
 	)
 	(symbol
+		(lib_id "Diode:SMAJ12CA")
+		(at 113.03 -12.7 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fb247547-de3d-4a24-a45f-e43ba66fdd96")
+		(property "Reference" "D2"
+			(at 115.57 -11.4299 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PSM712"
+			(at 115.57 -13.9699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 107.95 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://protekdevices.com/wp-content/uploads/datasheets/psm712.pdf"
+			(at 113.03 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
+			(at 113.03 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 113.03 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=A 2=K"
+			(at 113.03 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Params" "m=0.33 is=1e-13 rs=0.40 n=1 tt=1E vj=.6 cjp=1.23e-10 eg=1.11 bv=13.3 ibv=0.001"
+			(at 113.03 -12.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "158aa7d2-e388-4c62-9ba9-eaa56410dd7d")
+		)
+		(pin "1"
+			(uuid "7e750efe-0ff0-4302-b836-191d7badbbc1")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "D2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small")
 		(at 127 21.59 270)
 		(mirror x)
@@ -6190,7 +6561,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "fc63f262-ba41-4c60-bb19-1e9489ae6ffe")
 		(property "Reference" "R16"
 			(at 127 15.875 90)
