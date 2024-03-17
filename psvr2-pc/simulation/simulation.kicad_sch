@@ -3426,7 +3426,7 @@
 				)
 			)
 		)
-		(property "Value" "7K5"
+		(property "Value" "8K2"
 			(at 120.015 33.02 90)
 			(effects
 				(font
@@ -4491,7 +4491,7 @@
 				)
 			)
 		)
-		(property "Value" "7K"
+		(property "Value" "6K8"
 			(at 107.188 29.21 90)
 			(effects
 				(font
@@ -4926,7 +4926,7 @@
 				)
 			)
 		)
-		(property "Value" "7K"
+		(property "Value" "6K8"
 			(at 137.795 137.16 90)
 			(effects
 				(font
@@ -5840,7 +5840,7 @@
 				)
 			)
 		)
-		(property "Value" "47K"
+		(property "Value" "51K"
 			(at 120.015 25.4 90)
 			(effects
 				(font
@@ -6649,7 +6649,7 @@
 				)
 			)
 		)
-		(property "Value" "7K"
+		(property "Value" "6K8"
 			(at 116.205 69.85 90)
 			(effects
 				(font

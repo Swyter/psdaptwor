@@ -1,4 +1,5 @@
 Default	True	3.0	3
-High speed differential	True	2.0	3
+High speed differential DP (100 Ω ±10% impedance)	True	2.0	3
+High speed differential SS (90 Ω ±7Ω impedance)	True	2.0	3
 Power	True	2.0	3
 False	True	True
