@@ -4494,7 +4494,7 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 083a58a5-eb62-4f48-9e63-ffa6b3cfae6c)
   )
-  (text "(forward volt=2.1V, current at ~40% luminance=15mA)\n~= resistor value 80Ω "
+  (text "(forward volt=1.5V, current at ~40% luminance=10mA)\n~= resistor value 180Ω "
     (at 375.92 23.495 0)
     (effects (font (size 0.7 0.7) (thickness 0.14) bold) (justify left bottom))
     (uuid 087c0860-2475-47e1-9967-7291b366e9f0)
@@ -4590,7 +4590,7 @@
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 9414d994-e8d4-425d-9fcb-22e5a8831330)
   )
-  (text "(forward volt=2.7V, current at ~40% luminance=10mA)\n~= resistor value 60Ω"
+  (text "(forward volt=1.9V, current at ~40% luminance=10mA)\n~= resistor value 140Ω"
     (at 375.92 36.195 0)
     (effects (font (size 0.7 0.7) bold) (justify left bottom))
     (uuid 9714eeb6-c491-4e9b-8db7-3f79b9e8c0fb)
@@ -4636,11 +4636,6 @@
     (at 57.15 68.58 0)
     (effects (font (face "Courier New") (size 1.27 1.27) (thickness 0.254) bold italic) (justify left bottom))
     (uuid cc7b274c-a697-448f-bb68-2cfad02e582e)
-  )
-  (text "FIXME: MAKE VALUES BIGGER/DIMMER\n\nhttps://discord.com/channels/556527313823596604/711640844222070836/1215877059121774693"
-    (at 364.49 60.96 0)
-    (effects (font (size 1.27 1.27) (color 255 0 0 1)) (justify left bottom))
-    (uuid ce6c0b5a-1306-4b05-a5d0-78757ea434b2)
   )
   (text "Half-duplex M-LVDS transceivers >1Mbps, 3.3 LVTTL\n- SN65MLVD200A - 100 Mbps, Clock Frequencies up to 50 MHz\n- SN65MLVD204A - Multipoint-LVDS Line Driver and Receiver (100 Mbps / 50 MHz)\n- SN65MLVD204B - 100 Mbps, Clock Frequencies up to 50 MHz, Type-2 Receiver Provides an Offset Threshold to Detect Open-Circuit and Idle-Bus Conditions\n- SN65MLVD206B - 200 Mbps, clock frequencies up to 100 MHz\n- NB3N200S     - 3.3 V Differential Multipoint Low Voltage M-LVDS Driver Receiver (200 Mbps / 100 MHz)\n- ADN4690E     - 3.3 V, 100 Mbps (50 MHz), Half-Duplex, High Speed M-LVDS Transceiver"
     (at 77.47 30.48 0)
@@ -5389,7 +5384,7 @@
     (property "Reference" "R39" (at 368.3 32.385 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "10" (at 368.3 34.925 90)
+    (property "Value" "33" (at 368.3 34.925 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 368.3 33.147 90)
@@ -5685,7 +5680,7 @@
     (property "Reference" "R20" (at 368.3 41.275 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "51" (at 368.3 38.735 90)
+    (property "Value" "120" (at 368.3 38.735 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 368.3 36.957 90)
@@ -8466,7 +8461,7 @@
     (property "Reference" "R27" (at 368.3 27.94 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "51" (at 368.3 25.4 90)
+    (property "Value" "120" (at 368.3 25.4 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 368.3 23.622 90)
@@ -8517,7 +8512,7 @@
     (property "Reference" "R19" (at 368.3 19.05 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "33" (at 368.3 21.59 90)
+    (property "Value" "51" (at 368.3 21.59 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 368.3 19.812 90)
