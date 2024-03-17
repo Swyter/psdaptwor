@@ -5,151 +5,6 @@
 	(uuid "f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Device:D_Zener"
-			(pin_numbers hide)
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "D_Zener"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Zener diode"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "diode"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "D_Zener_0_1"
-				(polyline
-					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -1.27) (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "D_Zener_1_1"
-				(pin passive line
-					(at -3.81 0 0)
-					(length 2.54)
-					(name "K"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Device:R"
 			(pin_numbers hide)
 			(pin_names
@@ -377,6 +232,163 @@
 					(at 0 -2.54 90)
 					(length 0.762)
 					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Diode:SMAJ12CA"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SMAJ12CA"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_SMD:D_SMA"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "bidirectional diode TVS voltage suppressor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "D*SMA*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SMAJ12CA_0_1"
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -1.27) (xy 0 0) (xy -2.54 1.27) (xy -2.54 -1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 1.27) (xy 2.54 -1.27) (xy 0 0) (xy 2.54 1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SMAJ12CA_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1515,6 +1527,18 @@
 		(uuid "4b112b0a-1713-4382-bfa4-e3d2ceeac2d3")
 	)
 	(junction
+		(at 72.39 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4bd99b61-8822-4ee4-97a9-f38d9c203ac4")
+	)
+	(junction
+		(at 72.39 21.59)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "574e3779-934a-4495-ab91-df1dc485a2f7")
+	)
+	(junction
 		(at 99.06 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1525,12 +1549,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "764d0b86-6b98-4ee7-b423-95d7ed947713")
-	)
-	(junction
-		(at 81.28 21.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "83308c51-3619-4677-a3e8-a7b3f3603a30")
 	)
 	(junction
 		(at 116.84 29.21)
@@ -1609,16 +1627,6 @@
 			(type default)
 		)
 		(uuid "08de96bd-b723-44de-8277-e39430898c19")
-	)
-	(wire
-		(pts
-			(xy 68.58 21.59) (xy 81.28 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0b597c19-181a-408e-88e4-b19201f6b99c")
 	)
 	(wire
 		(pts
@@ -1742,16 +1750,6 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 10.16) (xy 81.28 10.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3b420861-341f-4c99-906a-a9c63d9c8e2e")
-	)
-	(wire
-		(pts
 			(xy 165.1 146.05) (xy 168.91 146.05)
 		)
 		(stroke
@@ -1822,6 +1820,16 @@
 	)
 	(wire
 		(pts
+			(xy 68.58 21.59) (xy 72.39 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5cc6028f-6907-4869-8198-6fc0337dc1de")
+	)
+	(wire
+		(pts
 			(xy 36.83 134.62) (xy 36.83 140.97)
 		)
 		(stroke
@@ -1882,16 +1890,6 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 38.1) (xy 77.47 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73b2428f-2541-4951-aa86-13fc756e53fd")
-	)
-	(wire
-		(pts
 			(xy 68.58 95.885) (xy 68.58 95.25)
 		)
 		(stroke
@@ -1939,6 +1937,16 @@
 			(type default)
 		)
 		(uuid "7c2e0408-9d6e-4e4d-ab36-dd645ef58949")
+	)
+	(wire
+		(pts
+			(xy 72.39 21.59) (xy 93.98 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8175363b-f622-49b8-ac26-852f08421edc")
 	)
 	(wire
 		(pts
@@ -2002,16 +2010,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 19.05) (xy 81.28 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9a02776a-2bd0-405e-9cda-7cc712d15496")
-	)
-	(wire
-		(pts
 			(xy 85.09 78.74) (xy 85.09 83.82)
 		)
 		(stroke
@@ -2062,6 +2060,16 @@
 	)
 	(wire
 		(pts
+			(xy 72.39 38.1) (xy 77.47 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b428a9c8-09ce-4e8f-9eee-00c6226c811f")
+	)
+	(wire
+		(pts
 			(xy 140.97 120.65) (xy 140.97 120.015)
 		)
 		(stroke
@@ -2082,23 +2090,13 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 10.16) (xy 81.28 11.43)
+			(xy 72.39 33.02) (xy 72.39 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b99b2539-bd32-4b73-813d-0c11d82496fa")
-	)
-	(wire
-		(pts
-			(xy 81.28 21.59) (xy 93.98 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c78cb0b1-259c-4ee7-ac1e-5d9a34f00fd2")
+		(uuid "bd1de858-9cfd-4c59-84a8-acf284d88e33")
 	)
 	(wire
 		(pts
@@ -2182,6 +2180,16 @@
 	)
 	(wire
 		(pts
+			(xy 72.39 21.59) (xy 72.39 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd875af8-ffae-44f6-8cbd-4ba09679d306")
+	)
+	(wire
+		(pts
 			(xy 99.06 29.21) (xy 99.06 38.1)
 		)
 		(stroke
@@ -2252,6 +2260,16 @@
 	)
 	(wire
 		(pts
+			(xy 68.58 38.1) (xy 72.39 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9aa62da-5208-4ea9-b606-a45cd2b83e16")
+	)
+	(wire
+		(pts
 			(xy 116.84 29.21) (xy 139.065 29.21)
 		)
 		(stroke
@@ -2293,7 +2311,7 @@
 	)
 	(text "Add a resistor voltage divider like this to protect the gate and avoid Vgs (gate-source pin difference)\ngetting too big and burning the MOSFET, usually the Vds limit (-30V) is bigger than the Vgs one (here ±12V):\nThat way we can withstand until 30V, in theory.\n\nhttps://electronics.stackexchange.com/a/61699/196330\nhttps://aosmd.com/sites/default/files/res/datasheets/AO3401A.pdf"
 		(exclude_from_sim no)
-		(at 64.516 27.94 0)
+		(at 40.894 2.54 0)
 		(effects
 			(font
 				(size 0.7 0.7)
@@ -2612,6 +2630,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Simulation_SPICE:VDC")
+		(at 21.59 31.75 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "119762d0-6176-4bde-a3c7-8c803de81013")
+		(property "Reference" "V1"
+			(at 25.4 30.3501 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "12"
+			(at 25.4 32.8901 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#sec_Independent_Sources_for"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Voltage source, DC"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=+ 2=-"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" "DC"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "V"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sim.Params" "ac=0 ph=0 portnum=0 z0=1"
+			(at 21.59 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "332a1931-d27c-4643-bde7-b27271206c97")
+		)
+		(pin "2"
+			(uuid "5bf46114-45a8-4288-a07e-5af989a72582")
+		)
+		(instances
+			(project "simulation"
+				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
+					(reference "V1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 21.59 36.83 0)
 		(unit 1)
@@ -2806,72 +2930,6 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "R18")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 77.47 10.16 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "28383cbf-df46-453c-89b3-b8c394de3a36")
-		(property "Reference" "#PWR018"
-			(at 77.47 16.51 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 77.47 15.24 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 77.47 10.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 77.47 10.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 77.47 10.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3dcf30e5-4183-4863-9f13-3cc49e8859aa")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -4413,17 +4471,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener")
-		(at 81.28 15.24 270)
+		(lib_id "Diode:SMAJ12CA")
+		(at 58.42 30.48 270)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "8826916f-06d6-4f0b-8e36-a32346c629a6")
+		(uuid "896d1b9b-de49-4974-8eed-70dbec67ea8d")
 		(property "Reference" "D1"
-			(at 83.82 16.5101 90)
+			(at 60.96 31.7501 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4431,8 +4489,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "D_Zener"
-			(at 83.82 13.9701 90)
+		(property "Value" "PSM712"
+			(at 60.96 29.2101 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4440,8 +4498,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 81.28 15.24 0)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 53.34 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4450,7 +4508,7 @@
 			)
 		)
 		(property "Datasheet" "https://protekdevices.com/wp-content/uploads/datasheets/psm712.pdf"
-			(at 81.28 15.24 0)
+			(at 58.42 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4458,8 +4516,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "TVS ARRAY"
-			(at 81.28 15.24 0)
+		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
+			(at 58.42 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4468,7 +4526,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 81.28 15.24 0)
+			(at 58.42 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4477,7 +4535,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=A 2=K"
-			(at 81.28 15.24 0)
+			(at 58.42 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4486,7 +4544,7 @@
 			)
 		)
 		(property "Sim.Params" "m=0.33 is=1e-13 rs=0.40 n=1 tt=1E vj=.6 cjp=1.23e-10 eg=1.11 bv=13.3 ibv=0.001"
-			(at 81.28 15.24 0)
+			(at 58.42 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4495,10 +4553,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "b5400603-0612-485e-819c-dbbfb15493eb")
+			(uuid "ca23ab91-367d-4916-8eb4-004c24f1e682")
 		)
 		(pin "1"
-			(uuid "16deba23-7426-4578-8751-8f19fce94477")
+			(uuid "1e347679-4522-45da-a9d5-8a982c2efc4d")
 		)
 		(instances
 			(project "simulation"
@@ -4803,103 +4861,6 @@
 			(project "simulation"
 				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
 					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Simulation_SPICE:VDC")
-		(at 21.59 31.75 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a13fcb54-4d2b-4fb8-b63e-84e4e21961d7")
-		(property "Reference" "V1"
-			(at 25.4 30.3501 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "30"
-			(at 25.4 32.8901 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#sec_Independent_Sources_for"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Voltage source, DC"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" "1=+ 2=-"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" "DC"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" "V"
-			(at 21.59 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9d7f4395-a893-4ba1-821c-957da86d8757")
-		)
-		(pin "2"
-			(uuid "94a8a43f-c277-4305-9cc5-df7b60b1b074")
-		)
-		(instances
-			(project "simulation"
-				(path "/f11bb3d3-5794-4a95-b9a9-d0bd9f1c0d65"
-					(reference "V1")
 					(unit 1)
 				)
 			)
