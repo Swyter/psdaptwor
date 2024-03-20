@@ -23,3 +23,5 @@ You can call it the *pee ess virtual adaptor*. :)
 * *`@JX35`*: For the *DisplayPort AUX emulator* board this is heavily based on, and uncountable references, ideas and suggestions.
 * *`@mrandTX`*: Hardware reviews, many suggestions, things I wouldn't have even thought about and encouragement.
 * *`@thaytan`, `@ivry.vr` and many others around the Monado project*: Crucial research and development about how the PS®VR2 hardware and software actually functions. Standing on the shoulders of giants, this just cobbles stuff together. Many thanks.
+* *[`jorticus/DPSwitch`](https://github.com/jorticus/DPSwitch)*, for the initial DisplayPort symbols and schematic that I used as a start point to learn the program and a good reference of how to use KiCad buses to group signals.
+* *[`diva-eng/diva-card`](https://github.com/diva-eng/diva-card)*, for the known-good 12 MHz 20pF crystal oscillator circuit using cheap JLCPCB basic parts, and the capacitor/resistor values.
