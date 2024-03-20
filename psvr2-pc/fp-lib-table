@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "JLC2KiCad_lib")(type "KiCad")(uri "${KIPRJMOD}/JLC2KiCad_lib.pretty")(options "")(descr ""))
+)
