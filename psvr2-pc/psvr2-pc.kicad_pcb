@@ -15910,7 +15910,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp de65c4f0-a6b2-41b5-af33-0d6acb4a7428)
     )
-    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 90) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 90) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp d8eadda1-6fd9-4f96-9062-771341e98012)
     )
@@ -19256,7 +19256,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 55c2da83-268a-4a20-91b6-1381c719d430)
     )
-    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 90) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 90) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp e1b171cb-dceb-4b4a-a741-3633032d39e2)
     )
@@ -19988,7 +19988,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 2532ab4e-0356-45e8-9e25-4e7145ce3b42)
     )
-    (fp_text value "TestPoint_Small" (at 0 -2.25) (layer "B.Fab")
+    (fp_text value "TestPoint_Small" (at 7.9522 0.0196) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 17ddda18-6f29-41d0-96db-1f8421b418ab)
     )
@@ -20021,7 +20021,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 01b5ae67-c40c-4af9-a91b-3152dd145071)
     )
-    (fp_text value "SolderJumper_2_Open" (at 0 -1.9 270) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_Open" (at 0 -1.9 270) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 0c122130-6eed-4e5a-94cd-25cd5949b583)
     )
@@ -20107,7 +20107,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp e21fdd79-71e3-4094-99a7-0e59bd39127f)
     )
-    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 270) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_CLOSED" (at 0 -1.9 270) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 7d6f9d64-e8a0-4231-bc16-adb4266f53e4)
     )
@@ -20193,7 +20193,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 140a5159-4e3b-4ef9-88a5-c796949503ec)
     )
-    (fp_text value "TestPoint_Small" (at 0 -2.25) (layer "B.Fab")
+    (fp_text value "TestPoint_Small" (at 7.929 -0.646) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 1268331b-88e2-456d-9223-9573c471cfa5)
     )
@@ -20438,7 +20438,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp d4638258-8dc4-4e79-abb1-8dbdfa6b7dce)
     )
-    (fp_text value "SolderJumper_2_Open" (at 0 -1.9) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_Open" (at 0 -1.9) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp a34067f2-3ccd-4433-a200-6a65f6dbd3df)
     )
@@ -21216,7 +21216,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 393026e1-add8-43ae-92e3-4be52944a759)
     )
-    (fp_text value "SolderJumper_2_Open" (at 0 -1.9) (layer "B.Fab")
+    (fp_text value "SolderJumper_2_Open" (at 0 -1.9) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp b13ec997-2c6d-4fcf-8d0d-139363a13709)
     )
