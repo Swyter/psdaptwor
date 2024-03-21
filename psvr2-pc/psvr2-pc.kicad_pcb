@@ -4523,7 +4523,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp f1c358ee-856a-4225-9063-6002b6b0b679)
     )
-    (fp_text value "1uF" (at -2.776 0.069 90) (layer "F.Fab")
+    (fp_text value "22uF" (at -2.776 0.069 90) (layer "F.Fab")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp d174ccea-4f41-4ce2-b5d5-84bfcd42a54a)
     )

@@ -7275,7 +7275,7 @@
     (property "Reference" "C21" (at 380.365 81.28 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "1uF" (at 380.365 83.82 0)
+    (property "Value" "22uF" (at 380.365 83.82 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 376.2248 86.36 0)
