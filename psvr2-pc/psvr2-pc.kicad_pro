@@ -63,7 +63,6 @@
       "drc_exclusions": [
         "clearance|37460000|24540000|dfc2c633-a7c6-4c77-934e-c720a9166ef0|48ea1016-f30c-417f-a5d8-8cfec6be02ec",
         "clearance|72830000|21760000|a91172b6-8f6a-4bd0-9ba9-2a67878eba0c|48ea1016-f30c-417f-a5d8-8cfec6be02ec",
-        "courtyards_overlap|110929999|30014799|f1187aaf-eba5-4c33-9b7a-b4c2f6bf409f|fab6bc96-e60f-48e3-9fd5-482ba6118a9b",
         "lib_footprint_issues|100838000|43688000|27baab4e-9de1-4a95-922c-ce640da23d97|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|103540000|58816000|bc304f5a-c3cd-4f1f-8abd-8bf49070a9f6|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|104548095|61450000|178369a4-7b1b-4992-8ef2-a078449d7aa8|00000000-0000-0000-0000-000000000000",
@@ -112,11 +111,8 @@
         "silk_overlap|39171646|49229722|26223b69-dd62-491e-be44-001aea85c249|e47c2f36-5ba8-415b-882e-e48a817c788c",
         "silk_overlap|74350000|56540000|873fa35a-1a6b-4d9c-a1bf-1b7e5fef6ca5|4e94ddcc-c007-48c6-bcc1-91efefb61423",
         "silk_overlap|74350000|56540000|873fa35a-1a6b-4d9c-a1bf-1b7e5fef6ca5|88bc1424-1a66-4002-aefc-124dfa01a100",
-        "silk_overlap|74681500|44497500|5270f24c-4beb-4c24-b7a9-1ef4e413daaf|42f3225d-bdbe-447a-8486-207b547f9179",
-        "silk_overlap|74681500|44497500|5270f24c-4beb-4c24-b7a9-1ef4e413daaf|7905685c-c50f-4ef4-9886-e61cda16d6c8",
         "solder_mask_bridge|38368137|21490509|bd99d4cb-5fe4-49b2-b679-0d2f54f1d27a|a91172b6-8f6a-4bd0-9ba9-2a67878eba0c",
         "solder_mask_bridge|64576925|47360008|3e03429f-9a1c-47e5-b5bb-edc8ae06bb65|49f4c4b1-e429-4cf2-96ea-00b0f265aa4c",
-        "text_height|106400600|32156400|9fbec24a-2488-460d-9823-71feb7ee36b9|00000000-0000-0000-0000-000000000000",
         "text_height|21310600|41503600|8963aebd-8605-4171-83f5-d6181d419029|00000000-0000-0000-0000-000000000000",
         "text_height|39859000|51208000|41779bc2-e873-494e-b473-3c198e43b46c|00000000-0000-0000-0000-000000000000",
         "text_height|46939200|42570400|5ba15f39-0556-4153-b4ea-b9a75ffd1e40|00000000-0000-0000-0000-000000000000",
@@ -228,7 +224,7 @@
       ],
       "teardrop_parameters": [
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -237,7 +233,7 @@
           "td_width_to_size_filter_ratio": 0.9
         },
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -246,7 +242,7 @@
           "td_width_to_size_filter_ratio": 0.9
         },
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
