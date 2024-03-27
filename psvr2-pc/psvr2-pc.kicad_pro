@@ -514,6 +514,10 @@
       {
         "netclass": "Power",
         "pattern": "/PC_VBUS_*"
+      },
+      {
+        "netclass": "High speed differential SS (90 Ω ±7Ω impedance)",
+        "pattern": "/PC_USB2*"
       }
     ]
   },
