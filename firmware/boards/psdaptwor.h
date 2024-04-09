@@ -35,7 +35,7 @@
 
 //------------- LED -------------//
 #ifndef PICO_DEFAULT_LED_PIN
-#define PICO_DEFAULT_LED_PIN 15
+#define PICO_DEFAULT_LED_PIN 14
 #endif
 
 //------------- I2C -------------//
