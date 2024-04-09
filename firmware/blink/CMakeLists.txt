@@ -3,7 +3,7 @@ add_executable(blink
         )
 
 # pull in common dependencies
-target_link_libraries(blink pico_stdlib hardware_adc)
+target_link_libraries(blink pico_stdlib hardware_adc hardware_i2c)
 
 pico_enable_stdio_usb(blink ENABLED)
 
