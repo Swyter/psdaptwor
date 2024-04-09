@@ -9,11 +9,11 @@
 //       SHOULD ONLY CONSIST OF PREPROCESSOR DIRECTIVES
 // -----------------------------------------------------
 
-#ifndef _BOARDS_ADAFRUIT_FEATHER_RP2040_H
-#define _BOARDS_ADAFRUIT_FEATHER_RP2040_H
+#ifndef _BOARDS_SWYTER_PSDAPTWOR_RP2040_H
+#define _BOARDS_SWYTER_PSDAPTWOR_RP2040_H
 
 // For board detection
-#define ADAFRUIT_FEATHER_RP2040
+#define SWYTER_PSDAPTWOR_RP2040
 
 // On some samples, the xosc can take longer to stabilize than is usual
 #ifndef PICO_XOSC_STARTUP_DELAY_MULTIPLIER
@@ -22,24 +22,20 @@
 
 //------------- UART -------------//
 #ifndef PICO_DEFAULT_UART
-#define PICO_DEFAULT_UART 0
+#define PICO_DEFAULT_UART 1
 #endif
 
 #ifndef PICO_DEFAULT_UART_TX_PIN
-#define PICO_DEFAULT_UART_TX_PIN 0
+#define PICO_DEFAULT_UART_TX_PIN 12
 #endif
 
 #ifndef PICO_DEFAULT_UART_RX_PIN
-#define PICO_DEFAULT_UART_RX_PIN 1
+#define PICO_DEFAULT_UART_RX_PIN 13
 #endif
 
 //------------- LED -------------//
 #ifndef PICO_DEFAULT_LED_PIN
-#define PICO_DEFAULT_LED_PIN 13
-#endif
-
-#ifndef PICO_DEFAULT_WS2812_PIN
-#define PICO_DEFAULT_WS2812_PIN 16
+#define PICO_DEFAULT_LED_PIN 15
 #endif
 
 //------------- I2C -------------//
@@ -48,28 +44,11 @@
 #endif
 
 #ifndef PICO_DEFAULT_I2C_SDA_PIN
-#define PICO_DEFAULT_I2C_SDA_PIN 2
+#define PICO_DEFAULT_I2C_SDA_PIN 0
 #endif
 
 #ifndef PICO_DEFAULT_I2C_SCL_PIN
-#define PICO_DEFAULT_I2C_SCL_PIN 3
-#endif
-
-//------------- SPI -------------//
-#ifndef PICO_DEFAULT_SPI
-#define PICO_DEFAULT_SPI 0
-#endif
-
-#ifndef PICO_DEFAULT_SPI_TX_PIN
-#define PICO_DEFAULT_SPI_TX_PIN 19
-#endif
-
-#ifndef PICO_DEFAULT_SPI_RX_PIN
-#define PICO_DEFAULT_SPI_RX_PIN 20
-#endif
-
-#ifndef PICO_DEFAULT_SPI_SCK_PIN
-#define PICO_DEFAULT_SPI_SCK_PIN 18
+#define PICO_DEFAULT_I2C_SCL_PIN 1
 #endif
 
 //------------- FLASH -------------//
@@ -82,7 +61,7 @@
 #endif
 
 #ifndef PICO_FLASH_SIZE_BYTES
-#define PICO_FLASH_SIZE_BYTES (8 * 1024 * 1024)
+#define PICO_FLASH_SIZE_BYTES (16 * 1024 * 1024)
 #endif
 
 // All boards have B1 RP2040
