@@ -12,6 +12,13 @@
 #include "pico/binary_info.h"
 #include "hardware/i2c.h"
 
+/*      Main microcontroller chip: https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
+                                   https://datasheets.raspberrypi.com/rp2040/hardware-design-with-rp2040.pdf
+
+        Type-C PD controller chip: https://www.onsemi.com/pdf/datasheet/fusb302b-d.pdf
+                                   https://github.com/Ralim/usb-pd/
+                                   
+   M-LVDS to TTL transceiver chip: http://www.ti.com/lit/gpn/SN65MLVD200 */
 
 enum psdaptwor_pins
 {
@@ -37,10 +44,10 @@ enum psdaptwor_pins
     PSDAPT_PIN_LED_CONN_WRONG_ORIENT = 14, /* swy: status LEDS; wrong-type-c-orientation is orange */
     PSDAPT_PIN_LED_HMD_IS_READY      = 15, /*                           headset-is-ready is green  */
 
-    PSDAPT_PIN_HMD_ENABLE_VBUS_12V = 16,
-    PSDAPT_PIN_HMD_ENABLE_VBUS     = 17,
+    PSDAPT_PIN_HMD_ENABLE_VBUS_12V = 16, /* swy: control the power switches by software as needed to enable */
+    PSDAPT_PIN_HMD_ENABLE_VBUS     = 17, /*      the higher 12V DC jack voltage/5V from PC/off              */
 
-    PSDAPT_PIN_HMD_USB2_P = 18,
+    PSDAPT_PIN_HMD_USB2_P = 18, /* swy: connected to the headset's USB 2.0 +/- pair, optional, in case we want to relay to the host PC, or inspect the billboard device */
     PSDAPT_PIN_HMD_USB2_N = 19,
 
 //  PSDAPT_PIN_20_UNUSED = 20,
