@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
 
+#set(PICO_SDK_PATH "C:/Program Files/Raspberry Pi/Pico SDK v1.5.1/pico-sdk")
+#set(PICO_TOOLCHAIN_PATH "${PICO_SDK_PATH}/../gcc-arm-none-eabi")
+#set(CMAKE_MAKE_PROGRAM "${PICO_SDK_PATH}/../ninja/ninja")
+
 # Pull in SDK (must be before project)
 include(pico_sdk_import.cmake)
-
-# We also need PICO EXTRAS
-#include(pico_extras_import.cmake)
 
 project(psdaptwor C CXX ASM)
 set(CMAKE_C_STANDARD 11)
