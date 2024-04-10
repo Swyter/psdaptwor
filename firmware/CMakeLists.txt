@@ -23,7 +23,16 @@ endif()
 pico_sdk_init()
 
 # Add blink example
-add_subdirectory(blink)
+add_executable(padaptwor main.c)
+
+# pull in common dependencies
+target_link_libraries(padaptwor pico_stdlib hardware_adc hardware_i2c)
+
+pico_enable_stdio_usb(padaptwor ENABLED)
+
+# create map/bin/hex file etc.
+pico_add_extra_outputs(padaptwor)
+
 
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int

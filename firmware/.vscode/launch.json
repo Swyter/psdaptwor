@@ -11,7 +11,7 @@
             "device": "RP2040",
             "gdbPath": "${config:cmake.environment.PICO_SDK_PATH}/../gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/build/blink/blink.elf",
+            "executable": "${workspaceRoot}/build/padaptwor.elf",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",
