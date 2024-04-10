@@ -2,6 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {   "name": "Pico Debug",
+            "program": "${command:cmake.launchTargetPath}",
             // swy: upload pico-debug-gimmecache.uf2 to have in-device debugging using the second RP2040 Arm core,
             //      no need to wire a second board via SWD pins to use as a relay:
             //      https://github.com/majbthrd/pico-debug/blob/master/howto/vscode1.md
