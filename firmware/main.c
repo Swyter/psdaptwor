@@ -83,9 +83,13 @@ int main() {
 #warning blink example requires a board with a regular LED
 #else
     const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    gpio_init(LED_PIN);
+    gpio_init   (LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
-    gpio_put(LED_PIN, 1);
+    gpio_put    (LED_PIN, 1);
+
+    gpio_init   (PSDAPT_PIN_LED_HMD_IS_READY);
+    gpio_set_dir(PSDAPT_PIN_LED_HMD_IS_READY, GPIO_OUT);
+    gpio_put    (PSDAPT_PIN_LED_HMD_IS_READY, 1);
 #endif
 
     gpio_init(0);
@@ -158,8 +162,10 @@ int main() {
 #warning blink example requires a board with a regular LED
 #else
         gpio_put(LED_PIN, 1);
+        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
         sleep_ms(250);
         gpio_put(LED_PIN, 0);
+        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 1);
         sleep_ms(250);
 #endif
 
