@@ -1,7 +1,8 @@
 /**
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+ * | psdaptwor - an experimental PSVR2 to PC adaptor | firmware
+ * | created by Swyter <swyterzone+psdaptor@gmail.com>
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -17,51 +18,51 @@
 
         Type-C PD controller chip: https://www.onsemi.com/pdf/datasheet/fusb302b-d.pdf
                                    https://github.com/Ralim/usb-pd/
-                                   
+
    M-LVDS to TTL transceiver chip: http://www.ti.com/lit/gpn/SN65MLVD200 */
 
 enum psdaptwor_pins
 {
-    PSDAPT_PIN_HMD_TYC_SDA =  0, /* swy: I2C connection to FUSB302B Type-C Power Delivery control chip */
-    PSDAPT_PIN_HMD_TYC_SCL =  1,
-    PSDAPT_PIN_HMD_TYC_INT =  2,
+    PSDAPT_PIN_HMD_TYC_SDA           =  0, /* swy: I2C connection to FUSB302B Type-C Power Delivery control chip */
+    PSDAPT_PIN_HMD_TYC_SCL           =  1,
+    PSDAPT_PIN_HMD_TYC_INT           =  2,
+          
+    PSDAPT_PIN_PC_LVDS_R             =  3, /* swy: M-LVDS transceiver data in-out for both DisplayPort AUX sides */
+    PSDAPT_PIN_PC_LVDS_RE            =  4,
+    PSDAPT_PIN_PC_LVDS_DR            =  5,
+    PSDAPT_PIN_PC_LVDS_D             =  6,
+          
+    PSDAPT_PIN_HMD_LVDS_R            =  7,
+    PSDAPT_PIN_HMD_LVDS_RE           =  8,
+    PSDAPT_PIN_HMD_LVDS_DR           =  9,
+    PSDAPT_PIN_HMD_LVDS_D            = 10,
 
-    PSDAPT_PIN_PC_LVDS_R   =  3, /* swy: M-LVDS transceiver data in-out for both DisplayPort AUX sides */
-    PSDAPT_PIN_PC_LVDS_RE  =  4,
-    PSDAPT_PIN_PC_LVDS_DR  =  5,
-    PSDAPT_PIN_PC_LVDS_D   =  6,
+    /* -- */
 
-    PSDAPT_PIN_HMD_LVDS_R  =  7,
-    PSDAPT_PIN_HMD_LVDS_RE =  8,
-    PSDAPT_PIN_HMD_LVDS_DR =  9,
-    PSDAPT_PIN_HMD_LVDS_D  = 10,
-
-    PSDAPT_PIN_PC_HPD      = 11, /* swy: DisplayPort hot-plug detection pulse signal */
-
-//  PSDAPT_PIN_12_UNUSED   = 12,
-//  PSDAPT_PIN_13_UNUSED   = 13,
+    PSDAPT_PIN_PC_HPD                = 11, /* swy: DisplayPort hot-plug detection pulse signal */
+//  PSDAPT_PIN_12_UNUSED             = 12,
+//  PSDAPT_PIN_13_UNUSED             = 13,
 
     PSDAPT_PIN_LED_CONN_WRONG_ORIENT = 14, /* swy: status LEDS; wrong-type-c-orientation is orange */
     PSDAPT_PIN_LED_HMD_IS_READY      = 15, /*                           headset-is-ready is green  */
 
-    PSDAPT_PIN_HMD_ENABLE_VBUS_12V = 16, /* swy: control the power switches by software as needed to enable */
-    PSDAPT_PIN_HMD_ENABLE_VBUS     = 17, /*      the higher 12V DC jack voltage/5V from PC/off              */
+    PSDAPT_PIN_HMD_ENABLE_VBUS_12V   = 16, /* swy: control the power switches by software as needed to enable */
+    PSDAPT_PIN_HMD_ENABLE_VBUS       = 17, /*      the higher 12V DC jack voltage/5V from PC/off              */
 
-    PSDAPT_PIN_HMD_USB2_P = 18, /* swy: connected to the headset's USB 2.0 +/- pair, optional, in case we want to relay to the host PC, or inspect the billboard device */
-    PSDAPT_PIN_HMD_USB2_N = 19,
+    PSDAPT_PIN_HMD_USB2_P            = 18, /* swy: connected to the headset's USB 2.0 +/- pair, optional, in case we want to */
+    PSDAPT_PIN_HMD_USB2_N            = 19, /*      relay it to the host PC via PIO, or inspect the billboard device          */
+//  PSDAPT_PIN_20_UNUSED             = 20,
+//  PSDAPT_PIN_21_UNUSED             = 21,
 
-//  PSDAPT_PIN_20_UNUSED = 20,
-//  PSDAPT_PIN_21_UNUSED = 21,
+    PSDAPT_PIN_AUX_TERMINATION_N     = 22, /* swy: M-LVDS transceiver software-defined pull-up and pull-down resistors */
+    PSDAPT_PIN_AUX_TERMINATION_P     = 23,
+    PSDAPT_PIN_PC_AUX_TERMINATION_N  = 24,
+    PSDAPT_PIN_PC_AUX_TERMINATION_P  = 25,
 
-    PSDAPT_PIN_AUX_TERMINATION_N    = 22, /* swy: M-LVDS transceiver software-defined pull-up and pull-down resistors */
-    PSDAPT_PIN_AUX_TERMINATION_P    = 23,
-    PSDAPT_PIN_PC_AUX_TERMINATION_N = 24,
-    PSDAPT_PIN_PC_AUX_TERMINATION_P = 25,
-
-    PSDAPT_PIN_DC_JACK_VOLT_SENSE = 26, /* swy: analog-to-digital converter pins */
-//  PSDAPT_PIN_27_UNUSED = 27,
-    PSDAPT_PIN_ADC_OPT_A = 28,
-    PSDAPT_PIN_ADC_OPT_B = 29,
+    PSDAPT_PIN_DC_JACK_VOLT_SENSE    = 26, /* swy: analog-to-digital converter pins */
+//  PSDAPT_PIN_27_UNUSED             = 27,
+    PSDAPT_PIN_ADC_OPT_A             = 28,
+    PSDAPT_PIN_ADC_OPT_B             = 29,
 };
 
 // I2C reserves some addresses for special purposes. We exclude these from the scan.
