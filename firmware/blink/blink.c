@@ -22,9 +22,9 @@ bool reserved_addr(uint8_t addr) {
  
 
 int main() {
-    //stdio_init_all();
-    //stdio_usb_init();
-    //stdio_usb_connected();
+    stdio_init_all();
+    stdio_usb_init();
+    stdio_usb_connected();
     printf("ADC Example, measuring GPIO26\n");
 
 #ifndef PICO_DEFAULT_LED_PIN
@@ -33,8 +33,19 @@ int main() {
     const uint LED_PIN = PICO_DEFAULT_LED_PIN;
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
+    gpio_put(LED_PIN, 1);
 #endif
 
+    gpio_init(0);
+    gpio_set_dir(0, GPIO_IN);
+
+    gpio_init(1);
+    gpio_set_dir(1, GPIO_IN);
+
+    bool zero = gpio_get(0);
+    bool one  = gpio_get(1);
+
+    
 
     adc_init();
 
@@ -67,16 +78,17 @@ int main() {
         // -1.
  
         // Skip over any reserved addresses.
-        int ret;
+        int ret = 0;
         uint8_t rxdata;
         if (reserved_addr(addr))
             ret = PICO_ERROR_GENERIC;
         else
-            ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+            //ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
  
         printf(ret < 0 ? "." : "@");
         printf(addr % 16 == 15 ? "\n" : "  ");
     }
+
     printf("Done.\n");
 
 
@@ -86,6 +98,8 @@ int main() {
         uint16_t result = adc_read();
         printf("Raw value: 0x%03x, voltage: %f V\n", result, result * conversion_factor);
         sleep_ms(500);
+
+        printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
 
 
 #ifndef PICO_DEFAULT_LED_PIN
