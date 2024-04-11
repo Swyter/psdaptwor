@@ -13,6 +13,8 @@
 #include "pico/binary_info.h"
 #include "hardware/i2c.h"
 
+#include "fusb302_defines.h"
+
 /*      Main microcontroller chip: https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
                                    https://datasheets.raspberrypi.com/rp2040/hardware-design-with-rp2040.pdf
 
@@ -101,7 +103,8 @@ int main() {
     bool zero = gpio_get(0);
     bool one  = gpio_get(1);
 
-    
+
+    sleep_ms(3500);    
 
     adc_init();
 
@@ -115,11 +118,12 @@ int main() {
     i2c_init(i2c_default, 100);
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
-    //gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
-    //gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
+    gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
+    gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
- 
+
+
     printf("\nI2C Bus Scan\n");
     printf("   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
  
@@ -136,10 +140,12 @@ int main() {
         // Skip over any reserved addresses.
         int ret = 0;
         uint8_t rxdata;
+        absolute_time_t timeout = make_timeout_time_ms(50);
+
         if (reserved_addr(addr))
             ret = PICO_ERROR_GENERIC;
         else
-            //ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+            ret = i2c_read_blocking_until(i2c_default, addr, &rxdata, 1, false, timeout);
  
         printf(ret < 0 ? "." : "@");
         printf(addr % 16 == 15 ? "\n" : "  ");
