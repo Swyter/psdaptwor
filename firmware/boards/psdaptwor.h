@@ -40,7 +40,7 @@
 
 //------------- I2C -------------//
 #ifndef PICO_DEFAULT_I2C
-#define PICO_DEFAULT_I2C 1
+#define PICO_DEFAULT_I2C 0
 #endif
 
 #ifndef PICO_DEFAULT_I2C_SDA_PIN
