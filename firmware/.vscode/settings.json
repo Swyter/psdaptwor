@@ -5,5 +5,8 @@
         "PICO_SDK_PATH": "C:/Program Files/Raspberry Pi/Pico SDK v1.5.1/pico-sdk", /* swy: change your folder here; they should have added an environmental variable themselves :( */
         "PICO_TOOLCHAIN_PATH": "${env:PICO_SDK_PATH}/../gcc-arm-none-eabi",
         "CMAKE_MAKE_PROGRAM":  "${env:PICO_SDK_PATH}/../ninja/ninja"
+    },
+    "files.associations": {
+        "fusb302_defines.h": "c"
     }
 }

@@ -20,6 +20,7 @@
 
         Type-C PD controller chip: https://www.onsemi.com/pdf/datasheet/fusb302b-d.pdf
                                    https://github.com/Ralim/usb-pd/
+                                   https://www.ti.com/lit/an/slva704/slva704.pdf (good overview of how the I2C protocol works)
 
    M-LVDS to TTL transceiver chip: http://www.ti.com/lit/gpn/SN65MLVD200 */
 
@@ -74,6 +75,47 @@ bool reserved_addr(uint8_t addr) {
     return (addr & 0x78) == 0 || (addr & 0x78) == 0x78;
 }
  
+
+/* swy: I2C register reading/writing functions from: https://forums.raspberrypi.com/viewtopic.php?p=2040653#p2040598 */
+// Read bytes from a register
+int i2c_read(
+    i2c_inst_t *i2c,   // i2c0 or i2c1
+    uint8_t i2c_addr,  // 7 bit I2C address
+    uint8_t reg,       // Number of the register to read from
+    uint8_t *rx_data,  // Pointer to block of bytes for data read
+    uint8_t len        // Number of bytes of data to read
+) {
+    if (i2c_write_blocking(i2c, i2c_addr, &reg, 1, true) != 1) {
+        return PICO_ERROR_GENERIC;
+    }
+
+    if (i2c_read_blocking(i2c, i2c_addr, rx_data, len, false) != len) {
+        return PICO_ERROR_GENERIC;
+    }
+
+    return PICO_OK;
+}
+
+// Write bytes to a register
+int i2c_write(
+    i2c_inst_t *i2c,         // i2c0 or i2c1
+    uint8_t i2c_addr,        // 7 bit I2C address 
+    uint8_t reg,             // Number of the register to write to
+    const uint8_t *tx_data,  // Pointer to block of bytes to write
+    uint8_t len              // Length of block of bytes to write
+) {
+    uint8_t tx_len = len + 1;
+    uint8_t tx_buf[tx_len];
+    tx_buf[0]  = reg;
+    memcpy(&tx_buf[1], tx_data, len);
+
+    if (i2c_write_blocking(i2c, i2c_addr, tx_buf, tx_len, false) != tx_len) {
+        return PICO_ERROR_GENERIC;
+    }
+
+    return PICO_OK;
+}
+
 
 int main() {
     stdio_init_all();
@@ -152,6 +194,16 @@ int main() {
     }
 
     printf("Done.\n");
+
+
+    uint8_t rxdata; absolute_time_t timeout = make_timeout_time_ms(50);
+    //uint32_t ret = i2c_read_blocking;//i2c_read_blocking_until(i2c_default, 0x22 | FUSB_DEVICE_ID, &rxdata, 1, false, timeout);
+
+    i2c_read(i2c_default, 0x22, 1, &rxdata, 1);
+
+    printf("read 0: %#x\n", rxdata);
+
+    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> 4,  (rxdata & 0b1100) >> 2, (rxdata & 0b0011) >> 0);
 
 
     while (1) {
