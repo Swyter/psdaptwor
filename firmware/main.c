@@ -219,8 +219,7 @@ int main() {
     printf("read 0: %#x\n", rxdata);
     printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
-    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RES);
-    printf("b write ret: %#x\n", ret);
+    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RES); printf("b write ret: %#x\n", ret);
 
     if (ret != PICO_OK)
         printf("[!] couldn't reset it\n");
@@ -231,6 +230,14 @@ int main() {
     printf("b read 0: %#x\n", rxdata);
     printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
+    /* Turn on all power */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
+
+    /* Set interrupt masks */
+    // Setting to 0 so interrupts are allowed
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASK1, 0); printf("c write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
