@@ -131,6 +131,7 @@ int i2c_write_byte(
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
     printf("[i] USB-C controller interrupt request: %x %x", gpio, event_mask);
+    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("b read FUSB_INTERRUPTA: %#x\n", rxdata);
 }
 
 
@@ -255,7 +256,7 @@ int main() {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
         const float conversion_factor = 3.3f / (1 << 12);
         uint16_t result = adc_read();
-        printf("Raw value: 0x%03x, voltage: %f V\n", result, result * conversion_factor);
+        printf("Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
         sleep_ms(500);
 
         printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
