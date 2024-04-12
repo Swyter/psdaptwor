@@ -1,7 +1,8 @@
-/*
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+/**
+ * | psdaptwor - an experimental PSVR2 to PC adaptor | custom RP2040 board pinout and boot-up defines
+ * | created by Swyter <swyterzone+psdaptor@gmail.com>
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 // -----------------------------------------------------
@@ -22,33 +23,33 @@
 
 //------------- UART -------------//
 #ifndef PICO_DEFAULT_UART
-#define PICO_DEFAULT_UART 1
+#define PICO_DEFAULT_UART 0 /* swy: we need to use [UART HW BLOCK 0] for GPIO12 and GPIO13, it's the only function that can be used in those pins; [UART HW BLOCK 1] won't work here */
 #endif
 
 #ifndef PICO_DEFAULT_UART_TX_PIN
-#define PICO_DEFAULT_UART_TX_PIN 12
+#define PICO_DEFAULT_UART_TX_PIN 12 /* swy: GPIO12 */
 #endif
 
 #ifndef PICO_DEFAULT_UART_RX_PIN
-#define PICO_DEFAULT_UART_RX_PIN 13
+#define PICO_DEFAULT_UART_RX_PIN 13 /* swy: GPIO13 */
 #endif
 
 //------------- LED -------------//
 #ifndef PICO_DEFAULT_LED_PIN
-#define PICO_DEFAULT_LED_PIN 14
+#define PICO_DEFAULT_LED_PIN 14 /* swy: GPIO14, also known as PSDAPT_PIN_LED_CONN_WRONG_ORIENT */
 #endif
 
 //------------- I2C -------------//
 #ifndef PICO_DEFAULT_I2C
-#define PICO_DEFAULT_I2C 0
+#define PICO_DEFAULT_I2C 0 /* swy: important: we need to use [I2C HW Block 0], which is the only function that works for GPIO0 and GPIO1. [I2C HW Block 1] won't do anything unless you change pins; see the diagram in gpio.h */
 #endif
 
 #ifndef PICO_DEFAULT_I2C_SDA_PIN
-#define PICO_DEFAULT_I2C_SDA_PIN 0
+#define PICO_DEFAULT_I2C_SDA_PIN 0 /* swy: GPIO0 */
 #endif
 
 #ifndef PICO_DEFAULT_I2C_SCL_PIN
-#define PICO_DEFAULT_I2C_SCL_PIN 1
+#define PICO_DEFAULT_I2C_SCL_PIN 1 /* swy: GPIO1 */
 #endif
 
 //------------- FLASH -------------//
@@ -61,7 +62,7 @@
 #endif
 
 #ifndef PICO_FLASH_SIZE_BYTES
-#define PICO_FLASH_SIZE_BYTES (16 * 1024 * 1024)
+#define PICO_FLASH_SIZE_BYTES (16 * 1024 * 1024) /* swy: 16 MiB for the W25Q128JVSIQ flash chip, or 128 Mbits in manufacturer lingo */
 #endif
 
 // All boards have B1 RP2040
