@@ -11,7 +11,7 @@ project(psdaptwor C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
-#set(PICO_NO_FLASH 1)
+set(PICO_NO_FLASH 1)
 set(PICO_BOARD psdaptwor)
 set(PICO_BOARD_HEADER_DIRS "${PROJECT_SOURCE_DIR}/boards")
 

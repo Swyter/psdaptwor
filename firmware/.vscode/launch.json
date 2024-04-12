@@ -33,6 +33,24 @@
             "searchDir": [
                 "${config:cmake.environment.PICO_SDK_PATH}/../openocd/scripts"
             ],
+        },
+        {
+            "request": "launch",
+            "name": "picotool load exec (no flash)",
+            "type": "node-terminal",
+            "command": "cd \"${config:cmake.environment.PICO_SDK_PATH}/../picotool\"; ./picotool reboot -f -u; sleep 1; ./picotool load -x ${workspaceRoot}/build/padaptwor.elf;"
+        },
+        {
+            "request": "launch",
+            "name": "picotool load (flash)",
+            "type": "node-terminal",
+            "command": "cd \"${config:cmake.environment.PICO_SDK_PATH}/../picotool\"; ./picotool reboot -f -u; sleep 1; ./picotool load    ${workspaceRoot}/build/padaptwor.elf;"
+        },
+        {
+            "request": "launch",
+            "name": "picotool reboot",
+            "type": "node-terminal",
+            "command": "cd \"${config:cmake.environment.PICO_SDK_PATH}/../picotool\"; ./picotool reboot -f"
         }
     ]
 }

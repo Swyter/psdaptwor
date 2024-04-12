@@ -119,8 +119,7 @@ int i2c_write(
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-
-
+    printf("[i] USB-C controller interrupt request: %x %x", gpio, event_mask);
 }
 
 
@@ -176,7 +175,7 @@ int main() {
     gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
 
 
-    printf("\nI2C Bus Scan\n");
+    printf("\nI2C Bus Scan test\n");
     printf("   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
  
     for (int addr = 0; addr < (1 << 7); ++addr) {
