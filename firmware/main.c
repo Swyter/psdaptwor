@@ -226,8 +226,7 @@ int main() {
 
     sleep_ms(10);
 
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1);
-    printf("b read 0: %#x\n", rxdata);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1); printf("b read 0: %#x\n", rxdata);
     printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
     /* Turn on all power */
@@ -238,6 +237,19 @@ int main() {
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASK1, 0); printf("c write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
+
+    /* Flush the TX buffer */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_FLUSH | 0x4); printf("f write ret: %#x\n", ret);
+
+    /* Flush the RX buffer */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write ret: %#x\n", ret);
+
+    /* Reset the PD logic */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write ret: %#x\n", ret);
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x\n", rxdata);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x\n", rxdata);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
