@@ -1,6 +1,6 @@
 /**
  * | psdaptwor - an experimental PSVR2 to PC adaptor | firmware
- * | created by Swyter <swyterzone+psdaptor@gmail.com>
+ * | created by Swyter <swyterzone+psdaptwor@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -117,6 +117,12 @@ int i2c_write(
     return PICO_OK;
 }
 
+void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
+{
+
+
+}
+
 
 int main() {
     stdio_init_all();
@@ -147,6 +153,7 @@ int main() {
     bool one  = gpio_get(1);
 
 
+
     sleep_ms(3500);    
 
     adc_init();
@@ -165,6 +172,8 @@ int main() {
     gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
+
+    gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan\n");

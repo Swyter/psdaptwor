@@ -1,6 +1,6 @@
 /**
  * | psdaptwor - an experimental PSVR2 to PC adaptor | custom RP2040 board pinout and boot-up defines
- * | created by Swyter <swyterzone+psdaptor@gmail.com>
+ * | created by Swyter <swyterzone+psdaptwor@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
