@@ -166,7 +166,8 @@ int main() {
     gpio_init(PSDAPT_PIN_HMD_ENABLE_VBUS);
     gpio_set_dir(PSDAPT_PIN_HMD_ENABLE_VBUS, GPIO_OUT);
 
-
+    gpio_init(PSDAPT_PIN_HMD_ENABLE_VBUS_12V);
+    gpio_set_dir(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, GPIO_OUT);
 
     sleep_ms(3500);    
 
@@ -274,9 +275,10 @@ int main() {
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   measureBackup);
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup);
 
-        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS, 1);
-        printf("gpio_is_pulled_down: %x", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS));
-    
+        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     1);
+        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 1);
+        printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS));
+        printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS_12V));
 
         sleep_ms(500);
 
