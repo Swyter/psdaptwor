@@ -11,7 +11,9 @@ project(psdaptwor C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
+# swy: write a RAM-only .uf2 file that does not persist, can be run with `picotool load -x psdaptwor.uf2`
 set(PICO_NO_FLASH 1)
+
 set(PICO_BOARD psdaptwor)
 set(PICO_BOARD_HEADER_DIRS "${PROJECT_SOURCE_DIR}/boards")
 

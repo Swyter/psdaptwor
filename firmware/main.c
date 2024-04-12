@@ -97,6 +97,7 @@ int i2c_read(
     return PICO_OK;
 }
 
+
 // Write bytes to a register
 int i2c_write(
     i2c_inst_t *i2c,         // i2c0 or i2c1
@@ -116,6 +117,16 @@ int i2c_write(
 
     return PICO_OK;
 }
+
+int i2c_write_byte(
+    i2c_inst_t *i2c,         // i2c0 or i2c1
+    uint8_t i2c_addr,        // 7 bit I2C address 
+    uint8_t reg,             // Number of the register to write to
+    uint8_t tx_byte          // Byte to write
+) {
+    uint8_t tx_buf = tx_byte; return i2c_write(i2c, i2c_addr, reg, &tx_buf, 1);
+}
+
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
@@ -204,15 +215,21 @@ int main() {
 
     printf("Done.\n");
 
-
-    uint8_t rxdata; absolute_time_t timeout = make_timeout_time_ms(50);
-    //uint32_t ret = i2c_read_blocking;//i2c_read_blocking_until(i2c_default, 0x22 | FUSB_DEVICE_ID, &rxdata, 1, false, timeout);
-
-    i2c_read(i2c_default, 0x22, 1, &rxdata, 1);
-
+    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1);
     printf("read 0: %#x\n", rxdata);
+    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
-    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> 4,  (rxdata & 0b1100) >> 2, (rxdata & 0b0011) >> 0);
+    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RES);
+    printf("b write ret: %#x\n", ret);
+
+    if (ret != PICO_OK)
+        printf("[!] couldn't reset it\n");
+
+    sleep_ms(10);
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1);
+    printf("b read 0: %#x\n", rxdata);
+    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
 
     while (1) {
