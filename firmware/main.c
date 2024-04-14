@@ -267,7 +267,7 @@ int main() {
 
         /* Reset the PD logic */
         ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup & 0b11110011); printf("f write ret: %#x\n", ret);
-        ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, FUSB_MEASURE_MEAS_VBUS | (counter++ & 0b111111)); printf("f write ret: %#x, counter: %x, comp volt: %f\n", ret, counter, (counter + 1) * 0.420f);
+        ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, FUSB_MEASURE_MEAS_VBUS | (counter & 0b111111)); printf("f write ret: %#x, counter: %x, comp volt: %f\n", ret, counter, (counter + 1) * 0.420f);
         sleep_ms(10);
         i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, &rxdata, 1); printf("i2c_read FUSB_MEASURE: %#x\n", rxdata);
         sleep_ms(100);
@@ -275,8 +275,10 @@ int main() {
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   measureBackup);
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup);
 
-        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     1);
-        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 1);
+        counter++;
+
+        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
+        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
         printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS));
         printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS_12V));
 
