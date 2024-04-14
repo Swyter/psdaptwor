@@ -130,8 +130,9 @@ int i2c_write_byte(
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x", gpio, event_mask);
-    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("b read FUSB_INTERRUPTA: %#x\n", rxdata);
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask);
+    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTA: %#x  ", rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); printf("int read FUSB_STATUS0:    %#x\n", rxdata);
 }
 
 
@@ -188,7 +189,7 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
-    gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
