@@ -147,9 +147,9 @@ int main() {
 #warning blink example requires a board with a regular LED
 #else
     const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    gpio_init   (LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
-    gpio_put    (LED_PIN, 1);
+    gpio_init   (PSDAPT_PIN_LED_CONN_WRONG_ORIENT);
+    gpio_set_dir(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, GPIO_OUT);
+    gpio_put    (PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 1);
 
     gpio_init   (PSDAPT_PIN_LED_HMD_IS_READY);
     gpio_set_dir(PSDAPT_PIN_LED_HMD_IS_READY, GPIO_OUT);
@@ -263,7 +263,7 @@ int main() {
 
     uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
-    uint8_t counter = 0;
+    uint8_t counter = 0, cc1 = 0, cc2 = 0;
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
         const float conversion_factor = 3.3f / (1 << 12);
@@ -282,12 +282,12 @@ int main() {
         ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2 | FUSB_SWITCHES0_MEAS_CC1); printf("cc1 write ret: %#x\n", ret);
         ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, 0); printf("cc1 write ret: %#x\n", ret);
         sleep_ms(10);
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc1 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (rxdata & FUSB_STATUS0_BC_LVL));
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc1 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (cc1 = rxdata & FUSB_STATUS0_BC_LVL));
 
         ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2 | FUSB_SWITCHES0_MEAS_CC2); printf("cc2 write ret: %#x\n", ret);
         ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, 0); printf("cc2 write ret: %#x\n", ret);
         sleep_ms(10);
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc2 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (rxdata & FUSB_STATUS0_BC_LVL));
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc2 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (cc2 = rxdata & FUSB_STATUS0_BC_LVL));
 
 
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   measureBackup);
@@ -308,10 +308,11 @@ int main() {
 #ifndef PICO_DEFAULT_LED_PIN
 #warning blink example requires a board with a regular LED
 #else
-        gpio_put(LED_PIN, 1);
+        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, (cc2 > cc1) ? 1 : 0);
+
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
         sleep_ms(250);
-        gpio_put(LED_PIN, 0);
+        //gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 1);
         sleep_ms(250);
 #endif
