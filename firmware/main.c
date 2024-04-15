@@ -23,6 +23,7 @@
         Type-C PD controller chip: https://www.onsemi.com/pdf/datasheet/fusb302b-d.pdf
                                    https://github.com/Ralim/usb-pd/
                                    https://www.ti.com/lit/an/slva704/slva704.pdf (good overview of how the I2C protocol works)
+                                   https://github.com/ReclaimerLabs/FUSB302/blob/master/FUSB302.cpp (The Google ChromeOS EC implementation; very clean and well-commented)
 
    M-LVDS to TTL transceiver chip: http://www.ti.com/lit/gpn/SN65MLVD200 */
 
@@ -131,12 +132,13 @@ int i2c_write_byte(
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask);
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
     uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTA: %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTB: %#x  ", rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); printf("int read FUSB_INTERRUPTB: %#x  ", rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); printf("int read FUSB_INTERRUPT:  %#x  ", rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); printf("int read FUSB_STATUS0:    %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); printf("int read FUSB_STATUS0A:   %#x\n", rxdata);
-
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); printf("int read FUSB_STATUS0A:   %#x  ", rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); printf("int read FUSB_SWITCHES0:  %#x\n", rxdata);
     return;
 }
 
@@ -320,7 +322,7 @@ int main() {
 
     uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
-    uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f;
+    uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f; bool cc_tx_configured = 0;
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
         const float conversion_factor = 3.3f / (1 << 12);
@@ -332,18 +334,17 @@ int main() {
 
         printf("[fusb] measured USB-C VBUS: %f, CC1 > CC2: %i\n", measured_vbus, cc1_is_bigger_than_cc2);
 
+        if (0)//measured_vbus > 3 && !cc_tx_configured)
+        {
+            if (cc1_is_bigger_than_cc2) {
+                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, FUSB_SWITCHES1_TXCC1 | FUSB_SWITCHES1_AUTO_CRC | (1 << FUSB_SWITCHES1_SPECREV_SHIFT)); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
+                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_MEAS_CC1 | FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
 
-        if (cc1_is_bigger_than_cc2) {
-            // TX_CC1|AUTO_CRC|SPECREV0
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, 0x25); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, 0x07); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
-            // PWDN1|PWDN2|MEAS_CC1
-
-        } else {
-            // TX_CC2|AUTO_CRC|SPECREV0
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, 0x26); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, 0x0B); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
-            // PWDN1|PWDN2|MEAS_CC2
+            } else {
+                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, FUSB_SWITCHES1_TXCC2 | FUSB_SWITCHES1_AUTO_CRC | (1 << FUSB_SWITCHES1_SPECREV_SHIFT)); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
+                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_MEAS_CC2 | FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
+            }
+            cc_tx_configured = 1;
         }
 
 
