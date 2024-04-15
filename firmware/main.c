@@ -133,6 +133,7 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
     printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask);
     uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTA: %#x  ", rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTB: %#x  ", rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); printf("int read FUSB_STATUS0:    %#x  ", rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); printf("int read FUSB_STATUS0A:   %#x\n", rxdata);
 
@@ -143,10 +144,7 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 int fusb_measure_against(int mdac_val)
 {
     uint8_t rxdata, ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, FUSB_MEASURE_MEAS_VBUS | (mdac_val & 0b111111)); //printf("f write ret: %#x, counter: %x, comp volt: %f\n", ret, mdac_val, mdac_val * 0.420f);
-
-    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, &rxdata, 1); //printf("i2c_read FUSB_MEASURE: %#x\n", rxdata); sleep_ms(1);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); //printf("i2c_read FUSB_STATUS0: %#x COMP: %u\n", rxdata, (rxdata & FUSB_STATUS0_COMP));
-
     return (rxdata & FUSB_STATUS0_COMP);
 }
 
@@ -307,6 +305,9 @@ int main() {
     /* Flush the RX buffer */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write ret: %#x\n", ret);
 
+    /* Flush the RX buffer */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, FUSB_CONTROL2_TOGGLE | (1 << FUSB_CONTROL2_MODE_SHIFT) ); printf("f write ret: %#x\n", ret);
+
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);
 
 
@@ -330,6 +331,21 @@ int main() {
         cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
 
         printf("[fusb] measured USB-C VBUS: %f, CC1 > CC2: %i\n", measured_vbus, cc1_is_bigger_than_cc2);
+
+
+        if (cc1_is_bigger_than_cc2) {
+            // TX_CC1|AUTO_CRC|SPECREV0
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, 0x25); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, 0x07); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
+            // PWDN1|PWDN2|MEAS_CC1
+
+        } else {
+            // TX_CC2|AUTO_CRC|SPECREV0
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, 0x26); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, 0x0B); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
+            // PWDN1|PWDN2|MEAS_CC2
+        }
+
 
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
