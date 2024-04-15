@@ -143,11 +143,10 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 
 int fusb_measure_against(int mdac_val)
 {
-    uint8_t rxdata, ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, FUSB_MEASURE_MEAS_VBUS | (mdac_val & 0b111111)); printf("f write ret: %#x, counter: %x, comp volt: %f\n", ret, mdac_val, mdac_val * 0.420f);
+    uint8_t rxdata, ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, FUSB_MEASURE_MEAS_VBUS | (mdac_val & 0b111111)); //printf("f write ret: %#x, counter: %x, comp volt: %f\n", ret, mdac_val, mdac_val * 0.420f);
 
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, &rxdata, 1); printf("i2c_read FUSB_MEASURE: %#x\n", rxdata);
-    sleep_ms(1);
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("i2c_read FUSB_STATUS0: %#x COMP: %u\n", rxdata, (rxdata & FUSB_STATUS0_COMP));
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, &rxdata, 1); //printf("i2c_read FUSB_MEASURE: %#x\n", rxdata); sleep_ms(1);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); //printf("i2c_read FUSB_STATUS0: %#x COMP: %u\n", rxdata, (rxdata & FUSB_STATUS0_COMP));
 
     return (rxdata & FUSB_STATUS0_COMP);
 }
@@ -166,12 +165,12 @@ float fusb_measure_vbus(void)
 {
     uint8_t counter = 0, lastrxdata = 0, rxdata = 0, ret = 0;
 
-    uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
-    uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
+    uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); //printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
+    uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); //printf("b read FUSB_MEASURE: %#x\n", measureBackup);
 
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup & 0b11110011); printf("f write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup & 0b11110011); //printf("f write ret: %#x\n", ret);
 
-    void *bsearch_ret = bsearch(NULL, NULL, FUSB_MEASURE_MDAC + 1, 1, fusb_measure_vbus_bsearch_comp); counter = (uint32_t) bsearch_ret;
+    void *bsearch_ret = bsearch(NULL, NULL, FUSB_MEASURE_MDAC + 1, 1, fusb_measure_vbus_bsearch_comp); counter = (uint32_t) bsearch_ret + 1;
 
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   measureBackup);
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup);
@@ -328,12 +327,8 @@ int main() {
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   measureBackup);
         i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup);
 
-        
-
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
-        printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS));
-        printf("gpio_is_pulled_down: %x ", gpio_is_pulled_down(PSDAPT_PIN_HMD_ENABLE_VBUS_12V));
 
         sleep_ms(500);
 
