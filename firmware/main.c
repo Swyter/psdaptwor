@@ -132,14 +132,18 @@ int i2c_write_byte(
 
 char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 {
+    uint8_t reg_data_orig = reg_data;
+
 #define CASE_PRINT(_REG) \
-    case _REG: printf("["#_REG "]: ");
+    case _REG: printf("[%s]: ", &#_REG[5]);
+
+#define PRINT_REG(ARG_PREFIX, ARG_NAME) /* swy: if the flag is set, print it, to see if we need to print a | separator make sure the current flag is set and there's any set data underneath that will be processed afterwards, or we'll just print the number */ \
+    printf("%s%s", (reg_data & ARG_PREFIX##_##ARG_NAME) ? #ARG_NAME : "", (reg_data & ARG_PREFIX##_##ARG_NAME) && (reg_data & (ARG_PREFIX##_##ARG_NAME - 1)) ? "|" : ""); reg_data &= ~ARG_PREFIX##_##ARG_NAME;
 
 #define CASE_END() \
-    printf("%x, ", reg_data);  break;
-
-#define PRINT_REG(_PREFIX, _NAME) \
-    printf((reg_data & _PREFIX##_##_NAME) ? #_NAME "|" : ""); reg_data &= ~_PREFIX##_##_NAME;
+    if (reg_data != 0 || reg_data_orig==reg_data) printf("%x, ", reg_data); /* swy: if there's any remaining unparsed data, or no flags have been processed, i.e. it's zero, print the number */ \
+                                             else printf(  ", "); \
+    break;
 
     switch (reg)
     {
@@ -202,6 +206,8 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
             PRINT_REG(FUSB_STATUS0, CRC_CHK )
             PRINT_REG(FUSB_STATUS0, ALERT   )
             PRINT_REG(FUSB_STATUS0, WAKE    )
+            PRINT_REG(FUSB_STATUS0, BC_LVL1 )
+            PRINT_REG(FUSB_STATUS0, BC_LVL0 )
             CASE_END()
         }
 

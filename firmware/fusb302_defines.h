@@ -181,6 +181,9 @@
 #define FUSB_STATUS0_WAKE         (1 << 2)
 #define FUSB_STATUS0_BC_LVL_SHIFT 0
 #define FUSB_STATUS0_BC_LVL       (0x3 << FUSB_STATUS0_BC_LVL_SHIFT)
+#define FUSB_STATUS0_BC_LVL1      (1 << 1)
+#define FUSB_STATUS0_BC_LVL0      (1 << 0)
+
 
 /* Status1 register */
 #define FUSB_STATUS1          0x41
