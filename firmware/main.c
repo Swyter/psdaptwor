@@ -227,6 +227,13 @@ int main() {
     gpio_set_dir(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, GPIO_OUT);
     gpio_put    (PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
 
+    gpio_init   (PSDAPT_PIN_PC_HPD);
+    gpio_set_dir(PSDAPT_PIN_PC_HPD, GPIO_OUT);
+    gpio_put    (PSDAPT_PIN_PC_HPD, 0);
+
+
+    
+
     sleep_ms(3500);    
 
     adc_init();
@@ -370,10 +377,12 @@ int main() {
         gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, (measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
 
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
+        gpio_put(PSDAPT_PIN_PC_HPD, 1);
         sleep_ms(250);
         //gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, measured_vbus > 0.f ? 1 : 0);
         sleep_ms(250);
+        gpio_put(PSDAPT_PIN_PC_HPD, 0);
 #endif
 
     }
