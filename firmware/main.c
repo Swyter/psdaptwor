@@ -317,6 +317,23 @@ int main() {
     /* Flush the RX buffer */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, FUSB_CONTROL2_TOGGLE | (1 << FUSB_CONTROL2_MODE_SHIFT) ); printf("f write ret: %#x\n", ret);
 
+
+    /* turn off toggle */
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &rxdata, 1);
+    rxdata &= ~FUSB_CONTROL2_TOGGLE;
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, rxdata);
+
+    /* enable pull-downs, disable pullups */
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1);
+
+    rxdata &= ~(FUSB_SWITCHES0_PU_EN1);
+    rxdata &= ~(FUSB_SWITCHES0_PU_EN2);
+    rxdata |= (FUSB_SWITCHES0_PDWN_1);
+    rxdata |= (FUSB_SWITCHES0_PDWN_2);
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, rxdata);
+
+
+
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);
 
 
@@ -328,6 +345,12 @@ int main() {
     uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
     uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f; bool cc_tx_configured = 0;
+
+    /* Reset the PD logic */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
+
+    uint8_t buf[32] = {0};
+
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
         const float conversion_factor = 3.3f / (1 << 12);
@@ -341,14 +364,19 @@ int main() {
 
         if (!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
         {
-            if (1) {
-                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, FUSB_SWITCHES1_TXCC1 | FUSB_SWITCHES1_AUTO_CRC | (1 << FUSB_SWITCHES1_SPECREV_SHIFT)); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
-                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2); printf("cc1_is_bigger_than_cc2 cc1 write ret: %#x\n", ret);
+            uint8_t reg; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg, 1);
+            /* Clear CC1/CC2 measure bits */
+            reg &= ~FUSB_SWITCHES0_MEAS_CC1;
+            reg &= ~FUSB_SWITCHES0_MEAS_CC2;
 
-            } else {
-                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, FUSB_SWITCHES1_TXCC2 | FUSB_SWITCHES1_AUTO_CRC | (1 << FUSB_SWITCHES1_SPECREV_SHIFT)); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
-                ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2); printf("cc1_is_bigger_than_cc2 cc2 write ret: %#x\n", ret);
-            }
+            if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
+            else   reg |= FUSB_SWITCHES0_MEAS_CC2;
+
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x\n", ret);
+
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &reg, 1);
+            reg |= FUSB_SWITCHES1_AUTO_CRC;
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x\n", ret);
 
             /* Flush the RX buffer */
             ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write FUSB_CONTROL1: %#x\n", ret);
@@ -361,12 +389,9 @@ int main() {
 
         sleep_ms(500);
 
-        /* Reset the PD logic */
-        ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
 
-
-        uint8_t buf[32];
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("b read FUSB_FIFOS: %#x\n", rxdata);
+        
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 4); printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
 
         printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
 
@@ -374,12 +399,15 @@ int main() {
 #ifndef PICO_DEFAULT_LED_PIN
 #warning blink example requires a board with a regular LED
 #else
-        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, (measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
+        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 1); //(measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
 
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
-        gpio_put(PSDAPT_PIN_PC_HPD, 1);
         sleep_ms(250);
-        //gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
+        gpio_put(PSDAPT_PIN_PC_HPD, 1);
+        sleep_ms(2);
+        gpio_put(PSDAPT_PIN_PC_HPD, 0);
+        sleep_ms(250);
+        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
         gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, measured_vbus > 0.f ? 1 : 0);
         sleep_ms(250);
         gpio_put(PSDAPT_PIN_PC_HPD, 0);
