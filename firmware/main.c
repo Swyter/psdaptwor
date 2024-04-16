@@ -132,20 +132,80 @@ int i2c_write_byte(
 
 char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 {
-    static char buf[1000];
+#define CASE_PRINT(_REG) \
+    case _REG: printf("["#_REG "]: ");
+
+#define CASE_END() \
+    printf("%x, ", reg_data);  break;
 
 #define PRINT_REG(_PREFIX, _NAME) \
-    printf((reg_data & _PREFIX##_##_NAME) ? #_NAME"|" : ""); reg_data &= ~_PREFIX##_##_NAME; //sniprintf(buf, sizeof(buf) - 1, (reg_data & _PREFIX##_##_NAME) ? #_NAME : "");
+    printf((reg_data & _PREFIX##_##_NAME) ? #_NAME "|" : ""); reg_data &= ~_PREFIX##_##_NAME;
 
     switch (reg)
     {
         default:
-            printf(" [??? Unknown register %X] ", reg);
+            printf(" [??? Unknown register %X], ", reg);
             break;
 
-        case FUSB_INTERRUPT:
-        {
-            printf("FUSB_INTERRUPT: ");
+        CASE_PRINT(FUSB_SWITCHES0) {
+            PRINT_REG(FUSB_SWITCHES0, PU_EN2   )
+            PRINT_REG(FUSB_SWITCHES0, PU_EN1   )
+            PRINT_REG(FUSB_SWITCHES0, VCONN_CC2)
+            PRINT_REG(FUSB_SWITCHES0, VCONN_CC1)
+            PRINT_REG(FUSB_SWITCHES0, MEAS_CC2 )
+            PRINT_REG(FUSB_SWITCHES0, MEAS_CC1 )
+            PRINT_REG(FUSB_SWITCHES0, PDWN_2   )
+            PRINT_REG(FUSB_SWITCHES0, PDWN_1   )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_STATUS0A) {
+            PRINT_REG(FUSB_STATUS0A, SOFTFAIL )
+            PRINT_REG(FUSB_STATUS0A, RETRYFAIL)
+            PRINT_REG(FUSB_STATUS0A, POWER3   )
+            PRINT_REG(FUSB_STATUS0A, POWER2   )
+            PRINT_REG(FUSB_STATUS0A, SOFTRST  )
+            PRINT_REG(FUSB_STATUS0A, HARDRST  )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_STATUS1A) {
+            PRINT_REG(FUSB_STATUS1A, TOGSS_SHIFT)
+            PRINT_REG(FUSB_STATUS1A, TOGSS      )
+            PRINT_REG(FUSB_STATUS1A, RXSOP2DB   )
+            PRINT_REG(FUSB_STATUS1A, RXSOP1DB   )
+            PRINT_REG(FUSB_STATUS1A, RXSOP      )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_INTERRUPTA) {
+            PRINT_REG(FUSB_INTERRUPTA, I_OCP_TEMP )
+            PRINT_REG(FUSB_INTERRUPTA, I_TOGDONE  )
+            PRINT_REG(FUSB_INTERRUPTA, I_SOFTFAIL )
+            PRINT_REG(FUSB_INTERRUPTA, I_RETRYFAIL)
+            PRINT_REG(FUSB_INTERRUPTA, I_HARDSENT )
+            PRINT_REG(FUSB_INTERRUPTA, I_TXSENT   )
+            PRINT_REG(FUSB_INTERRUPTA, I_SOFTRST  )
+            PRINT_REG(FUSB_INTERRUPTA, I_HARDRST  )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_INTERRUPTB) {
+            PRINT_REG(FUSB_INTERRUPTB, I_GCRCSENT )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_STATUS0) {
+            PRINT_REG(FUSB_STATUS0, VBUSOK  )
+            PRINT_REG(FUSB_STATUS0, ACTIVITY)
+            PRINT_REG(FUSB_STATUS0, COMP    )
+            PRINT_REG(FUSB_STATUS0, CRC_CHK )
+            PRINT_REG(FUSB_STATUS0, ALERT   )
+            PRINT_REG(FUSB_STATUS0, WAKE    )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_INTERRUPT) {
             PRINT_REG(FUSB_INTERRUPT, I_VBUSOK   )
             PRINT_REG(FUSB_INTERRUPT, I_ACTIVITY )
             PRINT_REG(FUSB_INTERRUPT, I_COMP_CHNG)
@@ -154,11 +214,13 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
             PRINT_REG(FUSB_INTERRUPT, I_WAKE     )
             PRINT_REG(FUSB_INTERRUPT, I_COLLISION)
             PRINT_REG(FUSB_INTERRUPT, I_BC_LVL   )
-            printf("%x", reg_data);
+            CASE_END()
         }
 
     }
+#undef PRINT_REG
 
+    
 }
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
