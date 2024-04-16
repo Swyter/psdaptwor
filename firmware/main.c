@@ -130,15 +130,46 @@ int i2c_write_byte(
 }
 
 
+char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
+{
+    static char buf[1000];
+
+#define PRINT_REG(_PREFIX, _NAME) \
+    printf((reg_data & _PREFIX##_##_NAME) ? #_NAME"|" : ""); reg_data &= ~_PREFIX##_##_NAME; //sniprintf(buf, sizeof(buf) - 1, (reg_data & _PREFIX##_##_NAME) ? #_NAME : "");
+
+    switch (reg)
+    {
+        default:
+            printf(" [??? Unknown register %X] ", reg);
+            break;
+
+        case FUSB_INTERRUPT:
+        {
+            printf("FUSB_INTERRUPT: ");
+            PRINT_REG(FUSB_INTERRUPT, I_VBUSOK   )
+            PRINT_REG(FUSB_INTERRUPT, I_ACTIVITY )
+            PRINT_REG(FUSB_INTERRUPT, I_COMP_CHNG)
+            PRINT_REG(FUSB_INTERRUPT, I_CRC_CHK  )
+            PRINT_REG(FUSB_INTERRUPT, I_ALERT    )
+            PRINT_REG(FUSB_INTERRUPT, I_WAKE     )
+            PRINT_REG(FUSB_INTERRUPT, I_COLLISION)
+            PRINT_REG(FUSB_INTERRUPT, I_BC_LVL   )
+            printf("%x", reg_data);
+        }
+
+    }
+
+}
+
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
     printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
-    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read FUSB_INTERRUPTA: %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); printf("int read FUSB_INTERRUPTB: %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); printf("int read FUSB_INTERRUPT:  %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); printf("int read FUSB_STATUS0:    %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); printf("int read FUSB_STATUS0A:   %#x  ", rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); printf("int read FUSB_SWITCHES0:  %#x\n", rxdata);
+    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read INTERRUPTA: %#x %s%s%s%s%s%s  ", rxdata, (rxdata&FUSB_INTERRUPT_I_VBUSOK) ? "I_VBUSOK|":"", (rxdata&FUSB_INTERRUPT_I_ACTIVITY) ? "I_ACTIVITY|":"", (rxdata&FUSB_INTERRUPT_I_COMP_CHNG) ? "I_COMP_CHNG|":"", (rxdata&FUSB_INTERRUPT_I_VBUSOK) ? "I_VBUSOK|":"", );
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
     return;
 }
 
@@ -308,6 +339,10 @@ int main() {
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
 
+    /* Reset the PD logic */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
+
+
     /* Flush the TX buffer */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_FLUSH | 0x4); printf("f write ret: %#x\n", ret);
 
@@ -346,8 +381,7 @@ int main() {
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
     uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f; bool cc_tx_configured = 0;
 
-    /* Reset the PD logic */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
+
 
     uint8_t buf[32] = {0};
 
