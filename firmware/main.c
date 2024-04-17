@@ -394,7 +394,7 @@ enum tcpc_rp_value {
 };
 
 int cc_polarity = -1;
-int previous_pull = 0;
+int previous_pull = TYPEC_CC_RD;
 bool vconn_enabled = false;
 int dfp_toggling_on = 0;
 int pulling_up = 0;
@@ -402,10 +402,11 @@ int pulling_up = 0;
 int togdone_pullup_cc1 = 0;
 int togdone_pullup_cc2 = 0;
 
+
 int set_polarity(int polarity)
 {
     /* Port polarity : 0 => CC1 is CC line, 1 => CC2 is CC line */
-    int8_t reg;
+    uint8_t reg;
 
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
 
@@ -466,7 +467,7 @@ int set_vconn(int enable)
      * Therefore at startup, set_polarity should be called first,
      * or else live with the default put into init.
      */
-    int8_t reg;
+    uint8_t reg;
 
     /* save enable state for later use */
     vconn_enabled = enable;
@@ -490,7 +491,7 @@ int set_vconn(int enable)
 
 int set_cc(int pull)
 {
-    int8_t reg;
+    uint8_t reg;
 
     /*
      * Ensure we aren't in the process of changing CC from the alert
@@ -566,6 +567,49 @@ int set_cc(int pull)
             /* Unsupported... */
             return 0;
     }
+    return 0;
+}
+
+int init()
+{
+    uint8_t reg;
+
+    /* set default */
+    cc_polarity = -1;
+    previous_pull = TYPEC_CC_RD;
+
+    /* set the voltage threshold for no connect detection (vOpen) */
+    //this->mdac_vnc = TCPC_REG_MEASURE_MDAC_MV(PD_SRC_DEF_VNC_MV);
+    /* set the voltage threshold for Rd vs Ra detection */
+    //this->mdac_rd = TCPC_REG_MEASURE_MDAC_MV(PD_SRC_DEF_RD_THRESH_MV);
+
+    /* Restore default settings */
+    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RESET); printf("b write ret: %#x\n", ret);
+
+    sleep_ms(1);
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &reg, 1); printf("b read 0: %#x\n", reg);
+    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", reg >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (reg & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (reg & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
+
+    /* Turn on retries and set number of retries */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg);
+    reg |= FUSB_CONTROL3_AUTO_RETRY;
+    reg |= FUSB_CONTROL3_N_RETRIES1 | FUSB_CONTROL3_N_RETRIES0;
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
+
+    /* Set interrupt masks */
+    // Setting to 0 so interrupts are allowed
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASK1, 0); printf("c write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
+
+    /* Set VCONN switch defaults */
+    set_polarity(0);
+    set_vconn(0);
+
+    /* Turn on all power */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
+    
     return 0;
 }
 
@@ -653,33 +697,7 @@ int main() {
 
     uint8_t rxdata, reg;
 
-    /* Restore default settings */
-    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RESET); printf("b write ret: %#x\n", ret);
-
-    sleep_ms(1);
-
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1); printf("b read 0: %#x\n", rxdata);
-    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
-
-    /* Turn on retries and set number of retries */
-    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg);
-    reg |= FUSB_CONTROL3_AUTO_RETRY;
-    reg |= FUSB_CONTROL3_N_RETRIES1 | FUSB_CONTROL3_N_RETRIES0;
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
-
-    /* Set interrupt masks */
-    // Setting to 0 so interrupts are allowed
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASK1, 0); printf("c write ret: %#x\n", ret);
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
-
-
-    /* Set VCONN switch defaults */
-    set_polarity(0);
-    set_vconn(0);
-
-    /* Turn on all power */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
+    init();
 
     /* turn off toggle */
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &rxdata, 1);
@@ -730,14 +748,14 @@ int main() {
             if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
             else   reg |= FUSB_SWITCHES0_MEAS_CC2;
 
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x ", ret); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1:"); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
 
             i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &reg, 1); 
             reg |= FUSB_SWITCHES1_AUTO_CRC;
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x ", ret); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1:"); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
 
             /* Flush the RX buffer */
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write FUSB_CONTROL1: %#x\n", ret);
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write FUSB_CONTROL1:\n");
             cc_tx_configured = 1;
         }
 
