@@ -163,6 +163,17 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
             CASE_END()
         }
 
+        CASE_PRINT(FUSB_SWITCHES1) {
+            PRINT_REG(FUSB_SWITCHES1, POWERROLE    )
+            PRINT_REG(FUSB_SWITCHES1, SPECREV1     )
+            PRINT_REG(FUSB_SWITCHES1, SPECREV0     )
+            PRINT_REG(FUSB_SWITCHES1, DATAROLE     )
+            PRINT_REG(FUSB_SWITCHES1, AUTO_CRC     )
+            PRINT_REG(FUSB_SWITCHES1, TXCC2        )
+            PRINT_REG(FUSB_SWITCHES1, TXCC1        )
+            CASE_END()
+        }
+
         CASE_PRINT(FUSB_STATUS0A) {
             PRINT_REG(FUSB_STATUS0A, SOFTFAIL )
             PRINT_REG(FUSB_STATUS0A, RETRYFAIL)
@@ -238,6 +249,7 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata); puts(NULL);
     return;
 }
 
@@ -409,12 +421,13 @@ int main() {
 
     /* Reset the PD logic */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
-
+    ret = i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
 
     /* Flush the TX buffer */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_FLUSH | 0x4); printf("f write ret: %#x\n", ret);
 
     /* Flush the RX buffer */
+    ret = i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write ret: %#x\n", ret);
 
     /* Flush the RX buffer */
@@ -451,7 +464,7 @@ int main() {
 
 
 
-    uint8_t buf[32] = {0};
+    uint8_t buf[32] = {0x69};
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
@@ -471,8 +484,8 @@ int main() {
             reg &= ~FUSB_SWITCHES0_MEAS_CC1;
             reg &= ~FUSB_SWITCHES0_MEAS_CC2;
 
-            if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
-            else   reg |= FUSB_SWITCHES0_MEAS_CC2;
+            //if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
+            //else   reg |= FUSB_SWITCHES0_MEAS_CC2;
 
             ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x\n", ret);
 
@@ -493,9 +506,12 @@ int main() {
 
 
         
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 4); printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 1);
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[1], 1);
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[2], 1);
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[3], 1);  printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
 
-        printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
+        //printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
 
 
 #ifndef PICO_DEFAULT_LED_PIN

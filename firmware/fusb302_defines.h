@@ -35,6 +35,8 @@
 #define FUSB_SWITCHES1_POWERROLE     (1 << 7)
 #define FUSB_SWITCHES1_SPECREV_SHIFT 5
 #define FUSB_SWITCHES1_SPECREV       (0x3 << FUSB_SWITCHES1_SPECREV_SHIFT)
+#define FUSB_SWITCHES1_SPECREV1      (1 << 6) /* swy: added this non-flag one */
+#define FUSB_SWITCHES1_SPECREV0      (1 << 5) /* swy: added this non-flag one */
 #define FUSB_SWITCHES1_DATAROLE      (1 << 4)
 #define FUSB_SWITCHES1_AUTO_CRC      (1 << 2)
 #define FUSB_SWITCHES1_TXCC2         (1 << 1)
@@ -181,8 +183,8 @@
 #define FUSB_STATUS0_WAKE         (1 << 2)
 #define FUSB_STATUS0_BC_LVL_SHIFT 0
 #define FUSB_STATUS0_BC_LVL       (0x3 << FUSB_STATUS0_BC_LVL_SHIFT)
-#define FUSB_STATUS0_BC_LVL1      (1 << 1)
-#define FUSB_STATUS0_BC_LVL0      (1 << 0)
+#define FUSB_STATUS0_BC_LVL1      (1 << 1) /* swy: added this non-flag one */
+#define FUSB_STATUS0_BC_LVL0      (1 << 0) /* swy: added this non-flag one */
 
 
 /* Status1 register */
