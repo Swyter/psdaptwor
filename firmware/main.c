@@ -148,7 +148,7 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
     switch (reg)
     {
         default:
-            printf(" [??? Unknown register %X], ", reg);
+            printf("[??? Unknown register %X], ", reg);
             break;
 
         CASE_PRINT(FUSB_SWITCHES0) {
@@ -285,14 +285,14 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
         }
 
     }
+#undef CASE_END
 #undef PRINT_REG
-
-    
+#undef CASE_PRINT
 }
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    //printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
     uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata); puts(NULL); stdio_flush();
@@ -306,7 +306,9 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); puts(NULL); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL); stdio_flush();
 
-    printf("[i] ---\n");
+    //printf("[i] ---\n");
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
     return;
 }
 
@@ -421,7 +423,7 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
-    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
@@ -487,7 +489,7 @@ int main() {
     ret = i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write ret: %#x\n", ret);
 
-    /* Flush the RX buffer */
+    /* FUSB_CONTROL2_TOGGLE */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, FUSB_CONTROL2_TOGGLE | (1 << FUSB_CONTROL2_MODE_SHIFT) ); printf("f write ret: %#x\n", ret);
 
 
@@ -505,17 +507,13 @@ int main() {
     rxdata |= (FUSB_SWITCHES0_PDWN_2);
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, rxdata);
 
+    //ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);
 
-
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);
-
-
-
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x\n", rxdata);
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x\n", rxdata);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
 
-    uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
+    uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x ", switchesBackup); fusb_debug_register(FUSB_SWITCHES0, switchesBackup); puts(NULL);
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
     uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f; bool cc_tx_configured = 0;
 
@@ -536,19 +534,19 @@ int main() {
 
         if (!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
         {
-            uint8_t reg; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg, 1);
+            uint8_t reg; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg, 1); fusb_debug_register(FUSB_SWITCHES0, reg); puts(NULL);
             /* Clear CC1/CC2 measure bits */
             reg &= ~FUSB_SWITCHES0_MEAS_CC1;
             reg &= ~FUSB_SWITCHES0_MEAS_CC2;
 
-            //if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
-            //else   reg |= FUSB_SWITCHES0_MEAS_CC2;
+            if (1) reg |= FUSB_SWITCHES0_MEAS_CC1;
+            else   reg |= FUSB_SWITCHES0_MEAS_CC2;
 
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x\n", ret);
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x ", ret); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
 
-            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &reg, 1);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &reg, 1); 
             reg |= FUSB_SWITCHES1_AUTO_CRC;
-            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x\n", ret);
+            ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg); printf("cc1_is_bigger_than_cc2 cc1 write FUSB_SWITCHES1: %#x ", ret); fusb_debug_register(FUSB_SWITCHES1, reg); puts(NULL);
 
             /* Flush the RX buffer */
             ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write FUSB_CONTROL1: %#x\n", ret);
