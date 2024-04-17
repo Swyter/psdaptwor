@@ -993,10 +993,8 @@ int main() {
         uint16_t result = adc_read();
         printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
 
-
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-        printf("get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
-
+        printf("[typec] get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
 
         //measured_vbus = fusb_measure_vbus();
         //cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
@@ -1029,15 +1027,6 @@ int main() {
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
 
         sleep_ms(500);
-
-
-        
-        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 1);
-        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[1], 1);
-        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[2], 1);
-        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[3], 1);  printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
-
-        //printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
 
 
 #ifndef PICO_DEFAULT_LED_PIN
