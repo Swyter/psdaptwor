@@ -160,14 +160,14 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
             break;
 
         CASE_PRINT(FUSB_SWITCHES0) {
-            PRINT_REG(FUSB_SWITCHES0, PU_EN2   )
-            PRINT_REG(FUSB_SWITCHES0, PU_EN1   )
+            PRINT_REG(FUSB_SWITCHES0, CC2_PU_EN)
+            PRINT_REG(FUSB_SWITCHES0, CC1_PU_EN)
             PRINT_REG(FUSB_SWITCHES0, VCONN_CC2)
             PRINT_REG(FUSB_SWITCHES0, VCONN_CC1)
             PRINT_REG(FUSB_SWITCHES0, MEAS_CC2 )
             PRINT_REG(FUSB_SWITCHES0, MEAS_CC1 )
-            PRINT_REG(FUSB_SWITCHES0, PDWN_2   )
-            PRINT_REG(FUSB_SWITCHES0, PDWN_1   )
+            PRINT_REG(FUSB_SWITCHES0, CC2_PD_EN)
+            PRINT_REG(FUSB_SWITCHES0, CC1_PD_EN)
             CASE_END()
         }
 
@@ -177,8 +177,8 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
             PRINT_REG(FUSB_SWITCHES1, SPECREV0 )
             PRINT_REG(FUSB_SWITCHES1, DATAROLE )
             PRINT_REG(FUSB_SWITCHES1, AUTO_CRC )
-            PRINT_REG(FUSB_SWITCHES1, TXCC2    )
-            PRINT_REG(FUSB_SWITCHES1, TXCC1    )
+            PRINT_REG(FUSB_SWITCHES1, TXCC2_EN )
+            PRINT_REG(FUSB_SWITCHES1, TXCC1_EN )
             CASE_END()
         }
 
@@ -303,16 +303,16 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
     printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
     uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata);
                     //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL0,   rxdata); puts(NULL); stdio_flush();
-                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL); stdio_flush();
+                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); stdio_flush();
 
     //printf("[i] ---\n");
 
@@ -361,12 +361,12 @@ int fusb_compare_cc1_and_cc2(void)
     uint8_t switchesBackup; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &switchesBackup, 1); printf("b read FUSB_SWITCHES0: %#x\n", switchesBackup);
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
 
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2 | FUSB_SWITCHES0_MEAS_CC1); printf("cc1 write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_CC1_PD_EN | FUSB_SWITCHES0_CC2_PD_EN | FUSB_SWITCHES0_MEAS_CC1); printf("cc1 write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, 0); printf("cc1 write ret: %#x\n", ret);
     sleep_ms(10);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc1 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (cc1 = rxdata & FUSB_STATUS0_BC_LVL));
 
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_PDWN_1 | FUSB_SWITCHES0_PDWN_2 | FUSB_SWITCHES0_MEAS_CC2); printf("cc2 write ret: %#x\n", ret);
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, FUSB_SWITCHES0_CC1_PD_EN | FUSB_SWITCHES0_CC2_PD_EN | FUSB_SWITCHES0_MEAS_CC2); printf("cc2 write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MEASURE, 0); printf("cc2 write ret: %#x\n", ret);
     sleep_ms(10);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &rxdata, 1); printf("cc2 i2c_read FUSB_STATUS0: %#x BC_LVL: %u\n", rxdata, (cc2 = rxdata & FUSB_STATUS0_BC_LVL));
@@ -376,6 +376,197 @@ int fusb_compare_cc1_and_cc2(void)
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, switchesBackup);
 
     return cc1 > cc2;
+}
+
+
+enum tcpc_cc_pull {
+    TYPEC_CC_RA = 0,
+    TYPEC_CC_RP = 1,
+    TYPEC_CC_RD = 2,
+    TYPEC_CC_OPEN = 3,
+};
+
+enum tcpc_rp_value {
+    TYPEC_RP_USB = 0,
+    TYPEC_RP_1A5 = 1,
+    TYPEC_RP_3A0 = 2,
+    TYPEC_RP_RESERVED = 3,
+};
+
+int cc_polarity = -1;
+int previous_pull = 0;
+bool vconn_enabled = false;
+int dfp_toggling_on = 0;
+int pulling_up = 0;
+
+int togdone_pullup_cc1 = 0;
+int togdone_pullup_cc2 = 0;
+
+int set_polarity(int polarity)
+{
+    /* Port polarity : 0 => CC1 is CC line, 1 => CC2 is CC line */
+    int8_t reg;
+
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+
+    /* clear VCONN switch bits */
+    reg &= ~FUSB_SWITCHES0_VCONN_CC1;
+    reg &= ~FUSB_SWITCHES0_VCONN_CC2;
+
+    if (vconn_enabled) {
+        /* set VCONN switch to be non-CC line */
+        if (polarity)
+            reg |= FUSB_SWITCHES0_VCONN_CC1;
+        else
+            reg |= FUSB_SWITCHES0_VCONN_CC2;
+    }
+
+    /* clear meas_cc bits (RX line select) */
+    reg &= ~FUSB_SWITCHES0_MEAS_CC1;
+    reg &= ~FUSB_SWITCHES0_MEAS_CC2;
+
+    /* set rx polarity */
+    if (polarity)
+        reg |= FUSB_SWITCHES0_MEAS_CC2;
+    else
+        reg |= FUSB_SWITCHES0_MEAS_CC1;
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &reg);
+
+    /* clear tx_cc bits */
+    reg &= ~FUSB_SWITCHES1_TXCC1_EN;
+    reg &= ~FUSB_SWITCHES1_TXCC2_EN;
+
+    /* set tx polarity */
+    if (polarity)
+        reg |= FUSB_SWITCHES1_TXCC2_EN;
+    else
+        reg |= FUSB_SWITCHES1_TXCC1_EN;
+
+    // Enable auto GoodCRC sending
+    reg |= FUSB_SWITCHES1_AUTO_CRC;
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg);
+
+    /* Save the polarity for later */
+    cc_polarity = polarity;
+
+    return 0;
+}
+
+int set_vconn(int enable)
+{
+    /*
+     * FUSB302 does not have dedicated VCONN Enable switch.
+     * We'll get through this by disabling both of the
+     * VCONN - CC* switches to disable, and enabling the
+     * saved polarity when enabling.
+     * Therefore at startup, set_polarity should be called first,
+     * or else live with the default put into init.
+     */
+    int8_t reg;
+
+    /* save enable state for later use */
+    vconn_enabled = enable;
+
+    if (enable) {
+        /* set to saved polarity */
+        set_polarity(cc_polarity);
+    } else {
+
+        i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+
+        /* clear VCONN switch bits */
+        reg &= ~FUSB_SWITCHES0_VCONN_CC1;
+        reg &= ~FUSB_SWITCHES0_VCONN_CC2;
+
+        i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+    }
+
+    return 0;
+}
+
+int set_cc(int pull)
+{
+    int8_t reg;
+
+    /*
+     * Ensure we aren't in the process of changing CC from the alert
+     * handler, then cancel any pending toggle-triggered CC change.
+     */
+    dfp_toggling_on = 0;
+    previous_pull = pull;
+
+    /* NOTE: FUSB302 toggles a single pull-up between CC1 and CC2 */
+    /* NOTE: FUSB302 Does not support Ra. */
+    switch (pull) {
+        case TYPEC_CC_RP:
+            /* enable the pull-up we know to be necessary */
+            i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+
+            reg &= ~(FUSB_SWITCHES0_CC1_PU_EN |
+                 FUSB_SWITCHES0_CC2_PU_EN |
+                 FUSB_SWITCHES0_CC1_PD_EN |
+                 FUSB_SWITCHES0_CC2_PD_EN |
+                 FUSB_SWITCHES0_VCONN_CC1 |
+                 FUSB_SWITCHES0_VCONN_CC2);
+
+            reg |= FUSB_SWITCHES0_CC1_PU_EN |
+                FUSB_SWITCHES0_CC2_PU_EN;
+
+            if (vconn_enabled)
+                reg |= togdone_pullup_cc1 ?
+                       FUSB_SWITCHES0_VCONN_CC2 :
+                       FUSB_SWITCHES0_VCONN_CC1;
+
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+            pulling_up = 1;
+            dfp_toggling_on = 0;
+            break;
+        case TYPEC_CC_RD:
+            /* Enable UFP Mode */
+
+            /* turn off toggle */
+            i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &reg);
+            reg &= ~FUSB_CONTROL2_TOGGLE;
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, reg);
+
+            /* enable pull-downs, disable pullups */
+            i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+            reg &= ~(FUSB_SWITCHES0_CC1_PU_EN);
+            reg &= ~(FUSB_SWITCHES0_CC2_PU_EN);
+            reg |=  (FUSB_SWITCHES0_CC1_PD_EN);
+            reg |=  (FUSB_SWITCHES0_CC2_PD_EN);
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+            pulling_up = 0;
+            dfp_toggling_on = 0;
+            break;
+        case TYPEC_CC_OPEN:
+            /* Disable toggling */
+            i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &reg);
+            reg &= ~FUSB_CONTROL2_TOGGLE;
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, reg);
+
+            /* Ensure manual switches are opened */
+            i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+            reg &= ~FUSB_SWITCHES0_CC1_PU_EN;
+            reg &= ~FUSB_SWITCHES0_CC2_PU_EN;
+            reg &= ~FUSB_SWITCHES0_CC1_PD_EN;
+            reg &= ~FUSB_SWITCHES0_CC2_PD_EN;
+            i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+            pulling_up = 0;
+            dfp_toggling_on = 0;
+            break;
+        default:
+            /* Unsupported... */
+            return 0;
+    }
+    return 0;
 }
 
 int main() {
@@ -408,9 +599,6 @@ int main() {
     gpio_init   (PSDAPT_PIN_PC_HPD);
     gpio_set_dir(PSDAPT_PIN_PC_HPD, GPIO_OUT);
     gpio_put    (PSDAPT_PIN_PC_HPD, 0);
-
-
-    
 
     sleep_ms(3500);    
 
@@ -485,19 +673,10 @@ int main() {
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
 
-    /* Reset the PD logic */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET); printf("f write FUSB_RESET: %#x\n", ret);
-    ret = i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
 
-    /* Flush the TX buffer */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_FLUSH | 0x4); printf("f write ret: %#x\n", ret);
-
-    /* Flush the RX buffer */
-    ret = i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH); printf("f write ret: %#x\n", ret);
-
-    /* FUSB_CONTROL2_TOGGLE */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, FUSB_CONTROL2_TOGGLE | (1 << FUSB_CONTROL2_MODE_SHIFT) ); printf("f write ret: %#x\n", ret);
+    /* Set VCONN switch defaults */
+    set_polarity(0);
+    set_vconn(0);
 
     /* Turn on all power */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
@@ -510,10 +689,10 @@ int main() {
     /* enable pull-downs, disable pullups */
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1);
 
-    rxdata &= ~(FUSB_SWITCHES0_PU_EN1);
-    rxdata &= ~(FUSB_SWITCHES0_PU_EN2);
-    rxdata |= (FUSB_SWITCHES0_PDWN_1);
-    rxdata |= (FUSB_SWITCHES0_PDWN_2);
+    rxdata &= ~(FUSB_SWITCHES0_CC1_PU_EN);
+    rxdata &= ~(FUSB_SWITCHES0_CC2_PU_EN);
+    rxdata |= (FUSB_SWITCHES0_CC1_PD_EN);
+    rxdata |= (FUSB_SWITCHES0_CC2_PD_EN);
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, rxdata);
 
     //ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);

@@ -21,14 +21,14 @@
 
 /* Switches0 register */
 #define FUSB_SWITCHES0           0x02
-#define FUSB_SWITCHES0_PU_EN2    (1 << 7)
-#define FUSB_SWITCHES0_PU_EN1    (1 << 6)
+#define FUSB_SWITCHES0_CC2_PU_EN (1 << 7) /* swy: was PU_EN2 */
+#define FUSB_SWITCHES0_CC1_PU_EN (1 << 6) /* swy: was PU_EN1 */
 #define FUSB_SWITCHES0_VCONN_CC2 (1 << 5)
 #define FUSB_SWITCHES0_VCONN_CC1 (1 << 4)
 #define FUSB_SWITCHES0_MEAS_CC2  (1 << 3)
 #define FUSB_SWITCHES0_MEAS_CC1  (1 << 2)
-#define FUSB_SWITCHES0_PDWN_2    (1 << 1)
-#define FUSB_SWITCHES0_PDWN_1    1
+#define FUSB_SWITCHES0_CC2_PD_EN (1 << 1) /* swy: was PDWN_2 */
+#define FUSB_SWITCHES0_CC1_PD_EN 1        /* swy: was PDWN_1 */
 
 /* Switches1 register */
 #define FUSB_SWITCHES1               0x03
@@ -39,8 +39,8 @@
 #define FUSB_SWITCHES1_SPECREV0      (0b01 << FUSB_SWITCHES1_SPECREV_SHIFT) /* swy: added this non-flag one */
 #define FUSB_SWITCHES1_DATAROLE      (1 << 4)
 #define FUSB_SWITCHES1_AUTO_CRC      (1 << 2)
-#define FUSB_SWITCHES1_TXCC2         (1 << 1)
-#define FUSB_SWITCHES1_TXCC1         1
+#define FUSB_SWITCHES1_TXCC2_EN      (1 << 1)
+#define FUSB_SWITCHES1_TXCC1_EN      1
 
 /* Measure register */
 #define FUSB_MEASURE            0x04
