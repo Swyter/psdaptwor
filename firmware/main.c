@@ -603,6 +603,11 @@ int init()
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKA, 0); printf("d write ret: %#x\n", ret);
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_MASKB, 0); printf("e write ret: %#x\n", ret);
 
+    /* Interrupt Enable */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg);
+    reg &= ~FUSB_CONTROL0_INT_MASK;
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+
     /* Set VCONN switch defaults */
     set_polarity(0);
     set_vconn(0);
@@ -875,8 +880,7 @@ int main() {
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
     gpio_init   (PSDAPT_PIN_HMD_TYC_INT);
-    gpio_set_dir(PSDAPT_PIN_HMD_TYC_INT, GPIO_IN);
-    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
@@ -986,6 +990,8 @@ int main() {
     uint32_t  usb_pd_message_buffer[10] = {0x69}; int ret;
 
     uint8_t buf[32] = {0x69};
+
+    //fusb_interrupt_callback(0, 0);
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
