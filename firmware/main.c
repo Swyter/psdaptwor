@@ -769,7 +769,7 @@ int get_message(uint32_t *payload, uint32_t *head)
      * is the PD packet (not header) and CRC.
      * maximum size necessary = 28 + 4 = 32
      */
-    uint8_t buf[32];
+    uint8_t buf[32]; const uint8_t send_reg_buf = FUSB_FIFOS;
     int rv = 0;
     int len;
 
@@ -780,8 +780,8 @@ int get_message(uint32_t *payload, uint32_t *head)
      * Issue a START, no STOP.
      */
     //tcpc_lock(port, 1);
-    const uint8_t reg_add_buf = FUSB_FIFOS;
-    if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, &reg_add_buf, 1, true) != 1) { printf("return get_message PART 1; ");
+    
+    if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, &send_reg_buf, 1, true) != 1) { printf("return get_message PART 1; ");
         return PICO_ERROR_GENERIC; 
     }
 
@@ -791,7 +791,10 @@ int get_message(uint32_t *payload, uint32_t *head)
      * only grab three bytes so we can get the header
      * and determine how many more bytes we need to read.
      */
-    if (i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true) != len) { printf("return get_message PART 2; ");
+
+    int ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true);
+    printf("i2c_read_blocking; %u; ", ret);
+    if (ret != 3) { printf("return get_message PART 2; ");
         return PICO_ERROR_GENERIC; 
     }
     
@@ -800,14 +803,16 @@ int get_message(uint32_t *payload, uint32_t *head)
     *head |= ((buf[2] << 8) & 0xFF00);
 
     /* figure out packet length, subtract header bytes */
-    len = get_num_bytes(*head) - 2; printf("get_num_bytes %u", len);
+    len = get_num_bytes(*head) - 2; printf("; get_num_bytes %u; ", len);
 
     /*
      * PART 3 OF BURST READ: Read everything else.
      * No START, but do issue a STOP at the end.
      * add 4 to len to read CRC out
      */
-    if (i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, len+4, false) != len) { printf("return get_message PART 3; ");
+    ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, len+4, false);
+    printf("i2c_read_blocking b; %u; ", ret);
+    if (ret != len+4) { printf("return get_message PART 3; ");
         return PICO_ERROR_GENERIC; 
     }
 
@@ -990,7 +995,7 @@ int main() {
 
 
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-        printf("get_message: ret=%i,  buf=%x, header=%x\n", ret, &usb_pd_message_buffer[0], usb_pd_message_header);
+        printf("get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
 
 
         //measured_vbus = fusb_measure_vbus();
