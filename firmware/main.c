@@ -613,6 +613,125 @@ int init()
     return 0;
 }
 
+/* bring the FUSB302 out of reset after Hard Reset signaling */
+void pd_reset()
+{
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_PD_RESET);
+}
+
+enum tcpc_cc_voltage_status {
+    TYPEC_CC_VOLT_OPEN = 0,
+    TYPEC_CC_VOLT_RA = 1,
+    TYPEC_CC_VOLT_RD = 2,
+    TYPEC_CC_VOLT_SNK_DEF = 5,
+    TYPEC_CC_VOLT_SNK_1_5 = 6,
+    TYPEC_CC_VOLT_SNK_3_0 = 7,
+};
+
+/* Convert BC LVL values (in FUSB302) to Type-C CC Voltage Status */
+uint8_t convert_bc_lvl(uint8_t bc_lvl)
+{
+    /* assume OPEN unless one of the following conditions is true... */
+    int ret = TYPEC_CC_VOLT_OPEN;
+
+    if (pulling_up) {
+        if (bc_lvl == 0x00)
+            ret = TYPEC_CC_VOLT_RA;
+        else if (bc_lvl < 0x3)
+            ret = TYPEC_CC_VOLT_RD;
+    } else {
+        if (bc_lvl == 0x1)
+            ret = TYPEC_CC_VOLT_SNK_DEF;
+        else if (bc_lvl == 0x2)
+            ret = TYPEC_CC_VOLT_SNK_1_5;
+        else if (bc_lvl == 0x3)
+            ret = TYPEC_CC_VOLT_SNK_3_0;
+    }
+
+    return ret;
+}
+
+
+/* Determine cc pin state for sink */
+void detect_cc_pin_sink(int *cc1, int *cc2)
+{
+    uint8_t reg;
+    int orig_meas_cc1;
+    int orig_meas_cc2;
+    uint8_t bc_lvl_cc1;
+    uint8_t bc_lvl_cc2;
+
+    /*
+     * Measure CC1 first.
+     */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+
+    /* save original state to be returned to later... */
+    if (reg & FUSB_SWITCHES0_MEAS_CC1)
+        orig_meas_cc1 = 1;
+    else
+        orig_meas_cc1 = 0;
+
+    if (reg & FUSB_SWITCHES0_MEAS_CC2)
+        orig_meas_cc2 = 1;
+    else
+        orig_meas_cc2 = 0;
+
+    /* Disable CC2 measurement switch, enable CC1 measurement switch */
+    reg &= ~FUSB_SWITCHES0_MEAS_CC2;
+    reg |= FUSB_SWITCHES0_MEAS_CC1;
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+    /* CC1 is now being measured by FUSB302. */
+
+    /* Wait on measurement */
+    sleep_us(250);
+
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &bc_lvl_cc1);
+
+    /* mask away unwanted bits */
+    bc_lvl_cc1 &= (FUSB_STATUS0_BC_LVL0 | FUSB_STATUS0_BC_LVL1);
+
+    /*
+     * Measure CC2 next.
+     */
+
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+
+    /* Disable CC1 measurement switch, enable CC2 measurement switch */
+    reg &= ~FUSB_SWITCHES0_MEAS_CC1;
+    reg |= FUSB_SWITCHES0_MEAS_CC2;
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
+    /* CC2 is now being measured by FUSB302. */
+
+    /* Wait on measurement */
+    busy_wait_us(250);
+
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &bc_lvl_cc2);
+
+    /* mask away unwanted bits */
+    bc_lvl_cc2 &= (FUSB_STATUS0_BC_LVL0 | FUSB_STATUS0_BC_LVL1);
+
+    *cc1 = convert_bc_lvl(bc_lvl_cc1);
+    *cc2 = convert_bc_lvl(bc_lvl_cc2);
+
+    /* return MEAS_CC1/2 switches to original state */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+    if (orig_meas_cc1)
+        reg |= FUSB_SWITCHES0_MEAS_CC1;
+    else
+        reg &= ~FUSB_SWITCHES0_MEAS_CC1;
+    if (orig_meas_cc2)
+        reg |= FUSB_SWITCHES0_MEAS_CC2;
+    else
+        reg &= ~FUSB_SWITCHES0_MEAS_CC2;
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+}
+
 int main() {
     stdio_init_all();
     stdio_usb_init();
@@ -698,22 +817,36 @@ int main() {
     uint8_t rxdata, reg;
 
     init();
+    pd_reset();
 
-    /* turn off toggle */
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &rxdata, 1);
-    rxdata &= ~FUSB_CONTROL2_TOGGLE;
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, rxdata);
+    int cc1_meas, cc2_meas;
+    detect_cc_pin_sink(&cc1_meas, &cc2_meas);
 
-    /* enable pull-downs, disable pullups */
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1);
-
-    rxdata &= ~(FUSB_SWITCHES0_CC1_PU_EN);
-    rxdata &= ~(FUSB_SWITCHES0_CC2_PU_EN);
-    rxdata |= (FUSB_SWITCHES0_CC1_PD_EN);
-    rxdata |= (FUSB_SWITCHES0_CC2_PD_EN);
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, rxdata);
-
-    //ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, FUSB_CONTROL3_N_RETRIES | FUSB_CONTROL3_AUTO_RETRY); printf("f write ret: %#x\n", ret);
+    printf("CC1 level = ");
+    switch (cc1_meas) {
+    case TYPEC_CC_VOLT_OPEN:
+        printf("Open");
+        break;
+    case TYPEC_CC_VOLT_RA:
+        printf("Ra pull-down");
+        break;
+    case TYPEC_CC_VOLT_RD:
+        printf("Rd pull-down");
+        break;
+    case TYPEC_CC_VOLT_SNK_DEF:
+        printf("Connected with default power");
+        break;
+    case TYPEC_CC_VOLT_SNK_1_5:
+        printf("Connected with 1.5A at 5V");
+        break;
+    case TYPEC_CC_VOLT_SNK_3_0:
+        printf("Connected with 3.0A at 5V");
+        break;
+    default :
+        printf("Unknown");
+        break;
+    }
+    puts(NULL);
 
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
