@@ -141,7 +141,7 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
     printf("%s%s", (reg_data & ARG_PREFIX##_##ARG_NAME) ? #ARG_NAME : "", (reg_data & ARG_PREFIX##_##ARG_NAME) && (reg_data & (ARG_PREFIX##_##ARG_NAME - 1)) ? "|" : ""); reg_data &= ~ARG_PREFIX##_##ARG_NAME;
 
 #define CASE_END() \
-    if (reg_data != 0 || reg_data_orig==reg_data) printf("%x, ", reg_data); /* swy: if there's any remaining unparsed data, or no flags have been processed, i.e. it's zero, print the number */ \
+    if (reg_data != 0 || reg_data_orig==reg_data) printf("%#x, ", reg_data); /* swy: if there's any remaining unparsed data, or no flags have been processed, i.e. it's zero, print the number */ \
                                              else printf(  ", "); \
     break;
 
@@ -164,13 +164,63 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
         }
 
         CASE_PRINT(FUSB_SWITCHES1) {
-            PRINT_REG(FUSB_SWITCHES1, POWERROLE    )
-            PRINT_REG(FUSB_SWITCHES1, SPECREV1     )
-            PRINT_REG(FUSB_SWITCHES1, SPECREV0     )
-            PRINT_REG(FUSB_SWITCHES1, DATAROLE     )
-            PRINT_REG(FUSB_SWITCHES1, AUTO_CRC     )
-            PRINT_REG(FUSB_SWITCHES1, TXCC2        )
-            PRINT_REG(FUSB_SWITCHES1, TXCC1        )
+            PRINT_REG(FUSB_SWITCHES1, POWERROLE)
+            PRINT_REG(FUSB_SWITCHES1, SPECREV1 )
+            PRINT_REG(FUSB_SWITCHES1, SPECREV0 )
+            PRINT_REG(FUSB_SWITCHES1, DATAROLE )
+            PRINT_REG(FUSB_SWITCHES1, AUTO_CRC )
+            PRINT_REG(FUSB_SWITCHES1, TXCC2    )
+            PRINT_REG(FUSB_SWITCHES1, TXCC1    )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_CONTROL0) {
+            PRINT_REG(FUSB_CONTROL0, TX_FLUSH )
+            PRINT_REG(FUSB_CONTROL0, INT_MASK )
+            PRINT_REG(FUSB_CONTROL0, HOST_CUR1)
+            PRINT_REG(FUSB_CONTROL0, HOST_CUR0)
+            PRINT_REG(FUSB_CONTROL0, AUTO_PRE )
+            PRINT_REG(FUSB_CONTROL0, TX_START )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_CONTROL1) {
+            PRINT_REG(FUSB_CONTROL1, ENSOP2DB  )
+            PRINT_REG(FUSB_CONTROL1, ENSOP1DB  )
+            PRINT_REG(FUSB_CONTROL1, BIST_MODE2)
+            PRINT_REG(FUSB_CONTROL1, RX_FLUSH  )
+            PRINT_REG(FUSB_CONTROL1, ENSOP2    )
+            PRINT_REG(FUSB_CONTROL1, ENSOP1    )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_CONTROL2) {
+            PRINT_REG(FUSB_CONTROL2, TOG_SAVE_PWR1)
+            PRINT_REG(FUSB_CONTROL2, TOG_SAVE_PWR0)
+            PRINT_REG(FUSB_CONTROL2, TOG_RD_ONLY  )
+            PRINT_REG(FUSB_CONTROL2, WAKE_EN      )
+            PRINT_REG(FUSB_CONTROL2, MODE1        )
+            PRINT_REG(FUSB_CONTROL2, MODE0        )
+            PRINT_REG(FUSB_CONTROL2, TOGGLE       )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_CONTROL3) {
+            PRINT_REG(FUSB_CONTROL3, SEND_HARD_RESET)
+            PRINT_REG(FUSB_CONTROL3, BIST_TMODE     )
+            PRINT_REG(FUSB_CONTROL3, AUTO_HARDRESET )
+            PRINT_REG(FUSB_CONTROL3, AUTO_SOFTRESET )
+            PRINT_REG(FUSB_CONTROL3, N_RETRIES1     )
+            PRINT_REG(FUSB_CONTROL3, N_RETRIES0     )
+            PRINT_REG(FUSB_CONTROL3, AUTO_RETRY     )
+            CASE_END()
+        }
+
+        CASE_PRINT(FUSB_POWER) {
+            PRINT_REG(FUSB_POWER, PWR3)
+            PRINT_REG(FUSB_POWER, PWR2)
+            PRINT_REG(FUSB_POWER, PWR1)
+            PRINT_REG(FUSB_POWER, PWR0)
             CASE_END()
         }
 
@@ -206,7 +256,7 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
         }
 
         CASE_PRINT(FUSB_INTERRUPTB) {
-            PRINT_REG(FUSB_INTERRUPTB, I_GCRCSENT )
+            PRINT_REG(FUSB_INTERRUPTB, I_GCRCSENT)
             CASE_END()
         }
 
@@ -242,14 +292,21 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
-    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); printf("int read INTERRUPTA: %#x %s%s%s%s%s%s  ", rxdata, (rxdata&FUSB_INTERRUPT_I_VBUSOK) ? "I_VBUSOK|":"", (rxdata&FUSB_INTERRUPT_I_ACTIVITY) ? "I_ACTIVITY|":"", (rxdata&FUSB_INTERRUPT_I_COMP_CHNG) ? "I_COMP_CHNG|":"", (rxdata&FUSB_INTERRUPT_I_VBUSOK) ? "I_VBUSOK|":"", );
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata); puts(NULL);
+    //printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
+    uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata); puts(NULL); stdio_flush();
+                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL0,   rxdata); puts(NULL); stdio_flush();
+                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); puts(NULL); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL); stdio_flush();
+
+    printf("[i] ---\n");
     return;
 }
 
@@ -394,7 +451,7 @@ int main() {
         printf(addr % 16 == 15 ? "\n" : "  ");
     }
 
-    printf("Done, for real.\n");
+    printf("Done, for real. :-)\n");
 
     uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1);
     printf("read 0: %#x\n", rxdata);

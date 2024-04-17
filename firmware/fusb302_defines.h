@@ -34,9 +34,9 @@
 #define FUSB_SWITCHES1               0x03
 #define FUSB_SWITCHES1_POWERROLE     (1 << 7)
 #define FUSB_SWITCHES1_SPECREV_SHIFT 5
-#define FUSB_SWITCHES1_SPECREV       (0x3 << FUSB_SWITCHES1_SPECREV_SHIFT)
-#define FUSB_SWITCHES1_SPECREV1      (1 << 6) /* swy: added this non-flag one */
-#define FUSB_SWITCHES1_SPECREV0      (1 << 5) /* swy: added this non-flag one */
+#define FUSB_SWITCHES1_SPECREV       ( 0x3 << FUSB_SWITCHES1_SPECREV_SHIFT)
+#define FUSB_SWITCHES1_SPECREV1      (0b10 << FUSB_SWITCHES1_SPECREV_SHIFT) /* swy: added this non-flag one */
+#define FUSB_SWITCHES1_SPECREV0      (0b01 << FUSB_SWITCHES1_SPECREV_SHIFT) /* swy: added this non-flag one */
 #define FUSB_SWITCHES1_DATAROLE      (1 << 4)
 #define FUSB_SWITCHES1_AUTO_CRC      (1 << 2)
 #define FUSB_SWITCHES1_TXCC2         (1 << 1)
@@ -60,7 +60,9 @@
 #define FUSB_CONTROL0_TX_FLUSH       (1 << 6)
 #define FUSB_CONTROL0_INT_MASK       (1 << 5)
 #define FUSB_CONTROL0_HOST_CUR_SHIFT 2
-#define FUSB_CONTROL0_HOST_CUR       (0x3 << FUSB_CONTROL0_HOST_CUR_SHIFT)
+#define FUSB_CONTROL0_HOST_CUR       ( 0x3 << FUSB_CONTROL0_HOST_CUR_SHIFT)
+#define FUSB_CONTROL0_HOST_CUR1      (0b10 << FUSB_CONTROL0_HOST_CUR_SHIFT) /* swy: added this non-flag one */
+#define FUSB_CONTROL0_HOST_CUR0      (0b01 << FUSB_CONTROL0_HOST_CUR_SHIFT) /* swy: added this non-flag one */
 #define FUSB_CONTROL0_AUTO_PRE       (1 << 1)
 #define FUSB_CONTROL0_TX_START       1
 
@@ -76,11 +78,15 @@
 /* Control2 register */
 #define FUSB_CONTROL2                    0x08
 #define FUSB_CONTROL2_TOG_SAVE_PWR_SHIFT 6
-#define FUSB_CONTROL2_TOG_SAVE_PWR       (0x3 << FUSB_CONTROL2_TOG_SAVE_PWR)
+#define FUSB_CONTROL2_TOG_SAVE_PWR       ( 0x3 << FUSB_CONTROL2_TOG_SAVE_PWR_SHIFT)
+#define FUSB_CONTROL2_TOG_SAVE_PWR1      (0b10 << FUSB_CONTROL2_TOG_SAVE_PWR_SHIFT) /* swy: added this non-flag one */
+#define FUSB_CONTROL2_TOG_SAVE_PWR0      (0b01 << FUSB_CONTROL2_TOG_SAVE_PWR_SHIFT) /* swy: added this non-flag one */
 #define FUSB_CONTROL2_TOG_RD_ONLY        (1 << 5)
 #define FUSB_CONTROL2_WAKE_EN            (1 << 3)
 #define FUSB_CONTROL2_MODE_SHIFT         1
-#define FUSB_CONTROL2_MODE               (0x3 << FUSB_CONTROL2_MODE_SHIFT)
+#define FUSB_CONTROL2_MODE               ( 0x3 << FUSB_CONTROL2_MODE_SHIFT)
+#define FUSB_CONTROL2_MODE1              (0b10 << FUSB_CONTROL2_MODE_SHIFT) /* swy: added this non-flag one */
+#define FUSB_CONTROL2_MODE0              (0b01 << FUSB_CONTROL2_MODE_SHIFT) /* swy: added this non-flag one */
 #define FUSB_CONTROL2_TOGGLE             1
 
 /* Control3 register */
@@ -90,7 +96,9 @@
 #define FUSB_CONTROL3_AUTO_HARDRESET  (1 << 4)
 #define FUSB_CONTROL3_AUTO_SOFTRESET  (1 << 3)
 #define FUSB_CONTROL3_N_RETRIES_SHIFT 1
-#define FUSB_CONTROL3_N_RETRIES       (0x3 << FUSB_CONTROL3_N_RETRIES_SHIFT)
+#define FUSB_CONTROL3_N_RETRIES       ( 0x3 << FUSB_CONTROL3_N_RETRIES_SHIFT)
+#define FUSB_CONTROL3_N_RETRIES1      (0b10 << FUSB_CONTROL3_N_RETRIES_SHIFT) /* swy: added this non-flag one */
+#define FUSB_CONTROL3_N_RETRIES0      (0b01 << FUSB_CONTROL3_N_RETRIES_SHIFT) /* swy: added this non-flag one */
 #define FUSB_CONTROL3_AUTO_RETRY      1
 
 /* Mask1 register */
@@ -182,9 +190,9 @@
 #define FUSB_STATUS0_ALERT        (1 << 3)
 #define FUSB_STATUS0_WAKE         (1 << 2)
 #define FUSB_STATUS0_BC_LVL_SHIFT 0
-#define FUSB_STATUS0_BC_LVL       (0x3 << FUSB_STATUS0_BC_LVL_SHIFT)
-#define FUSB_STATUS0_BC_LVL1      (1 << 1) /* swy: added this non-flag one */
-#define FUSB_STATUS0_BC_LVL0      (1 << 0) /* swy: added this non-flag one */
+#define FUSB_STATUS0_BC_LVL       ( 0x3 << FUSB_STATUS0_BC_LVL_SHIFT)
+#define FUSB_STATUS0_BC_LVL1      (0b10 << FUSB_STATUS0_BC_LVL_SHIFT) /* swy: added this non-flag one */
+#define FUSB_STATUS0_BC_LVL0      (0b01 << FUSB_STATUS0_BC_LVL_SHIFT) /* swy: added this non-flag one */
 
 
 /* Status1 register */
