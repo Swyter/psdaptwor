@@ -99,6 +99,14 @@ int i2c_read(
     return PICO_OK;
 }
 
+int i2c_read_byte(
+    i2c_inst_t *i2c,   // i2c0 or i2c1
+    uint8_t i2c_addr,  // 7 bit I2C address
+    uint8_t reg,       // Number of the register to read from
+    uint8_t *rx_data   // Pointer to block of bytes for data read
+) {
+    return i2c_read(i2c, i2c_addr, reg, rx_data, 1);
+}
 
 // Write bytes to a register
 int i2c_write(
@@ -455,22 +463,21 @@ int main() {
 
     printf("Done, for real. :-)\n");
 
-    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1);
-    printf("read 0: %#x\n", rxdata);
-    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
+    uint8_t rxdata, reg;
 
-    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RES); printf("b write ret: %#x\n", ret);
+    /* Restore default settings */
+    uint32_t ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_RESET, FUSB_RESET_SW_RESET); printf("b write ret: %#x\n", ret);
 
-    if (ret != PICO_OK)
-        printf("[!] couldn't reset it\n");
-
-    sleep_ms(10);
+    sleep_ms(1);
 
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &rxdata, 1); printf("b read 0: %#x\n", rxdata);
     printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", rxdata >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (rxdata & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (rxdata & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
-    /* Turn on all power */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
+    /* Turn on retries and set number of retries */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg);
+    reg |= FUSB_CONTROL3_AUTO_RETRY;
+    reg |= FUSB_CONTROL3_N_RETRIES1 | FUSB_CONTROL3_N_RETRIES0;
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
 
     /* Set interrupt masks */
     // Setting to 0 so interrupts are allowed
@@ -492,6 +499,8 @@ int main() {
     /* FUSB_CONTROL2_TOGGLE */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, FUSB_CONTROL2_TOGGLE | (1 << FUSB_CONTROL2_MODE_SHIFT) ); printf("f write ret: %#x\n", ret);
 
+    /* Turn on all power */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
 
     /* turn off toggle */
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, &rxdata, 1);

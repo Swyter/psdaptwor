@@ -122,7 +122,7 @@
 /* Reset register */
 #define FUSB_RESET          0x0C
 #define FUSB_RESET_PD_RESET (1 << 1)
-#define FUSB_RESET_SW_RES   1
+#define FUSB_RESET_SW_RESET  1
 
 /* OCPreg register */
 #define FUSB_OCPREG               0x0D
