@@ -793,7 +793,7 @@ int get_message(uint32_t *payload, uint32_t *head)
      */
 
     int ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true);
-    printf("i2c_read_blocking; %u; ", ret);
+    //printf("i2c_read_blocking; %u; ", ret);
     if (ret != 3) { printf("return get_message PART 2; ");
         return PICO_ERROR_GENERIC; 
     }
@@ -803,7 +803,7 @@ int get_message(uint32_t *payload, uint32_t *head)
     *head |= ((buf[2] << 8) & 0xFF00);
 
     /* figure out packet length, subtract header bytes */
-    len = get_num_bytes(*head) - 2; printf("; get_num_bytes %u; ", len);
+    len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u; ", len);
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -811,7 +811,7 @@ int get_message(uint32_t *payload, uint32_t *head)
      * add 4 to len to read CRC out
      */
     ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, len+4, false);
-    printf("i2c_read_blocking b; %u; ", ret);
+    //printf("i2c_read_blocking b; %u; ", ret);
     if (ret != len+4) { printf("return get_message PART 3; ");
         return PICO_ERROR_GENERIC; 
     }
@@ -821,7 +821,7 @@ int get_message(uint32_t *payload, uint32_t *head)
     /* return the data */
     memcpy(payload, buf, len+4);
 
-    return rv;
+    return len;
 }
 
 int main() {
@@ -990,11 +990,12 @@ int main() {
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
         const float conversion_factor = 3.3f / (1 << 12);
-        uint16_t result = adc_read();
-        printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
+        //uint16_t result = adc_read();
+        //printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
 
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-        printf("[typec] get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
+        if (ret > 0)
+            printf("[typec] get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
 
         //measured_vbus = fusb_measure_vbus();
         //cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
@@ -1026,24 +1027,24 @@ int main() {
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
         gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
 
-        sleep_ms(500);
+        //sleep_ms(500);
 
 
-#ifndef PICO_DEFAULT_LED_PIN
+#if 0//ndef PICO_DEFAULT_LED_PIN
 #warning blink example requires a board with a regular LED
 #else
         gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 1); //(measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
 
-        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
-        sleep_ms(250);
-        gpio_put(PSDAPT_PIN_PC_HPD, 1);
-        sleep_ms(2);
-        gpio_put(PSDAPT_PIN_PC_HPD, 0);
-        sleep_ms(250);
-        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
-        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, measured_vbus > 0.f ? 1 : 0);
-        sleep_ms(250);
-        gpio_put(PSDAPT_PIN_PC_HPD, 0);
+//        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
+//        sleep_ms(250);
+//        gpio_put(PSDAPT_PIN_PC_HPD, 1);
+//        sleep_ms(2);
+//        gpio_put(PSDAPT_PIN_PC_HPD, 0);
+//        sleep_ms(250);
+//        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 0);
+//        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, measured_vbus > 0.f ? 1 : 0);
+//        sleep_ms(250);
+//        gpio_put(PSDAPT_PIN_PC_HPD, 0);
 #endif
 
     }
