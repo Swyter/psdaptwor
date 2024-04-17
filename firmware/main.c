@@ -848,6 +848,38 @@ int main() {
     }
     puts(NULL);
 
+    printf("CC2 level = ");
+    switch (cc2_meas) {
+    case TYPEC_CC_VOLT_OPEN:
+        printf("Open");
+        break;
+    case TYPEC_CC_VOLT_RA:
+        printf("Ra pull-down");
+        break;
+    case TYPEC_CC_VOLT_RD:
+        printf("Rd pull-down");
+        break;
+    case TYPEC_CC_VOLT_SNK_DEF:
+        printf("Connected with default power");
+        break;
+    case TYPEC_CC_VOLT_SNK_1_5:
+        printf("Connected with 1.5A at 5V");
+        break;
+    case TYPEC_CC_VOLT_SNK_3_0:
+        printf("Connected with 3.0A at 5V");
+        break;
+    default :
+        printf("Unknown");
+        break;
+    }
+    puts(NULL);
+
+    if (cc1_meas > cc2_meas) {
+        set_polarity(0); printf("set_polarity(0)\n");
+    } else {
+        set_polarity(1); printf("set_polarity(1)\n");
+    }
+
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
