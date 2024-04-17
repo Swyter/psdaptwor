@@ -782,7 +782,7 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
-    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
@@ -903,7 +903,7 @@ int main() {
 
         //printf("[fusb] measured USB-C VBUS: %f, CC1 > CC2: %i\n", measured_vbus, cc1_is_bigger_than_cc2);
 
-        if (!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
+        if (0) //(!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
         {
             uint8_t reg; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg, 1); fusb_debug_register(FUSB_SWITCHES0, reg); puts(NULL);
             /* Clear CC1/CC2 measure bits */
