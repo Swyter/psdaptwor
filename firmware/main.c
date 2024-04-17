@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <tusb.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/adc.h"
@@ -300,22 +301,22 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */ 
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); return; /* swy: clear interrupt registers by reading them */ 
     uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush(); 
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);/*
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata);
-                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL0,   rxdata); puts(NULL); stdio_flush();
-                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); stdio_flush();
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); stdio_flush();
 
     //printf("[i] ---\n");
-*/
+
     //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS interrupt: %#x\n", rxdata);
     return;
 }
@@ -589,7 +590,7 @@ int init()
     sleep_ms(1);
 
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &reg, 1); printf("b read 0: %#x\n", reg);
-    printf("revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", reg >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (reg & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (reg & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
+    printf("FUSB_DEVICE_ID: revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", reg >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (reg & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (reg & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
     /* Turn on retries and set number of retries */
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg);
@@ -1007,6 +1008,11 @@ int main() {
         //cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
 
         //printf("[fusb] measured USB-C VBUS: %f, CC1 > CC2: %i\n", measured_vbus, cc1_is_bigger_than_cc2);
+
+        if(tud_cdc_available())
+        {
+            printf("serial input: %c", getchar());
+        }
 
         if (0) //(!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
         {
