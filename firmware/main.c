@@ -300,11 +300,11 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */
-    uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush();
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */ 
+    uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush(); 
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);/*
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata);
@@ -315,8 +315,8 @@ void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
                     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); stdio_flush();
 
     //printf("[i] ---\n");
-
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS rxdata: %#x\n", rxdata);
+*/
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS interrupt: %#x\n", rxdata);
     return;
 }
 
@@ -732,6 +732,93 @@ void detect_cc_pin_sink(int *cc1, int *cc2)
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
 }
 
+
+#define PD_HEADER_CNT(header)  (((header) >> 12) & 7)
+#define PD_HEADER_TYPE(header) ((header) & 0xF)
+#define PD_HEADER_ID(header)   (((header) >> 9) & 7)
+
+int get_num_bytes(uint16_t header)
+{
+    int rv;
+
+    /* Grab the Number of Data Objects field.*/
+    rv = PD_HEADER_CNT(header);
+
+    /* Multiply by four to go from 32-bit words -> bytes */
+    rv *= 4;
+
+    /* Plus 2 for header */
+    rv += 2;
+
+    return rv;
+}
+
+/*
+ * Make sure to allocate enough memory for *payload. 
+ *
+ * Maximum size is (max number of data objects + 1) * 4
+ * The extra "+1" is for the CRC32 calculation
+ */
+int get_message(uint32_t *payload, uint32_t *head)
+{
+    /*
+     * this is the buffer that will get the burst-read data
+     * from the fusb302.
+     *
+     * it's re-used in a couple different spots, the worst of which
+     * is the PD packet (not header) and CRC.
+     * maximum size necessary = 28 + 4 = 32
+     */
+    uint8_t buf[32];
+    int rv = 0;
+    int len;
+
+    /* NOTE: Assuming enough memory has been allocated for payload. */
+
+    /*
+     * PART 1 OF BURST READ: Write in register address.
+     * Issue a START, no STOP.
+     */
+    //tcpc_lock(port, 1);
+    const uint8_t reg_add_buf = FUSB_FIFOS;
+    if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, &reg_add_buf, 1, true) != 1) { printf("return get_message PART 1; ");
+        return PICO_ERROR_GENERIC; 
+    }
+
+    /*
+     * PART 2 OF BURST READ: Read up to the header.
+     * Issue a repeated START, no STOP.
+     * only grab three bytes so we can get the header
+     * and determine how many more bytes we need to read.
+     */
+    if (i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true) != len) { printf("return get_message PART 2; ");
+        return PICO_ERROR_GENERIC; 
+    }
+    
+    /* Grab the header */
+    *head = (buf[1] & 0xFF);
+    *head |= ((buf[2] << 8) & 0xFF00);
+
+    /* figure out packet length, subtract header bytes */
+    len = get_num_bytes(*head) - 2; printf("get_num_bytes %u", len);
+
+    /*
+     * PART 3 OF BURST READ: Read everything else.
+     * No START, but do issue a STOP at the end.
+     * add 4 to len to read CRC out
+     */
+    if (i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, len+4, false) != len) { printf("return get_message PART 3; ");
+        return PICO_ERROR_GENERIC; 
+    }
+
+    //tcpc_lock(port, 0);
+
+    /* return the data */
+    memcpy(payload, buf, len+4);
+
+    return rv;
+}
+
 int main() {
     stdio_init_all();
     stdio_usb_init();
@@ -782,6 +869,8 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
+    gpio_init   (PSDAPT_PIN_HMD_TYC_INT);
+    gpio_set_dir(PSDAPT_PIN_HMD_TYC_INT, GPIO_IN);
     gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, fusb_interrupt_callback);
 
 
@@ -888,7 +977,8 @@ int main() {
     uint8_t measureBackup;  i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &measureBackup,  1); printf("b read FUSB_MEASURE: %#x\n", measureBackup);
     uint8_t counter = 0, cc1 = 0, cc2 = 0, cc1_is_bigger_than_cc2 = 0; float measured_vbus = 0.f; bool cc_tx_configured = 0;
 
-
+    uint32_t  usb_pd_message_header = 0x69;
+    uint32_t  usb_pd_message_buffer[10] = {0x69}; int ret;
 
     uint8_t buf[32] = {0x69};
 
@@ -897,6 +987,11 @@ int main() {
         const float conversion_factor = 3.3f / (1 << 12);
         uint16_t result = adc_read();
         printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
+
+
+        ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
+        printf("get_message: ret=%i,  buf=%x, header=%x\n", ret, &usb_pd_message_buffer[0], usb_pd_message_header);
+
 
         //measured_vbus = fusb_measure_vbus();
         //cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
@@ -932,10 +1027,10 @@ int main() {
 
 
         
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 1);
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[1], 1);
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[2], 1);
-        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[3], 1);  printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
+        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[0], 1);
+        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[1], 1);
+        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[2], 1);
+        //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &buf[3], 1);  printf("b read FUSB_FIFOS: %#x %#x %#x %#x\n", buf[0], buf[1], buf[2], buf[3]);
 
         //printf("\nGPIO 0: %u 1: %u 2: %u 3: %u 4: %u 5: %u\n", gpio_get(0), gpio_get(1), gpio_get(2), gpio_get(4), gpio_get(5), gpio_get(6));
 
