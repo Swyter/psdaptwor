@@ -301,19 +301,10 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
-    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); return; /* swy: clear interrupt registers by reading them */ 
-    uint8_t rxdata; //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata); stdio_flush(); 
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata);
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL0,   rxdata); puts(NULL); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); stdio_flush();
-                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); stdio_flush();
+    printf("[i] USB-C controller interrupt request: %x %x\b", gpio, event_mask); /* swy: clear interrupt registers by reading them */ 
+    uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata);
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); 
+                    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata); puts(NULL);
 
     //printf("[i] ---\n");
 
@@ -702,7 +693,6 @@ void detect_cc_pin_sink(int *cc1, int *cc2)
     /*
      * Measure CC2 next.
      */
-
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
 
     /* Disable CC1 measurement switch, enable CC2 measurement switch */
@@ -714,7 +704,7 @@ void detect_cc_pin_sink(int *cc1, int *cc2)
     /* CC2 is now being measured by FUSB302. */
 
     /* Wait on measurement */
-    busy_wait_us(250);
+    sleep_us(250);
 
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_STATUS0, &bc_lvl_cc2);
 
@@ -785,8 +775,6 @@ int get_message(uint32_t *payload, uint32_t *head)
      * PART 1 OF BURST READ: Write in register address.
      * Issue a START, no STOP.
      */
-    //tcpc_lock(port, 1);
-    
     if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, &send_reg_buf, 1, true) != 1) { printf("return get_message PART 1; ");
         return PICO_ERROR_GENERIC; 
     }
@@ -799,7 +787,6 @@ int get_message(uint32_t *payload, uint32_t *head)
      */
 
     int ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true);
-    //printf("i2c_read_blocking; %u; ", ret);
     if (ret != 3) { printf("return get_message PART 2; ");
         return PICO_ERROR_GENERIC; 
     }
@@ -817,12 +804,9 @@ int get_message(uint32_t *payload, uint32_t *head)
      * add 4 to len to read CRC out
      */
     ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, len+4, false);
-    //printf("i2c_read_blocking b; %u; ", ret);
     if (ret != len+4) { printf("return get_message PART 3; ");
         return PICO_ERROR_GENERIC; 
     }
-
-    //tcpc_lock(port, 0);
 
     /* return the data */
     memcpy(payload, buf, len+4);
@@ -880,8 +864,7 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
-    gpio_init   (PSDAPT_PIN_HMD_TYC_INT);
-    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
@@ -1011,7 +994,18 @@ int main() {
 
         if(tud_cdc_available())
         {
-            printf("serial input: %c", getchar());
+            printf("serial input: %c\n", getchar());
+
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0,    &rxdata, 1); fusb_debug_register(FUSB_STATUS0,    rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS0A,   &rxdata, 1); fusb_debug_register(FUSB_STATUS0A,   rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES0,  rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1,  &rxdata, 1); fusb_debug_register(FUSB_SWITCHES1,  rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_POWER,      &rxdata, 1); fusb_debug_register(FUSB_POWER,      rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL0,   rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL1,   rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); puts(NULL);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL);
+            printf("--\n");
         }
 
         if (0) //(!cc_tx_configured)//measured_vbus > 3 && !cc_tx_configured)
