@@ -791,7 +791,7 @@ int get_message(uint32_t *payload, uint32_t *head)
     *head |= ((buf[2] << 8) & 0xFF00);
 
     /* figure out packet length, subtract header bytes */
-    len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u; ", len);
+    len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u; \n", len);
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -903,6 +903,10 @@ int main() {
     int cc1_meas, cc2_meas;
     detect_cc_pin_sink(&cc1_meas, &cc2_meas);
 
+    /* swy: send a hard reset packet to the other side to restart the PD conversation with anything already plugged-in */
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg, 1); reg |= FUSB_CONTROL3_SEND_HARD_RESET;
+    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
+
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES0, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
@@ -926,7 +930,16 @@ int main() {
 
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
         if (ret > 0)
-            printf("[typec] get_message: ret=%i,  buf=%x, header=%x\n", ret, usb_pd_message_buffer[0], usb_pd_message_header);
+        {
+            printf("[typec] get_message: ret=%i, header=%x, buf=", ret, usb_pd_message_header);
+
+            unsigned char *buf = (unsigned char *) &usb_pd_message_buffer[0];
+            for (int i = 0, max = get_num_bytes(usb_pd_message_header) - 2; i < max; i++)
+                printf("%02x ", buf[i]);
+
+            puts(NULL);
+        }
+
 
 
         if (fusb_interrupt_callback_happened)
