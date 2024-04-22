@@ -903,64 +903,6 @@ int main() {
     int cc1_meas, cc2_meas;
     detect_cc_pin_sink(&cc1_meas, &cc2_meas);
 
-    printf("CC1 level = ");
-    switch (cc1_meas) {
-    case TYPEC_CC_VOLT_OPEN:
-        printf("Open");
-        break;
-    case TYPEC_CC_VOLT_RA:
-        printf("Ra pull-down");
-        break;
-    case TYPEC_CC_VOLT_RD:
-        printf("Rd pull-down");
-        break;
-    case TYPEC_CC_VOLT_SNK_DEF:
-        printf("Connected with default power");
-        break;
-    case TYPEC_CC_VOLT_SNK_1_5:
-        printf("Connected with 1.5A at 5V");
-        break;
-    case TYPEC_CC_VOLT_SNK_3_0:
-        printf("Connected with 3.0A at 5V");
-        break;
-    default :
-        printf("Unknown");
-        break;
-    }
-    puts(NULL);
-
-    printf("CC2 level = ");
-    switch (cc2_meas) {
-    case TYPEC_CC_VOLT_OPEN:
-        printf("Open");
-        break;
-    case TYPEC_CC_VOLT_RA:
-        printf("Ra pull-down");
-        break;
-    case TYPEC_CC_VOLT_RD:
-        printf("Rd pull-down");
-        break;
-    case TYPEC_CC_VOLT_SNK_DEF:
-        printf("Connected with default power");
-        break;
-    case TYPEC_CC_VOLT_SNK_1_5:
-        printf("Connected with 1.5A at 5V");
-        break;
-    case TYPEC_CC_VOLT_SNK_3_0:
-        printf("Connected with 3.0A at 5V");
-        break;
-    default :
-        printf("Unknown");
-        break;
-    }
-    puts(NULL);
-
-    if (cc1_meas > cc2_meas) {
-        set_polarity(0); printf("set_polarity(0)\n");
-    } else {
-        set_polarity(1); printf("set_polarity(1)\n");
-    }
-
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &rxdata, 1); printf("b read FUSB_SWITCHES0: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES0, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, &rxdata, 1); printf("b read FUSB_SWITCHES1: %#x ", rxdata); fusb_debug_register(FUSB_SWITCHES1, rxdata); puts(NULL);
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
@@ -974,7 +916,7 @@ int main() {
 
     uint8_t buf[32] = {0x69};
 
-    //fusb_interrupt_callback(0, 0);
+    bool run_replug = true;
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
@@ -990,16 +932,87 @@ int main() {
         if (fusb_interrupt_callback_happened)
         {
             printf("[i] USB-C controller interrupt request: %x %x\n", 2, fusb_interrupt_callback_happened); /* swy: clear interrupt registers by reading them */ 
-            uint8_t rxdata; i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTA, rxdata);
-                            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &rxdata, 1); fusb_debug_register(FUSB_INTERRUPTB, rxdata); 
-                            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &rxdata, 1); fusb_debug_register(FUSB_INTERRUPT,  rxdata); puts(NULL);
+            uint8_t dat_int_a, dat_int_b, dat_int;
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &dat_int_a, 1); fusb_debug_register(FUSB_INTERRUPTA, dat_int_a);
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &dat_int_b, 1); fusb_debug_register(FUSB_INTERRUPTB, dat_int_b); 
+            i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &dat_int,   1); fusb_debug_register(FUSB_INTERRUPT,  dat_int  ); puts(NULL);
 
             printf("[i] ---\n");
 
             //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS interrupt: %#x\n", rxdata);
 
+            if (dat_int & FUSB_INTERRUPT_I_VBUSOK)
+                run_replug = true;
+
             fusb_interrupt_callback_happened = 0;
         }
+
+
+        if (run_replug)
+        {
+            detect_cc_pin_sink(&cc1_meas, &cc2_meas);
+
+            printf("CC1 level = ");
+            switch (cc1_meas) {
+            case TYPEC_CC_VOLT_OPEN:
+                printf("Open");
+                break;
+            case TYPEC_CC_VOLT_RA:
+                printf("Ra pull-down");
+                break;
+            case TYPEC_CC_VOLT_RD:
+                printf("Rd pull-down");
+                break;
+            case TYPEC_CC_VOLT_SNK_DEF:
+                printf("Connected with default power");
+                break;
+            case TYPEC_CC_VOLT_SNK_1_5:
+                printf("Connected with 1.5A at 5V");
+                break;
+            case TYPEC_CC_VOLT_SNK_3_0:
+                printf("Connected with 3.0A at 5V");
+                break;
+            default :
+                printf("Unknown");
+                break;
+            }
+            puts(NULL);
+
+            printf("CC2 level = ");
+            switch (cc2_meas) {
+            case TYPEC_CC_VOLT_OPEN:
+                printf("Open");
+                break;
+            case TYPEC_CC_VOLT_RA:
+                printf("Ra pull-down");
+                break;
+            case TYPEC_CC_VOLT_RD:
+                printf("Rd pull-down");
+                break;
+            case TYPEC_CC_VOLT_SNK_DEF:
+                printf("Connected with default power");
+                break;
+            case TYPEC_CC_VOLT_SNK_1_5:
+                printf("Connected with 1.5A at 5V");
+                break;
+            case TYPEC_CC_VOLT_SNK_3_0:
+                printf("Connected with 3.0A at 5V");
+                break;
+            default :
+                printf("Unknown");
+                break;
+            }
+            puts(NULL);
+
+            if (cc1_meas > cc2_meas) {
+                set_polarity(0); printf("set_polarity(0)\n");
+            } else {
+                set_polarity(1); printf("set_polarity(1)\n");
+            }
+
+            run_replug = false;
+        }
+
 
         //measured_vbus = fusb_measure_vbus();
         //cc1_is_bigger_than_cc2 = fusb_compare_cc1_and_cc2();
@@ -1022,6 +1035,7 @@ int main() {
                 i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL2,   rxdata); puts(NULL);
                 i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL);
                 printf("--\n");
+                run_replug = true;
             }
         }
 
