@@ -901,7 +901,7 @@ int main() {
 
 
     // This example will use I2C0 on the default SDA and SCL pins (GP4, GP5 on a Pico)
-    i2c_init(i2c_default, 100);
+    i2c_init(i2c_default, 500000 /* 400000 */);
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
@@ -1059,10 +1059,10 @@ int main() {
                 ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
                 printf("send_message() ret=%x\n", ret);
 
-                //sleep_ms(1);
+                sleep_us(70);
 
-                //ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
-                //printf("send_message() ret=%x\n", ret);
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                printf("send_message() ret=%x\n", ret);
             }
         }
 
