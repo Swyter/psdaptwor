@@ -17,6 +17,7 @@
 #include "hardware/i2c.h"
 
 #include "fusb302_defines.h"
+//#include "pd.h"
 
 /*      Main microcontroller chip: https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
                                    https://datasheets.raspberrypi.com/rp2040/hardware-design-with-rp2040.pdf
@@ -736,7 +737,7 @@ int get_num_bytes(uint16_t header)
     rv = PD_HEADER_CNT(header);
 
     /* Multiply by four to go from 32-bit words -> bytes */
-    rv *= 4;
+    rv *= sizeof(uint32_t) /* swy: 4 */;
 
     /* Plus 2 for header */
     rv += 2;
@@ -791,7 +792,7 @@ int get_message(uint32_t *payload, uint32_t *head)
     *head |= ((buf[2] << 8) & 0xFF00);
 
     /* figure out packet length, subtract header bytes */
-    len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u; \n", len);
+    len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u;  \n", len);
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -931,7 +932,51 @@ int main() {
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
         if (ret > 0)
         {
-            printf("[typec] get_message: ret=%i, header=%x, buf=", ret, usb_pd_message_header);
+
+const char *str_pdmsgtype[][30] = {
+    [0] = {
+        [0x01] = "GOODCRC                 ",
+        [0x02] = "GOTOMIN                 ",
+        [0x03] = "ACCEPT                  ",
+        [0x04] = "REJECT                  ",
+        [0x05] = "PING                    ",
+        [0x06] = "PS_RDY                  ",
+        [0x07] = "GET_SOURCE_CAP          ",
+        [0x08] = "GET_SINK_CAP            ",
+        [0x09] = "DR_SWAP                 ",
+        [0x0A] = "PR_SWAP                 ",
+        [0x0B] = "VCONN_SWAP              ",
+        [0x0C] = "WAIT                    ",
+        [0x0D] = "SOFT_RESET              ",
+        [0x10] = "NOT_SUPPORTED           ",
+        [0x11] = "GET_SOURCE_CAP_EXTENDED ",
+        [0x12] = "GET_STATUS              ",
+        [0x13] = "FR_SWAP                 ",
+        [0x14] = "GET_PPS_STATUS          ",
+        [0x15] = "GET_COUNTRY_CODES       ",
+        [0x16] = "GET_SINK_CAP_EXTENDED   ",
+        [0x17] = "GET_SOURCE_INFO         ",
+        [0x18] = "GET_REVISION            ",
+    },
+    [1] = {
+        /* Data Message */
+        [0x01] = "SOURCE_CAPABILITIES", 
+        [0x02] = "REQUEST            ", 
+        [0x03] = "BIST               ", 
+        [0x04] = "SINK_CAPABILITIES  ", 
+        [0x05] = "BATTERY_STATUS     ", 
+        [0x06] = "ALERT              ", 
+        [0x07] = "GET_COUNTRY_INFO   ", 
+        [0x08] = "ENTER_USB          ", 
+        [0x09] = "EPR_REQUEST        ", 
+        [0x0A] = "EPR_MODE           ", 
+        [0x0B] = "SOURCE_INFO        ", 
+        [0x0C] = "REVISION           ", 
+        [0x0F] = "VENDOR_DEFINED     ", 
+    }
+};
+
+            printf("[typec] get_message: ret=%i, header=%x, obj=%u, name=%s buf=", ret, usb_pd_message_header, PD_HEADER_CNT(usb_pd_message_header), str_pdmsgtype[PD_HEADER_CNT(usb_pd_message_header) > 0][PD_HEADER_TYPE(usb_pd_message_header)]);
 
             unsigned char *buf = (unsigned char *) &usb_pd_message_buffer[0];
             for (int i = 0, max = get_num_bytes(usb_pd_message_header) - 2; i < max; i++)
