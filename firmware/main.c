@@ -812,7 +812,7 @@ int get_message(uint32_t *payload, uint32_t *head)
 int send_message(uint16_t head, uint32_t *payload)
 {
     uint32_t payload_len = get_num_bytes(head);
-    uint8_t tx_len = 0; uint8_t tx_buf[40];
+    uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; printf("send_message() head=%#4x payload=%p payload_len=%x\n", head, payload, payload_len);
     tx_buf[tx_len++] = FUSB_FIFOS;       /* put register address first for of burst tcpc write; as part of the I2C write; anything after that is written data */
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_SOP1 /* Sync-1 K-code | From the spec; SOP is an ordered set.                            */;
@@ -831,7 +831,7 @@ int send_message(uint16_t head, uint32_t *payload)
     tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_TXOFF; /* swy: make the FUSB32 chip send the packet when it reaches these special tokens; don't ask me why we need to toggle it off first */
-    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
 
     if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
         return PICO_ERROR_GENERIC;
@@ -1031,7 +1031,13 @@ int main() {
                     else                                    printf("  - [%u] FIXME/%#x = %#x %#x\n", i, cur_powerdataobj_type, cur_powerdataobj, usb_pd_message_buffer[i]);
                 }
 
-                send_message(0, NULL);
+#define PD_HEADER_SET_CNT(_val)  ((_val &  0b111) << 12)
+#define PD_HEADER_SET_ID(_val)   ((_val &  0b111) <<  9)
+#define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
+#define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
+
+                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                printf("send_message() ret=%x\n", ret);
             }
         }
 
