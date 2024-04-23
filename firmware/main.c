@@ -788,8 +788,7 @@ int get_message(uint32_t *payload, uint32_t *head)
     }
     
     /* Grab the header */
-    *head = (buf[1] & 0xFF);
-    *head |= ((buf[2] << 8) & 0xFF00);
+    *head = ((buf[2] << 8) & 0xFF00) | (buf[1] & 0xFF);
 
     /* figure out packet length, subtract header bytes */
     len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u;  \n", len);
@@ -808,6 +807,36 @@ int get_message(uint32_t *payload, uint32_t *head)
     memcpy(payload, buf, len+4);
 
     return len;
+}
+
+int send_message(uint16_t head, uint32_t *payload)
+{
+    uint32_t payload_len = get_num_bytes(head);
+    uint8_t tx_len = 0; uint8_t tx_buf[40];
+    tx_buf[tx_len++] = FUSB_FIFOS;       /* put register address first for of burst tcpc write; as part of the I2C write; anything after that is written data */
+
+    tx_buf[tx_len++] = FUSB_FIFO_TX_SOP1 /* Sync-1 K-code | From the spec; SOP is an ordered set.                            */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_SOP1 /* Sync-1 K-code | The SOP ordered set is defined as: three Sync-1 K-codes          */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_SOP1 /* Sync-1 K-code | followed by one Sync-2 K-code (see Table 5.5 “SOP ordered set”). */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_SOP2 /* Sync-2 K-code */;
+
+    /* packsym tells the TXFIFO that the next X bytes are payload, and should not be interpreted as special tokens.
+       The 5 LSBs represent X, the number of bytes. */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_PACKSYM | (payload_len & 0x1F);
+
+    memcpy(&tx_buf[tx_len], &head, sizeof(uint16_t)); tx_len += sizeof(uint16_t); /* swy: write in the header (16-bits) */
+    memcpy(&tx_buf[tx_len],  payload, payload_len);   tx_len += payload_len;      /* swy: write the body (multiples of 32-bit "data objects") */
+
+    tx_buf[tx_len++] = FUSB_FIFO_TX_JAM_CRC /* make it generate and add the correct CRC32 for our payload data */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
+
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXOFF; /* swy: make the FUSB32 chip send the packet when it reaches these special tokens; don't ask me why we need to toggle it off first */
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON;
+
+    if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
+        return PICO_ERROR_GENERIC;
+
+    return PICO_OK;
 }
 
 int main() {
@@ -1001,6 +1030,8 @@ int main() {
                     else if (cur_powerdataobj_type == 0b11) printf("  - [%u] Augmented Power/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
                     else                                    printf("  - [%u] FIXME/%#x = %#x %#x\n", i, cur_powerdataobj_type, cur_powerdataobj, usb_pd_message_buffer[i]);
                 }
+
+                send_message(0, NULL);
             }
         }
 
