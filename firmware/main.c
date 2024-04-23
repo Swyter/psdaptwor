@@ -313,9 +313,11 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 }
 
 uint32_t fusb_interrupt_callback_happened = 0;
-
+uint8_t dat_int_a, dat_int_b, dat_int, dat_stat1;
+bool run_replug = true;
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
+    printf("[i] USB-C controller interrupt request: %x %x\n", 2, event_mask); /* swy: clear interrupt registers by reading them */ 
     fusb_interrupt_callback_happened = event_mask;
     return;
 }
@@ -445,7 +447,7 @@ int set_polarity(int polarity)
         reg |= FUSB_SWITCHES1_TXCC2_EN;
     else
         reg |= FUSB_SWITCHES1_TXCC1_EN;
-#if 0
+#if 1
     // Enable auto GoodCRC sending
     reg |= FUSB_SWITCHES1_AUTO_CRC;
 #endif
@@ -615,6 +617,10 @@ int init()
     /* Turn on all power */
     ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
     
+    /* swy: flush the TXFIFO and RXFIFO */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, &reg); reg |= FUSB_CONTROL1_RX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, reg);
+
     /* swy: disable the measurement switch so that we can read without glitching the RX FIFO; detect_cc_pin_sink() changes it back and restores it automatically */
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
     reg &= ~(FUSB_SWITCHES0_MEAS_CC1 | FUSB_SWITCHES0_MEAS_CC1);
@@ -780,7 +786,7 @@ int get_message(uint32_t *payload, uint32_t *head)
      */
     uint8_t buf[32]; const uint8_t send_reg_buf = FUSB_FIFOS;
     int rv = 0;
-    int len;
+    int len, ret_val = 0;
 
     /* NOTE: Assuming enough memory has been allocated for payload. */
 
@@ -799,9 +805,9 @@ int get_message(uint32_t *payload, uint32_t *head)
      * and determine how many more bytes we need to read.
      */
 
-    int ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true);
-    if (ret != 3) { printf("return get_message PART 2; ");
-        return PICO_ERROR_GENERIC; 
+    int ret = i2c_read_blocking(i2c_default, FUSB302B_ADDR, buf, 3, true); if (buf[0] || buf[1] || buf[2]) printf("return get_message PART 2; %x %x %x\n", buf[0], buf[1], buf[2]);
+    if (ret != 3) { printf("return get_message PART 2; %x %x %x", buf[0], buf[1], buf[2]);
+        return PICO_ERROR_GENERIC;
     }
     
     /* Grab the header */
@@ -809,6 +815,11 @@ int get_message(uint32_t *payload, uint32_t *head)
 
     /* figure out packet length, subtract header bytes */
     len = get_num_bytes(*head) - 2; if (len) printf("; get_num_bytes %u;  \n", len);
+
+    if ((buf[0] & FUSB_FIFO_RX_TOKEN_BITS) == FUSB_FIFO_RX_SOP)
+        ret_val = len;
+    else
+        ret_val = PICO_ERROR_NO_DATA;
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -823,13 +834,13 @@ int get_message(uint32_t *payload, uint32_t *head)
     /* return the data */
     memcpy(payload, buf, len+4);
 
-    return len;
+    return ret_val;
 }
 
 int send_message(uint16_t head, uint32_t *payload)
 {
     /* Flush the TXFIFO */
-    uint8_t reg = 0; i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+    //uint8_t reg = 0; i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
 
     uint32_t total_len_with_header = get_num_bytes(head), payload_len = total_len_with_header - 2;
     uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; printf("send_message() head=%#6x payload=%#06x total_len_with_header=%x payload_len=%x\n", head, payload, total_len_with_header, payload_len);
@@ -901,7 +912,7 @@ int main() {
 
 
     // This example will use I2C0 on the default SDA and SCL pins (GP4, GP5 on a Pico)
-    i2c_init(i2c_default, 500000 /* 400000 */);
+    i2c_init(i2c_default, 10 * 1000 /* 400000 */);
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
@@ -909,7 +920,7 @@ int main() {
     // Make the I2C pins available to picotool
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
-    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
+    gpio_set_irq_enabled_with_callback(PSDAPT_PIN_HMD_TYC_INT, GPIO_IRQ_EDGE_FALL, true, fusb_interrupt_callback);
 
 
     printf("\nI2C Bus Scan test\n");
@@ -971,7 +982,7 @@ int main() {
 
     uint8_t buf[32] = {0x69};
 
-    bool run_replug = true;
+    
 
     while (1) {
         // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
@@ -980,7 +991,7 @@ int main() {
         //printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
 
         ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-        if (ret > 0)
+        if (ret > 0 && (dat_int & FUSB_INTERRUPT_I_CRC_CHK))
         {
             const char *str_pdmsgtype[][30] = {
                 [0] = { /* Control Message (when the number of data objects is zero) */
@@ -1056,8 +1067,8 @@ int main() {
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
-                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
-                printf("send_message() ret=%x\n", ret);
+                //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
+                //printf("send_message() ret=%x\n", ret);
 
                 sleep_us(70);
 
@@ -1069,8 +1080,9 @@ int main() {
 
         if (fusb_interrupt_callback_happened)
         {
-            printf("[i] USB-C controller interrupt request: %x %x\n", 2, fusb_interrupt_callback_happened); /* swy: clear interrupt registers by reading them */ 
-            uint8_t dat_int_a, dat_int_b, dat_int, dat_stat1;
+            //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS interrupt: %#x\n", rxdata);
+            printf("[i] reading interrupt registers\n");
+
             i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTA, &dat_int_a, 1); fusb_debug_register(FUSB_INTERRUPTA, dat_int_a);
             i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPTB, &dat_int_b, 1); fusb_debug_register(FUSB_INTERRUPTB, dat_int_b); 
             i2c_read(i2c_default, FUSB302B_ADDR, FUSB_INTERRUPT,  &dat_int,   1); fusb_debug_register(FUSB_INTERRUPT,  dat_int  );
@@ -1078,16 +1090,9 @@ int main() {
 
             printf("[i] ---\n");
 
-            //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_FIFOS, &rxdata, 1); printf("FUSB_FIFOS interrupt: %#x\n", rxdata);
-
             if (dat_int & FUSB_INTERRUPT_I_VBUSOK)
                 run_replug = true;
 
-
-
-            if (dat_int & FUSB_INTERRUPT_I_CRC_CHK)
-            {
-            }
             fusb_interrupt_callback_happened = 0;
         }
 
@@ -1189,6 +1194,19 @@ int main() {
                 i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3,   &rxdata, 1); fusb_debug_register(FUSB_CONTROL3,   rxdata); puts(NULL);
                 printf("--\n");
                 run_replug = true;
+
+                if (retrieved_byte == 'r')
+                {
+                    /* swy: send a hard reset packet to the other side to restart the PD conversation with anything already plugged-in */
+                    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg, 1); reg |= FUSB_CONTROL3_SEND_HARD_RESET;
+                    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
+                        set_cc(TYPEC_CC_OPEN);
+                        sleep_ms(100);
+                        init();
+                        pd_reset();
+                        set_cc(TYPEC_CC_RD); /* swy: this should not be needed, as it's the default; but mark us as the UFP/sink/peripheral device */
+
+                }
             }
         }
 
