@@ -976,11 +976,17 @@ const char *str_pdmsgtype[][30] = {
     }
 };
 
-            printf("[typec] get_message: ret=%i, header=%x, obj=%u, name=%s buf=", ret, usb_pd_message_header, PD_HEADER_CNT(usb_pd_message_header), str_pdmsgtype[PD_HEADER_CNT(usb_pd_message_header) > 0][PD_HEADER_TYPE(usb_pd_message_header)]);
+            printf("[typec] get_message: ret=%i, header=%x, ndataobj=%u, id=%u, pwrole=%u, specrev=%#x, datarole=%u type=%s/%#x buf=",
+                ret, usb_pd_message_header, PD_HEADER_CNT(usb_pd_message_header), PD_HEADER_ID(usb_pd_message_header),
+                 (usb_pd_message_header >> 8) & 0b1,
+                 (usb_pd_message_header >> 6) & 0b11, /* swy: 0b00 -> 1.0, 0b01 -> 2.0 , 0b10 -> 3.0 */
+                 (usb_pd_message_header >> 5) & 0b1,
+                str_pdmsgtype[PD_HEADER_CNT(usb_pd_message_header) > 0][PD_HEADER_TYPE(usb_pd_message_header)], PD_HEADER_TYPE(usb_pd_message_header)
+            );
 
             unsigned char *buf = (unsigned char *) &usb_pd_message_buffer[0];
-            for (int i = 0, max = get_num_bytes(usb_pd_message_header) - 2; i < max; i++)
-                printf("%02x ", buf[i]);
+            for (int i = 0, max = (get_num_bytes(usb_pd_message_header) - 2) + 4; i < max; i++)
+                printf("%02x %s", buf[i], ((i%4)==3) ? " " : "");
 
             puts(NULL);
         }
