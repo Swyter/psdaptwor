@@ -369,8 +369,8 @@ int fusb_compare_cc1_and_cc2(void)
 
 enum tcpc_cc_pull {
     TYPEC_CC_RA = 0,
-    TYPEC_CC_RP = 1,
-    TYPEC_CC_RD = 2,
+    TYPEC_CC_RP = 1, /* A downstream facing port (DFP), such as a host computer, exposes pull-up terminations, Rp, on its CC pins (CC1 and CC2) */
+    TYPEC_CC_RD = 2, /* An  upstream facing port (UFP), such as a peripheral,  exposes pull-down terminations, Rd, on its CC pins. */
     TYPEC_CC_OPEN = 3,
 };
 
@@ -491,19 +491,19 @@ int set_cc(int pull)
     /* NOTE: FUSB302 toggles a single pull-up between CC1 and CC2 */
     /* NOTE: FUSB302 Does not support Ra. */
     switch (pull) {
-        case TYPEC_CC_RP:
+        case TYPEC_CC_RP: /* A downstream facing port (DFP), such as a host computer, exposes pull-up terminations, Rp, on its CC pins (CC1 and CC2) */
             /* enable the pull-up we know to be necessary */
             i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
 
             reg &= ~(FUSB_SWITCHES0_CC1_PU_EN |
-                 FUSB_SWITCHES0_CC2_PU_EN |
-                 FUSB_SWITCHES0_CC1_PD_EN |
-                 FUSB_SWITCHES0_CC2_PD_EN |
-                 FUSB_SWITCHES0_VCONN_CC1 |
-                 FUSB_SWITCHES0_VCONN_CC2);
+                     FUSB_SWITCHES0_CC2_PU_EN |
+                     FUSB_SWITCHES0_CC1_PD_EN |
+                     FUSB_SWITCHES0_CC2_PD_EN |
+                     FUSB_SWITCHES0_VCONN_CC1 |
+                     FUSB_SWITCHES0_VCONN_CC2);
 
             reg |= FUSB_SWITCHES0_CC1_PU_EN |
-                FUSB_SWITCHES0_CC2_PU_EN;
+                   FUSB_SWITCHES0_CC2_PU_EN;
 
             if (vconn_enabled)
                 reg |= togdone_pullup_cc1 ?
@@ -515,7 +515,7 @@ int set_cc(int pull)
             pulling_up = 1;
             dfp_toggling_on = 0;
             break;
-        case TYPEC_CC_RD:
+        case TYPEC_CC_RD: /* An upstream facing port (UFP), such as a peripheral, exposes pull-down terminations, Rd, on its CC pins. */
             /* Enable UFP Mode */
 
             /* turn off toggle */
@@ -900,6 +900,7 @@ int main() {
 
     init();
     pd_reset();
+    set_cc(TYPEC_CC_RD); /* swy: this should not be needed, as it's the default; but mark us as the UFP/sink/peripheral device */
 
     int cc1_meas, cc2_meas;
     detect_cc_pin_sink(&cc1_meas, &cc2_meas);
