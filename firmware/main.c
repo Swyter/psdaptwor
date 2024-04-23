@@ -811,8 +811,8 @@ int get_message(uint32_t *payload, uint32_t *head)
 
 int send_message(uint16_t head, uint32_t *payload)
 {
-    uint32_t payload_len = get_num_bytes(head);
-    uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; printf("send_message() head=%#4x payload=%p payload_len=%x\n", head, payload, payload_len);
+    uint32_t total_len_with_header = get_num_bytes(head), payload_len = total_len_with_header - 2;
+    uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; printf("send_message() head=%#4x payload=%#04x total_len_with_header=%x payload_len=%x\n", head, payload, total_len_with_header, payload_len);
     tx_buf[tx_len++] = FUSB_FIFOS;       /* put register address first for of burst tcpc write; as part of the I2C write; anything after that is written data */
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_SOP1 /* Sync-1 K-code | From the spec; SOP is an ordered set.                            */;
@@ -822,10 +822,10 @@ int send_message(uint16_t head, uint32_t *payload)
 
     /* packsym tells the TXFIFO that the next X bytes are payload, and should not be interpreted as special tokens.
        The 5 LSBs represent X, the number of bytes. */;
-    tx_buf[tx_len++] = FUSB_FIFO_TX_PACKSYM | (payload_len & 0x1F);
+    tx_buf[tx_len++] = FUSB_FIFO_TX_PACKSYM | (total_len_with_header & 0x1F);
 
     memcpy(&tx_buf[tx_len], &head, sizeof(uint16_t)); tx_len += sizeof(uint16_t); /* swy: write in the header (16-bits) */
-    memcpy(&tx_buf[tx_len],  payload, payload_len);   tx_len += payload_len;      /* swy: write the body (multiples of 32-bit "data objects") */
+    memcpy(&tx_buf[tx_len],  payload,   payload_len); tx_len += payload_len;      /* swy: write the body (multiples of 32-bit "data objects") */
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_JAM_CRC /* make it generate and add the correct CRC32 for our payload data */;
     tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
@@ -1036,7 +1036,7 @@ int main() {
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
-                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
                 printf("send_message() ret=%x\n", ret);
             }
         }
@@ -1062,81 +1062,7 @@ int main() {
 
             if (dat_int & FUSB_INTERRUPT_I_CRC_CHK)
             {
-                ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-                if (ret > 0)
-                {
-                    const char *str_pdmsgtype[][30] = {
-                        [0] = { /* Control Message (when the number of data objects is zero) */
-                            [0x01] = "GOODCRC                 ",
-                            [0x02] = "GOTOMIN                 ",
-                            [0x03] = "ACCEPT                  ",
-                            [0x04] = "REJECT                  ",
-                            [0x05] = "PING                    ",
-                            [0x06] = "PS_RDY                  ",
-                            [0x07] = "GET_SOURCE_CAP          ",
-                            [0x08] = "GET_SINK_CAP            ",
-                            [0x09] = "DR_SWAP                 ",
-                            [0x0A] = "PR_SWAP                 ",
-                            [0x0B] = "VCONN_SWAP              ",
-                            [0x0C] = "WAIT                    ",
-                            [0x0D] = "SOFT_RESET              ",
-                            [0x10] = "NOT_SUPPORTED           ",
-                            [0x11] = "GET_SOURCE_CAP_EXTENDED ",
-                            [0x12] = "GET_STATUS              ",
-                            [0x13] = "FR_SWAP                 ",
-                            [0x14] = "GET_PPS_STATUS          ",
-                            [0x15] = "GET_COUNTRY_CODES       ",
-                            [0x16] = "GET_SINK_CAP_EXTENDED   ",
-                            [0x17] = "GET_SOURCE_INFO         ",
-                            [0x18] = "GET_REVISION            ",
-                        },
-                        [1] = { /* Data Message */
-                            [0x01] = "SOURCE_CAPABILITIES", 
-                            [0x02] = "REQUEST            ", 
-                            [0x03] = "BIST               ", 
-                            [0x04] = "SINK_CAPABILITIES  ", 
-                            [0x05] = "BATTERY_STATUS     ", 
-                            [0x06] = "ALERT              ", 
-                            [0x07] = "GET_COUNTRY_INFO   ", 
-                            [0x08] = "ENTER_USB          ", 
-                            [0x09] = "EPR_REQUEST        ", 
-                            [0x0A] = "EPR_MODE           ", 
-                            [0x0B] = "SOURCE_INFO        ", 
-                            [0x0C] = "REVISION           ", 
-                            [0x0F] = "VENDOR_DEFINED     ", 
-                        }
-                    };
-
-                    printf("[typec] get_message: ret=%i, header=%x, ndataobj=%u, id=%u, pwrole=%u, specrev=%#x, datarole=%u type=%s/%#x buf=",
-                        ret, usb_pd_message_header, PD_HEADER_CNT(usb_pd_message_header), PD_HEADER_ID(usb_pd_message_header),
-                        (usb_pd_message_header >> 8) & 0b1,
-                        (usb_pd_message_header >> 6) & 0b11, /* swy: 0b00 -> 1.0, 0b01 -> 2.0, 0b10 -> 3.0 */
-                        (usb_pd_message_header >> 5) & 0b1,
-                        str_pdmsgtype[PD_HEADER_CNT(usb_pd_message_header) > 0][PD_HEADER_TYPE(usb_pd_message_header)], PD_HEADER_TYPE(usb_pd_message_header)
-                    );
-
-                    unsigned char *buf = (unsigned char *) &usb_pd_message_buffer[0];
-                    for (int i = 0, max = (get_num_bytes(usb_pd_message_header) - 2) + 4; i < max; i++)
-                        printf("%02x %s", buf[i], ((i%4)==3) ? " " : "");
-
-                    puts(NULL);
-
-
-                    if (PD_HEADER_CNT(usb_pd_message_header) > 0 && PD_HEADER_TYPE(usb_pd_message_header) == 0x1) /* swy: SOURCE_CAPABILITIES/0x1 */
-                    {
-                        for (int i = 0, max = PD_HEADER_CNT(usb_pd_message_header); i < max; i++)
-                        {
-                            uint32_t cur_powerdataobj = (usb_pd_message_buffer[i]); uint32_t cur_powerdataobj_type =  (cur_powerdataobj >> 30) & 0b1111;
-
-                                if (cur_powerdataobj_type == 0b00) printf("  - [%u]    Fixed Supply/%#x, Dual Role=%u, USB Suspend=%u, Unconstrained=%u, USB Comms=%u, DualRole=%u, UnchunkedExt=%u, EPR=%u, Peak Current=%u, Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 29) & 0b1), ((cur_powerdataobj >> 28) & 0b1), ((cur_powerdataobj >> 27) & 0b1), ((cur_powerdataobj >> 26) & 0b1), ((cur_powerdataobj >> 25) & 0b1), ((cur_powerdataobj >> 24) & 0b1), ((cur_powerdataobj >> 23) & 0b1), ((cur_powerdataobj >> 20) & 0b11),  ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
-                            else if (cur_powerdataobj_type == 0b01) printf("  - [%u] Variable Supply/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
-                            else if (cur_powerdataobj_type == 0b11) printf("  - [%u] Augmented Power/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
-                            else                                    printf("  - [%u] FIXME/%#x = %#x %#x\n", i, cur_powerdataobj_type, cur_powerdataobj, usb_pd_message_buffer[i]);
-                        }
-                    }
-                }
             }
-
             fusb_interrupt_callback_happened = 0;
         }
 
