@@ -596,6 +596,12 @@ int init()
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_DEVICE_ID, &reg, 1); printf("b read 0: %#x\n", reg);
     printf("FUSB_DEVICE_ID: revision ID: %#x, Product ID: %#x, Revision ID: %#x\n", reg >> FUSB_DEVICE_ID_VERSION_ID_SHIFT,  (reg & 0b1100) >> FUSB_DEVICE_ID_PRODUCT_ID_SHIFT, (reg & 0b0011) >> FUSB_DEVICE_ID_REVISION_ID_SHIFT);
 
+    /* Turn on all power */
+    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
+
+    /* Turn on retries and set number of retries */
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL2, 0);
+
     /* Turn on retries and set number of retries */
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg);
     reg |= FUSB_CONTROL3_AUTO_RETRY;
@@ -611,21 +617,19 @@ int init()
     /* Interrupt Enable */
     i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg);
     reg &= ~FUSB_CONTROL0_INT_MASK;
+    ret |= FUSB_CONTROL0_HOST_CUR1 | FUSB_CONTROL0_HOST_CUR0;
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
 
     /* Set VCONN switch defaults */
     set_polarity(0);
     set_vconn(0);
 
-    /* Turn on all power */
-    ret = i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_POWER, FUSB_POWER_PWR0 | FUSB_POWER_PWR1 | FUSB_POWER_PWR2 | FUSB_POWER_PWR3); printf("b write ret: %#x\n", ret);
-    
 
     //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_AUTO_PRE; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
 
     /* swy: flush the TXFIFO and RXFIFO */
     //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
-    //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, &reg); reg |= FUSB_CONTROL1_RX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, reg);
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, &reg); reg |= FUSB_CONTROL1_RX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, reg);
 
     /* swy: disable the measurement switch so that we can read without glitching the RX FIFO; detect_cc_pin_sink() changes it back and restores it automatically */
     //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
@@ -977,8 +981,12 @@ int main() {
     i2c_read(i2c_default, FUSB302B_ADDR, FUSB_MEASURE,   &rxdata, 1); printf("b read FUSB_MEASURE: %#x\n", rxdata);
 
     init();
-    pd_reset();
     set_cc(TYPEC_CC_RD); /* swy: this should not be needed, as it's the default; but mark us as the UFP/sink/peripheral device */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+    /* Flush the RX buffer */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, &reg); reg |= FUSB_CONTROL1_RX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, reg);
+
+    pd_reset();
 
     int cc1_meas, cc2_meas;
     detect_cc_pin_sink(&cc1_meas, &cc2_meas);
@@ -1117,14 +1125,14 @@ int main() {
 
                 //sleep_us(100);
 
-                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10410) });
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10411) });
                 printf("send_message() ret=%x\n", ret);
 
                 absolute_time_t after = get_absolute_time();
 
                 printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
 
-                sleep_us(100);
+                //sleep_us(100);
 
                 //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(7 /*GETSOURCECAP*/), &(uint32_t) { 0 });
                 //printf("send_message() ret=%x\n", ret);
@@ -1236,10 +1244,11 @@ int main() {
                         set_cc(TYPEC_CC_OPEN);
                         sleep_ms(1500);
                         init();
-                        pd_reset();
                         set_cc(TYPEC_CC_RD); /* swy: this should not be needed, as it's the default; but mark us as the UFP/sink/peripheral device */
                         //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, &reg, 1); reg |= FUSB_CONTROL3_SEND_HARD_RESET; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL3, reg);
-
+                        /* Flush the RX buffer */
+                        i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL1, FUSB_CONTROL1_RX_FLUSH);
+                        pd_reset();
                 }
             }
         }
