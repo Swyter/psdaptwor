@@ -891,6 +891,30 @@ int send_message(uint16_t head, uint32_t *payload)
     return PICO_OK;
 }
 
+int send_reset_message(void)
+{
+    /* Flush the TXFIFO */
+    uint8_t reg = 0; //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+
+    uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; //printf("send_message() head=%#6x payload=%#06x total_len_with_header=%x payload_len=%x\n", head, payload, total_len_with_header, payload_len);
+    tx_buf[tx_len++] = FUSB_FIFOS;       /* put register address first for of burst tcpc write; as part of the I2C write; anything after that is written data */
+
+    tx_buf[tx_len++] = FUSB_FIFO_TX_RESET1 /* Sync-1 K-code | From the spec; SOP is an ordered set.                            */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_RESET1 /* Sync-1 K-code | The SOP ordered set is defined as: three Sync-1 K-codes          */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_RESET1 /* Sync-1 K-code | followed by one Sync-2 K-code (see Table 5.5 “SOP ordered set”). */;
+    tx_buf[tx_len++] = FUSB_FIFO_TX_RESET2 /* Sync-2 K-code */;
+
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXOFF; /* swy: make the FUSB32 chip send the packet when it reaches these special tokens; don't ask me why we need to toggle it off first */
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; //printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
+
+    printf("send_message() txbuf: "); for (int i=0; i < tx_len; i++) printf("%x ", tx_buf[i]); puts(NULL);
+
+    if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
+        return PICO_ERROR_GENERIC;
+        
+    return PICO_OK;
+}
+
 int main() {
     stdio_init_all();
     stdio_usb_init();
@@ -1129,7 +1153,8 @@ int main() {
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
-                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
+                send_reset_message();
+                //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
                 //printf("send_message() ret=%x\n", ret);
 
                 //sleep_us(100);
