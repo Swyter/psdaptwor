@@ -114,17 +114,98 @@ typedef union _USBC_PD_REQUEST_DATA_OBJECT {
 } USBC_PD_REQUEST_DATA_OBJECT;
 
 
+enum<UINT16> PD_MSGTYPE_CONTROL /* Control Message */
+{
+    PD_MSGTYPE_GOODCRC                 = 0x01,
+    PD_MSGTYPE_GOTOMIN                 = 0x02,
+    PD_MSGTYPE_ACCEPT                  = 0x03,
+    PD_MSGTYPE_REJECT                  = 0x04,
+    PD_MSGTYPE_PING                    = 0x05,
+    PD_MSGTYPE_PS_RDY                  = 0x06,
+    PD_MSGTYPE_GET_SOURCE_CAP          = 0x07,
+    PD_MSGTYPE_GET_SINK_CAP            = 0x08,
+    PD_MSGTYPE_DR_SWAP                 = 0x09,
+    PD_MSGTYPE_PR_SWAP                 = 0x0A,
+    PD_MSGTYPE_VCONN_SWAP              = 0x0B,
+    PD_MSGTYPE_WAIT                    = 0x0C,
+    PD_MSGTYPE_SOFT_RESET              = 0x0D,
+    PD_MSGTYPE_NOT_SUPPORTED           = 0x10,
+    PD_MSGTYPE_GET_SOURCE_CAP_EXTENDED = 0x11,
+    PD_MSGTYPE_GET_STATUS              = 0x12,
+    PD_MSGTYPE_FR_SWAP                 = 0x13,
+    PD_MSGTYPE_GET_PPS_STATUS          = 0x14,
+    PD_MSGTYPE_GET_COUNTRY_CODES       = 0x15,
+    PD_MSGTYPE_GET_SINK_CAP_EXTENDED   = 0x16,
+    PD_MSGTYPE_GET_SOURCE_INFO         = 0x17,
+    PD_MSGTYPE_GET_REVISION            = 0x18
+};
+
+enum<UINT16> PD_MSGTYPE_DATA /* Data Message */
+{ 
+    PD_MSGTYPE_SOURCE_CAPABILITIES = 0x01,
+    PD_MSGTYPE_REQUEST             = 0x02,
+    PD_MSGTYPE_BIST                = 0x03,
+    PD_MSGTYPE_SINK_CAPABILITIES   = 0x04,
+    PD_MSGTYPE_BATTERY_STATUS      = 0x05,
+    PD_MSGTYPE_ALERT               = 0x06,
+    PD_MSGTYPE_GET_COUNTRY_INFO    = 0x07,
+    PD_MSGTYPE_ENTER_USB           = 0x08,
+    PD_MSGTYPE_EPR_REQUEST         = 0x09,
+    PD_MSGTYPE_EPR_MODE            = 0x0A,
+    PD_MSGTYPE_SOURCE_INFO         = 0x0B,
+    PD_MSGTYPE_REVISION            = 0x0C,
+    PD_MSGTYPE_VENDOR_DEFINED      = 0x0F
+};
+
+enum<UINT16> PD_MSGTYPE_EXT /* Extended Message */
+{
+    PD_MSGTYPE_SOURCE_CAPABILITIES_EXTENDED = 0x01,
+    PD_MSGTYPE_STATUS                       = 0x02,
+    PD_MSGTYPE_GET_BATTERY_CAP              = 0x03,
+    PD_MSGTYPE_GET_BATTERY_STATUS           = 0x04,
+    PD_MSGTYPE_BATTERY_CAPABILITIES         = 0x05,
+    PD_MSGTYPE_GET_MANUFACTURER_INFO        = 0x06,
+    PD_MSGTYPE_MANUFACTURER_INFO            = 0x07,
+    PD_MSGTYPE_SECURITY_REQUEST             = 0x08,
+    PD_MSGTYPE_SECURITY_RESPONSE            = 0x09,
+    PD_MSGTYPE_FIRMWARE_UPDATE_REQUEST      = 0x0A,
+    PD_MSGTYPE_FIRMWARE_UPDATE_RESPONSE     = 0x0B,
+    PD_MSGTYPE_PPS_STATUS                   = 0x0C,
+    PD_MSGTYPE_COUNTRY_INFO                 = 0x0D,
+    PD_MSGTYPE_COUNTRY_CODES                = 0x0E,
+    PD_MSGTYPE_SINK_CAPABILITIES_EXTENDED   = 0x0F,
+    PD_MSGTYPE_EXTENDED_CONTROL             = 0x10,
+    PD_MSGTYPE_EPR_SOURCE_CAPABILITIES      = 0x11,
+    PD_MSGTYPE_VENDOR_DEFINED_EXTENDED      = 0x1E
+};
+
 typedef struct {
-    UINT16 MessageType : 5;
+         if (0) enum PD_MSGTYPE_CONTROL MessageType : 5;
+    else if (1) enum PD_MSGTYPE_DATA    MessageType : 5;
+    else if (0) enum PD_MSGTYPE_EXT     MessageType : 5;
     UINT16 PortDataRole : 1;
     UINT16 SpecRevision : 2;
     UINT16 PortPowerRoleOrCablePlug : 1;
     UINT16 MessageID : 3;
     UINT16 NumberOfDataObjects : 3;
     UINT16 Extended : 1;
-} USBC_PD_HEADER;
+} USBC_PD_HEADER <read=Str("dataobj=%u, id=%u, pwrole=%u, specrev=%u, datarole=%u, type=%s", NumberOfDataObjects, MessageID, PortPowerRoleOrCablePlug, SpecRevision, PortDataRole, EnumToString(MessageType))>;
 
 USBC_PD_HEADER header;
 
-     if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT do_capabilities[header.NumberOfDataObjects];
-else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT    do_request[header.NumberOfDataObjects];
+     if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT   dobj_capabilities[header.NumberOfDataObjects];
+else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT dobj_request     [header.NumberOfDataObjects];
+
+if (!FEof())
+{
+    UINT32 orig_checksum <format=hex>; /* swy: crc32 */
+    
+    local uint64 data_end_offset = FileSize() - sizeof(uint); /* swy: right until the end, minus the last four bytes of checksum */
+    local int64 new_checksum = Checksum(CHECKSUM_CRC32, 0, data_end_offset);
+
+Printf(
+    "\n[i] Old: %06X,\n    New: %6X (%smatch)\n", orig_checksum, new_checksum,
+    (orig_checksum == new_checksum) ? "" : "didn't "
+);
+
+}
