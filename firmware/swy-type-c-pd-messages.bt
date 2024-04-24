@@ -115,7 +115,7 @@ typedef union _USBC_PD_REQUEST_DATA_OBJECT {
 
 
 typedef struct {
-    UINT16 MessageType : 4;
+    UINT16 MessageType : 5;
     UINT16 PortDataRole : 1;
     UINT16 SpecRevision : 2;
     UINT16 PortPowerRoleOrCablePlug : 1;
@@ -126,5 +126,5 @@ typedef struct {
 
 USBC_PD_HEADER header;
 
-     if (header.MessageType == 1) USBC_PD_POWER_DATA_OBJECT do_capabilities[header.NumberOfDataObjects];
-else if (header.MessageType == 2) USBC_PD_REQUEST_DATA_OBJECT    do_request[header.NumberOfDataObjects];
+     if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT do_capabilities[header.NumberOfDataObjects];
+else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT    do_request[header.NumberOfDataObjects];
