@@ -26,6 +26,9 @@
                                    https://github.com/Ralim/usb-pd/
                                    https://www.ti.com/lit/an/slva704/slva704.pdf (good overview of how the I2C protocol works)
                                    https://github.com/ReclaimerLabs/FUSB302/blob/master/FUSB302.cpp (The Google ChromeOS EC implementation; very clean and well-commented)
+                                   https://hackaday.com/2023/02/14/all-about-usb-c-talking-low-level-pd/ (init and receiving PD messages as a UFP/sink)
+                                   https://hackaday.com/2023/02/22/all-about-usb-c-replying-low-level-pd/ (sending [accept] messages)
+                                   https://github.com/CRImier/AltmodeFriend/blob/main/main.py (RP2040 micropython implementation from the Hackaday author)
 
    M-LVDS to TTL transceiver chip: http://www.ti.com/lit/gpn/SN65MLVD200 */
 
@@ -926,7 +929,7 @@ int main() {
 
 
     // This example will use I2C0 on the default SDA and SCL pins (GP4, GP5 on a Pico)
-    i2c_init(i2c_default, 900 * 1000 /* 400000 */);
+    i2c_init(i2c_default, 400000);
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
