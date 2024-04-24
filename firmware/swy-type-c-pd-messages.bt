@@ -182,16 +182,17 @@ enum<UINT16> PD_MSGTYPE_EXT /* Extended Message */
 };
 
 typedef struct {
-         if (0) enum PD_MSGTYPE_CONTROL MessageType : 5;
-    else if (1) enum PD_MSGTYPE_DATA    MessageType : 5;
-    else if (0) enum PD_MSGTYPE_EXT     MessageType : 5;
+         if (ReadUShort() & 0x8000) enum PD_MSGTYPE_EXT     MessageType : 5;
+    else if (ReadUShort() & 0x0E00) enum PD_MSGTYPE_DATA    MessageType : 5;
+    else                            enum PD_MSGTYPE_CONTROL MessageType : 5;
+
     UINT16 PortDataRole : 1;
     UINT16 SpecRevision : 2;
     UINT16 PortPowerRoleOrCablePlug : 1;
     UINT16 MessageID : 3;
     UINT16 NumberOfDataObjects : 3;
     UINT16 Extended : 1;
-} USBC_PD_HEADER <read=Str("dataobj=%u, id=%u, pwrole=%u, specrev=%u, datarole=%u, type=%s", NumberOfDataObjects, MessageID, PortPowerRoleOrCablePlug, SpecRevision, PortDataRole, EnumToString(MessageType))>;
+} USBC_PD_HEADER <optimize=false, read=Str("dataobj=%u, id=%u, pwrole=%u, specrev=%u, datarole=%u, type=%s/%u", NumberOfDataObjects, MessageID, PortPowerRoleOrCablePlug, SpecRevision, PortDataRole, EnumToString(MessageType), MessageType)>;
 
 
 struct 

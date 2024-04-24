@@ -830,10 +830,10 @@ int get_message(uint32_t *payload, uint32_t *head)
     /* figure out packet length, subtract header bytes */
     len = get_num_bytes(*head) - 2; //if (len) printf("; get_num_bytes %u;  \n", len);
 
-    //if ((buf[0] & FUSB_FIFO_RX_TOKEN_BITS) == FUSB_FIFO_RX_SOP)
+    if ((buf[0] & FUSB_FIFO_RX_TOKEN_BITS) == FUSB_FIFO_RX_SOP)
         ret_val = len;
-    //else
-    //    ret_val = PICO_ERROR_NO_DATA;
+    else
+        ret_val = PICO_ERROR_NO_DATA;
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -1097,6 +1097,7 @@ int main() {
     
 
     while (1) {
+        absolute_time_t from = get_absolute_time();
         if (fusb_interrupt_callback_happened)
         {
             printf("[i] reading interrupt registers\n");
@@ -1119,15 +1120,15 @@ int main() {
         //uint16_t result = adc_read();
         //printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
 
-        absolute_time_t from = get_absolute_time();
+        
 
         i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &rxdata, 1); ret = 0;
         
         //if ((rxdata & FUSB_STATUS1_RX_EMPTY) == 0)
             ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
 
-        if (ret < 0)
-            printf("[!] error in get_message() return=%i", ret);
+        //if (ret < 0)
+        //    printf("[!] error in get_message() return=%i", ret);
 
         if((ret > 0))
         {
@@ -1165,6 +1166,8 @@ int main() {
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
+                absolute_time_t from_send = get_absolute_time();
+
                 //send_reset_message();
                 ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(1 /*GOODCRC*/), NULL);
                 //printf("send_message() ret=%x\n", ret);
@@ -1176,7 +1179,8 @@ int main() {
 
                 absolute_time_t after = get_absolute_time();
 
-                printf("time diff: %llu/%llu %lluus\n", before, after, absolute_time_diff_us(before, after));
+                printf("time diff: %llu/%llu %lluus out of 195us\n", from, after, absolute_time_diff_us(from, after));
+                printf("time diff: %llu/%llu %lluus out of 195us\n", from_send, after, absolute_time_diff_us(from_send, after));
 
                 //sleep_us(100);
 
