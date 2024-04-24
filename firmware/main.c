@@ -849,9 +849,9 @@ int send_message(uint16_t head, uint32_t *payload)
     uint8_t reg = 0; //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
 
     /* swy: disable the measurement switch so that we can read without glitching the RX FIFO; detect_cc_pin_sink() changes it back and restores it automatically */
-    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
-    reg &= ~(FUSB_SWITCHES0_MEAS_CC1 | FUSB_SWITCHES0_MEAS_CC2);
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+    //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+    //reg &= ~(FUSB_SWITCHES0_MEAS_CC1 | FUSB_SWITCHES0_MEAS_CC2);
+    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
 
 
     uint32_t total_len_with_header = get_num_bytes(head), payload_len = total_len_with_header - 2;
@@ -1117,12 +1117,17 @@ int main() {
 
                 //sleep_us(100);
 
-                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10410) });
                 printf("send_message() ret=%x\n", ret);
 
                 absolute_time_t after = get_absolute_time();
 
                 printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
+
+                sleep_us(100);
+
+                //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(7 /*GETSOURCECAP*/), &(uint32_t) { 0 });
+                //printf("send_message() ret=%x\n", ret);
             }
         }
 

@@ -84,7 +84,9 @@ typedef union _USBC_PD_REQUEST_DATA_OBJECT {
   struct {
     UINT32 MaximumOperatingCurrentIn10mA : 10;
     UINT32 OperatingCurrentIn10mA : 10;
-    UINT32 Reserved1 : 6;
+    UINT32 Reserved1 : 4;
+    UINT32 NoUsbSuspend : 1;
+    UINT32 UsbCommunicationCapable : 1;
     UINT32 CapabilityMismatch : 1;
     UINT32 GiveBackFlag : 1;
     UINT32 ObjectPosition : 3;
