@@ -72,7 +72,7 @@ typedef union _USBC_PD_POWER_DATA_OBJECT {
     UINT32 MaximumVoltageIn50mV : 10;
     UINT32 VariableSupportNonBattery : 2;
   } VariableSupplyNonBatteryPdoSink;
-} USBC_PD_POWER_DATA_OBJECT;
+} USBC_PD_POWER_DATA_OBJECT <read=Str("type=%u | fixed: volt=%5umV, maxcurr=%4umA extpower=%u", Common.Type, FixedSupplyPdo.VoltageIn50mV * 50, FixedSupplyPdo.MaximumCurrentIn10mA * 10, FixedSupplyPdo.ExternallyPowered)>;
 
 typedef union _USBC_PD_REQUEST_DATA_OBJECT {
   UINT32 U;
@@ -191,10 +191,13 @@ typedef struct {
     UINT16 Extended : 1;
 } USBC_PD_HEADER <read=Str("dataobj=%u, id=%u, pwrole=%u, specrev=%u, datarole=%u, type=%s", NumberOfDataObjects, MessageID, PortPowerRoleOrCablePlug, SpecRevision, PortDataRole, EnumToString(MessageType))>;
 
-USBC_PD_HEADER header;
 
-     if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT   dobj_capabilities[header.NumberOfDataObjects];
-else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT dobj_request     [header.NumberOfDataObjects];
+struct 
+{
+    USBC_PD_HEADER header;
+         if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT   dobj_capabilities[header.NumberOfDataObjects];
+    else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT dobj_request     [header.NumberOfDataObjects];
+} message <open=true>;
 
 if (!FEof())
 {
