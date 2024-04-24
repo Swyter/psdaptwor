@@ -1,0 +1,130 @@
+//------------------------------------------------
+//--- 010 Editor v14.0 Binary Template
+//
+//      File: USB Type-C Power Delivery message format
+//   Authors: Swyter
+//   Version: 2024.04.24
+//   Purpose: Template to visually inspect, understand and validate USB-C PD hex data dumps.
+//   History: Based on https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbctypes/ns-usbctypes-_usbc_pd_request_data_object
+//------------------------------------------------
+
+typedef union _USBC_PD_POWER_DATA_OBJECT {
+  UINT32 U;
+  struct {
+    UINT32 Reserved : 30;
+    UINT32 Type : 2;
+  } Common;
+  struct {
+    UINT32 MaximumCurrentIn10mA : 10;
+    UINT32 VoltageIn50mV : 10;
+    UINT32 PeakCurrent : 2;
+    UINT32 Reserved1 : 3;
+    UINT32 DataRoleSwap : 1;
+    UINT32 UsbCommunicationCapable : 1;
+    UINT32 ExternallyPowered : 1;
+    UINT32 UsbSuspendSupported : 1;
+    UINT32 DualRolePower : 1;
+    UINT32 FixedSupply : 2;
+  } FixedSupplyPdo;
+  struct {
+    UINT32 MaximumAllowablePowerIn250mW : 10;
+    UINT32 MinimumVoltageIn50mV : 10;
+    UINT32 MaximumVoltageIn50mV : 10;
+    UINT32 Battery : 2;
+  } BatterySupplyPdo;
+  struct {
+    UINT32 MaximumCurrentIn10mA : 10;
+    UINT32 MinimumVoltageIn50mV : 10;
+    UINT32 MaximumVoltageIn50mV : 10;
+    UINT32 VariableSupportNonBattery : 2;
+  } VariableSupplyNonBatteryPdo;
+  struct {
+    UINT32 MaximumCurrentIn50mA : 7;
+    UINT32 Reserved1 : 1;
+    UINT32 MinimumVoltageIn100mV : 8;
+    UINT32 Reserved2 : 1;
+    UINT32 MaximumVoltageIn100mV : 8;
+    UINT32 Reserved3 : 2;
+    UINT32 PpsPowerLimited : 1;
+    UINT32 AugmentedPowerDataObjectType : 2;
+    UINT32 AugmentedPowerDataObject : 2;
+  } ProgrammablePowerSupplyApdo;
+  struct {
+    UINT32 OperationalCurrentIn10mA : 10;
+    UINT32 VoltageIn50mV : 10;
+    UINT32 Reserved : 5;
+    UINT32 DataRoleSwap : 1;
+    UINT32 UsbCommunicationCapable : 1;
+    UINT32 ExternallyPowered : 1;
+    UINT32 HigherCapability : 1;
+    UINT32 DualRolePower : 1;
+    UINT32 FixedSupply : 2;
+  } FixedSupplyPdoSink;
+  struct {
+    UINT32 OperationalPowerIn250mW : 10;
+    UINT32 MinimumVoltageIn50mV : 10;
+    UINT32 MaximumVoltageIn50mV : 10;
+    UINT32 Battery : 2;
+  } BatterySupplyPdoSink;
+  struct {
+    UINT32 OperationalCurrentIn10mA : 10;
+    UINT32 MinimumVoltageIn50mV : 10;
+    UINT32 MaximumVoltageIn50mV : 10;
+    UINT32 VariableSupportNonBattery : 2;
+  } VariableSupplyNonBatteryPdoSink;
+} USBC_PD_POWER_DATA_OBJECT;
+
+typedef union _USBC_PD_REQUEST_DATA_OBJECT {
+  UINT32 U;
+  struct {
+    UINT32 Reserved1 : 28;
+    UINT32 ObjectPosition : 3;
+    UINT32 Reserved2 : 1;
+  } Common;
+  struct {
+    UINT32 MaximumOperatingCurrentIn10mA : 10;
+    UINT32 OperatingCurrentIn10mA : 10;
+    UINT32 Reserved1 : 6;
+    UINT32 CapabilityMismatch : 1;
+    UINT32 GiveBackFlag : 1;
+    UINT32 ObjectPosition : 3;
+    UINT32 Reserved2 : 1;
+  } FixedAndVariableRdo;
+  struct {
+    UINT32 MaximumOperatingPowerIn250mW : 10;
+    UINT32 OperatingPowerIn250mW : 10;
+    UINT32 Reserved1 : 6;
+    UINT32 CapabilityMismatch : 1;
+    UINT32 GiveBackFlag : 1;
+    UINT32 ObjectPosition : 3;
+    UINT32 Reserved2 : 1;
+  } BatteryRdo;
+  struct {
+    UINT32 OperatingCurrentIn50mA : 7;
+    UINT32 Reserved1 : 2;
+    UINT32 OutputVoltageIn20mV : 11;
+    UINT32 Reserved2 : 3;
+    UINT32 UnchunkedExtendedMessagesSupported : 1;
+    UINT32 Reserved3 : 2;
+    UINT32 CapabilityMismatch : 1;
+    UINT32 Reserved4 : 1;
+    UINT32 ObjectPosition : 3;
+    UINT32 Reserved5 : 1;
+  } ProgrammableRdo;
+} USBC_PD_REQUEST_DATA_OBJECT;
+
+
+typedef struct {
+    UINT16 MessageType : 4;
+    UINT16 PortDataRole : 1;
+    UINT16 SpecRevision : 2;
+    UINT16 PortPowerRoleOrCablePlug : 1;
+    UINT16 MessageID : 3;
+    UINT16 NumberOfDataObjects : 3;
+    UINT16 Extended : 1;
+} USBC_PD_HEADER;
+
+USBC_PD_HEADER header;
+
+     if (header.MessageType == 1) USBC_PD_POWER_DATA_OBJECT do_capabilities[header.NumberOfDataObjects];
+else if (header.MessageType == 2) USBC_PD_REQUEST_DATA_OBJECT    do_request[header.NumberOfDataObjects];

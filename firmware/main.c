@@ -1110,7 +1110,7 @@ int main() {
 
                 //sleep_us(70);
 
-                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
                 printf("send_message() ret=%x\n", ret);
 
                 absolute_time_t after = get_absolute_time();
