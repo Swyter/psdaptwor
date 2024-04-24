@@ -821,10 +821,10 @@ int get_message(uint32_t *payload, uint32_t *head)
     /* figure out packet length, subtract header bytes */
     len = get_num_bytes(*head) - 2; //if (len) printf("; get_num_bytes %u;  \n", len);
 
-    if ((buf[0] & FUSB_FIFO_RX_TOKEN_BITS) == FUSB_FIFO_RX_SOP)
+    //if ((buf[0] & FUSB_FIFO_RX_TOKEN_BITS) == FUSB_FIFO_RX_SOP)
         ret_val = len;
-    else
-        ret_val = PICO_ERROR_NO_DATA;
+    //else
+    //    ret_val = PICO_ERROR_NO_DATA;
 
     /*
      * PART 3 OF BURST READ: Read everything else.
@@ -1018,11 +1018,19 @@ int main() {
         //uint16_t result = adc_read();
         //printf("[adc] Raw value: 0x%03x, measured voltage: %f V, actual pre-divided voltage: %f V\n", result, result * conversion_factor, result * (24.f / (1 << 12)));
 
-        ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
-        if (ret > 0) // && 
+        absolute_time_t from = get_absolute_time();
+
+        i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &rxdata, 1); ret = 0;
+        
+        if ((rxdata & FUSB_STATUS1_RX_EMPTY) == 0)
+            ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
+
+        if (ret < 0)
+            printf("[!] error in get_message() return=%i", ret);
+
+        if (ret > 0)
         {
-            dat_int &= ~FUSB_INTERRUPT_I_CRC_CHK;
-            const char *str_pdmsgtype[][30] = {
+            static const char *str_pdmsgtype[][30] = {
                 [0] = { /* Control Message (when the number of data objects is zero) */
                     [0x01] = "GOODCRC                 ",
                     [0x02] = "GOTOMIN                 ",
@@ -1082,7 +1090,7 @@ int main() {
             if (PD_HEADER_CNT(usb_pd_message_header) > 0 && PD_HEADER_TYPE(usb_pd_message_header) == 0x1) /* swy: SOURCE_CAPABILITIES/0x1 */
             {
                
-                for (int i = 0, max = PD_HEADER_CNT(usb_pd_message_header); i < max; i++)
+            /*    for (int i = 0, max = PD_HEADER_CNT(usb_pd_message_header); i < max; i++)
                 {
                     uint32_t cur_powerdataobj = (usb_pd_message_buffer[i]); uint32_t cur_powerdataobj_type =  (cur_powerdataobj >> 30) & 0b1111;
 
@@ -1090,7 +1098,7 @@ int main() {
                     else if (cur_powerdataobj_type == 0b01) printf("  - [%u] Variable Supply/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
                     else if (cur_powerdataobj_type == 0b11) printf("  - [%u] Augmented Power/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
                     else                                    printf("  - [%u] FIXME/%#x = %#x %#x\n", i, cur_powerdataobj_type, cur_powerdataobj, usb_pd_message_buffer[i]);
-                }
+                } */
 
 #define PD_HEADER_SET_CNT(_val)  ((_val &  0b111) << 12)
 #define PD_HEADER_SET_ID(_val)   ((_val &  0b111) <<  9)
@@ -1104,6 +1112,10 @@ int main() {
 
                 ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(3 /*ACCEPT*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
                 printf("send_message() ret=%x\n", ret);
+
+                absolute_time_t after = get_absolute_time();
+
+                printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
             }
         }
 
