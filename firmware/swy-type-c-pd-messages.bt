@@ -194,7 +194,7 @@ typedef struct {
 
 struct 
 {
-    USBC_PD_HEADER header;
+    USBC_PD_HEADER header <bgcolor=cRed>;
          if (header.MessageType == 1 && header.NumberOfDataObjects > 0) USBC_PD_POWER_DATA_OBJECT   dobj_capabilities[header.NumberOfDataObjects];
     else if (header.MessageType == 2 && header.NumberOfDataObjects > 0) USBC_PD_REQUEST_DATA_OBJECT dobj_request     [header.NumberOfDataObjects];
 } message <open=true>;
