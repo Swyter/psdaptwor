@@ -853,7 +853,7 @@ int get_message(uint32_t *payload, uint32_t *head)
 
 int send_message(uint16_t head, uint32_t *payload)
 {
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
     /* Flush the TXFIFO */
     uint8_t reg = 0; //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
@@ -884,20 +884,20 @@ int send_message(uint16_t head, uint32_t *payload)
     tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_TXOFF; /* swy: make the FUSB32 chip send the packet when it reaches these special tokens; don't ask me why we need to toggle it off first */
-    //tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; //printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
+    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; //printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
 
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
     if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
         return PICO_ERROR_GENERIC;
 
-    printf("send_message() txbuf: "); for (int i=0; i < tx_len; i++) printf("%x ", tx_buf[i]); puts(NULL);
+    //printf("send_message() txbuf: "); for (int i=0; i < tx_len; i++) printf("%x ", tx_buf[i]); puts(NULL);
 
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
+    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
 
-    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+    //i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
     return PICO_OK;
 }
