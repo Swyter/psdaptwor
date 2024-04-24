@@ -406,6 +406,7 @@ int pulling_up = 0;
 int togdone_pullup_cc1 = 0;
 int togdone_pullup_cc2 = 0;
 
+uint cur_message_id = 0;
 
 int set_polarity(int polarity)
 {
@@ -451,8 +452,8 @@ int set_polarity(int polarity)
         reg |= FUSB_SWITCHES1_TXCC1_EN;
 #if 1
     // Enable auto GoodCRC sending
-    reg |= FUSB_SWITCHES1_AUTO_CRC;
-    reg |= FUSB_SWITCHES1_SPECREV1; reg &= ~FUSB_SWITCHES1_SPECREV0; /* swy: spec 0b10 */
+    //reg |= FUSB_SWITCHES1_AUTO_CRC;
+    //reg |= FUSB_SWITCHES1_SPECREV1; reg &= ~FUSB_SWITCHES1_SPECREV0; /* swy: spec 0b10 */
 #endif
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg);
 
@@ -923,6 +924,13 @@ int main() {
     gpio_set_dir(PSDAPT_PIN_PC_HPD, GPIO_OUT);
     gpio_put    (PSDAPT_PIN_PC_HPD, 0);
 
+    gpio_init         (PSDAPT_PIN_HMD_USB2_P);
+    gpio_set_dir      (PSDAPT_PIN_HMD_USB2_P, GPIO_IN);
+    gpio_disable_pulls(PSDAPT_PIN_HMD_USB2_P);
+    gpio_init         (PSDAPT_PIN_HMD_USB2_N);
+    gpio_set_dir      (PSDAPT_PIN_HMD_USB2_N, GPIO_IN);
+    gpio_disable_pulls(PSDAPT_PIN_HMD_USB2_N);
+
     sleep_ms(3500);    
 
     adc_init();
@@ -1043,7 +1051,7 @@ int main() {
         if (ret < 0)
             printf("[!] error in get_message() return=%i", ret);
 
-        if (ret > 0)
+        if((ret > 0))
         {
             static const char *str_pdmsgtype[][30] = {
                 [0] = { /* Control Message (when the number of data objects is zero) */
@@ -1114,29 +1122,30 @@ int main() {
                     else if (cur_powerdataobj_type == 0b11) printf("  - [%u] Augmented Power/%#x, Maximum Voltage=%umV, Minimum Voltage=%5umV, Maximum Current=%umA\n", i, cur_powerdataobj_type, ((cur_powerdataobj >> 20) & 0b1111111111) * 50, ((cur_powerdataobj >> 10) & 0b1111111111) * 50, ((cur_powerdataobj >> 0) & 0b1111111111) * 10);
                     else                                    printf("  - [%u] FIXME/%#x = %#x %#x\n", i, cur_powerdataobj_type, cur_powerdataobj, usb_pd_message_buffer[i]);
                 } */
+            }
 
 #define PD_HEADER_SET_CNT(_val)  ((_val &  0b111) << 12)
 #define PD_HEADER_SET_ID(_val)   ((_val &  0b111) <<  9)
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
-                //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
+                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
                 //printf("send_message() ret=%x\n", ret);
 
                 //sleep_us(100);
 
-                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10411) });
-                printf("send_message() ret=%x\n", ret);
+                //ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10411) });
+                //printf("send_message() ret=%x\n", ret);
 
                 absolute_time_t after = get_absolute_time();
 
-                printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
+                //printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
 
                 //sleep_us(100);
 
                 //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(7 /*GETSOURCECAP*/), &(uint32_t) { 0 });
                 //printf("send_message() ret=%x\n", ret);
-            }
+            
         }
 
         if (run_replug)
@@ -1275,8 +1284,8 @@ int main() {
         }
 
 
-        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
-        gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
+        //gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS,     0);
+        //gpio_put(PSDAPT_PIN_HMD_ENABLE_VBUS_12V, 0);
 
         //sleep_ms(500);
 
@@ -1284,7 +1293,7 @@ int main() {
 #if 0//ndef PICO_DEFAULT_LED_PIN
 #warning blink example requires a board with a regular LED
 #else
-        gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 1); //(measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
+        //gpio_put(PSDAPT_PIN_LED_CONN_WRONG_ORIENT, 1); //(measured_vbus > 0.f && cc1_is_bigger_than_cc2) ? 1 : 0);
 
 //        gpio_put(PSDAPT_PIN_LED_HMD_IS_READY, 0);
 //        sleep_ms(250);
