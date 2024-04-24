@@ -452,6 +452,7 @@ int set_polarity(int polarity)
 #if 1
     // Enable auto GoodCRC sending
     reg |= FUSB_SWITCHES1_AUTO_CRC;
+    reg |= FUSB_SWITCHES1_SPECREV1; reg &= ~FUSB_SWITCHES1_SPECREV0; /* swy: spec 0b10 */
 #endif
     i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES1, reg);
 
@@ -845,7 +846,13 @@ int get_message(uint32_t *payload, uint32_t *head)
 int send_message(uint16_t head, uint32_t *payload)
 {
     /* Flush the TXFIFO */
-    //uint8_t reg = 0; i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+    uint8_t reg = 0; //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
+
+    /* swy: disable the measurement switch so that we can read without glitching the RX FIFO; detect_cc_pin_sink() changes it back and restores it automatically */
+    i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, &reg);
+    reg &= ~(FUSB_SWITCHES0_MEAS_CC1 | FUSB_SWITCHES0_MEAS_CC2);
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_SWITCHES0, reg);
+
 
     uint32_t total_len_with_header = get_num_bytes(head), payload_len = total_len_with_header - 2;
     uint8_t tx_len = 0; uint8_t tx_buf[40] = {0}; //printf("send_message() head=%#6x payload=%#06x total_len_with_header=%x payload_len=%x\n", head, payload, total_len_with_header, payload_len);
@@ -860,8 +867,8 @@ int send_message(uint16_t head, uint32_t *payload)
        The 5 LSBs represent X, the number of bytes. */;
     tx_buf[tx_len++] = FUSB_FIFO_TX_PACKSYM | (total_len_with_header & 0x1F);
 
-    memcpy(&tx_buf[tx_len], &head, sizeof(uint16_t)); tx_len += sizeof(uint16_t); /* swy: write in the header (16-bits) */
-    memcpy(&tx_buf[tx_len],  payload,   payload_len); tx_len += payload_len;      /* swy: write the body (multiples of 32-bit "data objects") */
+    memcpy(&tx_buf[tx_len], &head,   sizeof(head)); tx_len += sizeof(head); /* swy: write in the header (16-bits) */
+    memcpy(&tx_buf[tx_len],  payload, payload_len); tx_len += payload_len;  /* swy: write the body (multiples of 32-bit "data objects") */
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_JAM_CRC /* make it generate and add the correct CRC32 for our payload data */;
     tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
@@ -874,7 +881,7 @@ int send_message(uint16_t head, uint32_t *payload)
     if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
         return PICO_ERROR_GENERIC;
 
-    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
+    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
 
     return PICO_OK;
 }
@@ -1108,9 +1115,9 @@ int main() {
                 //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
                 //printf("send_message() ret=%x\n", ret);
 
-                //sleep_us(70);
+                //sleep_us(100);
 
-                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(1) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
+                ret = send_message(PD_HEADER_SET_CNT(1) | PD_HEADER_SET_ID(0) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(2 /*REQUEST*/), &(uint32_t) { TU_BSWAP32(0x2CB10400) });
                 printf("send_message() ret=%x\n", ret);
 
                 absolute_time_t after = get_absolute_time();
