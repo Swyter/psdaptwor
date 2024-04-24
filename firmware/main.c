@@ -318,10 +318,13 @@ char *fusb_debug_register(uint8_t reg, uint8_t reg_data)
 uint32_t fusb_interrupt_callback_happened = 0;
 uint8_t dat_int_a, dat_int_b, dat_int, dat_stat1;
 bool run_replug = true;
+
+absolute_time_t before = 0;
+
 void fusb_interrupt_callback(uint gpio, uint32_t event_mask)
 {
+    before = get_absolute_time();printf("\nget_absolute_time %lu\n", before);
     fusb_interrupt_callback_happened = event_mask;
-    return;
 }
 
 
@@ -850,6 +853,8 @@ int get_message(uint32_t *payload, uint32_t *head)
 
 int send_message(uint16_t head, uint32_t *payload)
 {
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+
     /* Flush the TXFIFO */
     uint8_t reg = 0; //i2c_read_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, &reg); reg |= FUSB_CONTROL0_TX_FLUSH; i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, reg);
 
@@ -873,20 +878,26 @@ int send_message(uint16_t head, uint32_t *payload)
     tx_buf[tx_len++] = FUSB_FIFO_TX_PACKSYM | (total_len_with_header & 0x1F);
 
     memcpy(&tx_buf[tx_len], &head,   sizeof(head)); tx_len += sizeof(head); /* swy: write in the header (16-bits) */
-    memcpy(&tx_buf[tx_len],  payload, payload_len); tx_len += payload_len;  /* swy: write the body (multiples of 32-bit "data objects") */
+    memcpy(&tx_buf[tx_len], &payload, payload_len); tx_len += payload_len;  /* swy: write the body (multiples of 32-bit "data objects") */
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_JAM_CRC /* make it generate and add the correct CRC32 for our payload data */;
     tx_buf[tx_len++] = FUSB_FIFO_TX_EOP     /* EOP K-code | Causes an EOP symbol to be sent when this token reaches the end of the TX FIFO */;
 
     tx_buf[tx_len++] = FUSB_FIFO_TX_TXOFF; /* swy: make the FUSB32 chip send the packet when it reaches these special tokens; don't ask me why we need to toggle it off first */
-    tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; //printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
+    //tx_buf[tx_len++] = FUSB_FIFO_TX_TXON; //printf("send_message() txbuf: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x\n", tx_buf[0], tx_buf[1], tx_buf[2], tx_buf[3], tx_buf[4], tx_buf[5], tx_buf[6], tx_buf[7], tx_buf[8], tx_buf[9], tx_buf[10], tx_buf[11], tx_buf[12], tx_buf[13], tx_buf[14], tx_buf[15]);
 
-    printf("send_message() txbuf: "); for (int i=0; i < tx_len; i++) printf("%x ", tx_buf[i]); puts(NULL);
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
     if (i2c_write_blocking(i2c_default, FUSB302B_ADDR, tx_buf, tx_len, false) != tx_len)
         return PICO_ERROR_GENERIC;
 
-    //i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
+    printf("send_message() txbuf: "); for (int i=0; i < tx_len; i++) printf("%x ", tx_buf[i]); puts(NULL);
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
+
+    i2c_write_byte(i2c_default, FUSB302B_ADDR, FUSB_CONTROL0, FUSB_CONTROL0_TX_START);
+
+    i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &dat_stat1, 1); fusb_debug_register(FUSB_STATUS1,  dat_stat1  ); puts(NULL);
 
     return PICO_OK;
 }
@@ -914,6 +925,49 @@ int send_reset_message(void)
         
     return PICO_OK;
 }
+
+
+static const char *str_pdmsgtype[][30] = {
+    [0] = { /* Control Message (when the number of data objects is zero) */
+        [0x01] = "GOODCRC                 ",
+        [0x02] = "GOTOMIN                 ",
+        [0x03] = "ACCEPT                  ",
+        [0x04] = "REJECT                  ",
+        [0x05] = "PING                    ",
+        [0x06] = "PS_RDY                  ",
+        [0x07] = "GET_SOURCE_CAP          ",
+        [0x08] = "GET_SINK_CAP            ",
+        [0x09] = "DR_SWAP                 ",
+        [0x0A] = "PR_SWAP                 ",
+        [0x0B] = "VCONN_SWAP              ",
+        [0x0C] = "WAIT                    ",
+        [0x0D] = "SOFT_RESET              ",
+        [0x10] = "NOT_SUPPORTED           ",
+        [0x11] = "GET_SOURCE_CAP_EXTENDED ",
+        [0x12] = "GET_STATUS              ",
+        [0x13] = "FR_SWAP                 ",
+        [0x14] = "GET_PPS_STATUS          ",
+        [0x15] = "GET_COUNTRY_CODES       ",
+        [0x16] = "GET_SINK_CAP_EXTENDED   ",
+        [0x17] = "GET_SOURCE_INFO         ",
+        [0x18] = "GET_REVISION            ",
+    },
+    [1] = { /* Data Message */
+        [0x01] = "SOURCE_CAPABILITIES", 
+        [0x02] = "REQUEST            ", 
+        [0x03] = "BIST               ", 
+        [0x04] = "SINK_CAPABILITIES  ", 
+        [0x05] = "BATTERY_STATUS     ", 
+        [0x06] = "ALERT              ", 
+        [0x07] = "GET_COUNTRY_INFO   ", 
+        [0x08] = "ENTER_USB          ", 
+        [0x09] = "EPR_REQUEST        ", 
+        [0x0A] = "EPR_MODE           ", 
+        [0x0B] = "SOURCE_INFO        ", 
+        [0x0C] = "REVISION           ", 
+        [0x0F] = "VENDOR_DEFINED     ", 
+    }
+};
 
 int main() {
     stdio_init_all();
@@ -1069,7 +1123,7 @@ int main() {
 
         i2c_read(i2c_default, FUSB302B_ADDR, FUSB_STATUS1,    &rxdata, 1); ret = 0;
         
-        if ((rxdata & FUSB_STATUS1_RX_EMPTY) == 0)
+        //if ((rxdata & FUSB_STATUS1_RX_EMPTY) == 0)
             ret = get_message(usb_pd_message_buffer, &usb_pd_message_header);
 
         if (ret < 0)
@@ -1077,48 +1131,6 @@ int main() {
 
         if((ret > 0))
         {
-            static const char *str_pdmsgtype[][30] = {
-                [0] = { /* Control Message (when the number of data objects is zero) */
-                    [0x01] = "GOODCRC                 ",
-                    [0x02] = "GOTOMIN                 ",
-                    [0x03] = "ACCEPT                  ",
-                    [0x04] = "REJECT                  ",
-                    [0x05] = "PING                    ",
-                    [0x06] = "PS_RDY                  ",
-                    [0x07] = "GET_SOURCE_CAP          ",
-                    [0x08] = "GET_SINK_CAP            ",
-                    [0x09] = "DR_SWAP                 ",
-                    [0x0A] = "PR_SWAP                 ",
-                    [0x0B] = "VCONN_SWAP              ",
-                    [0x0C] = "WAIT                    ",
-                    [0x0D] = "SOFT_RESET              ",
-                    [0x10] = "NOT_SUPPORTED           ",
-                    [0x11] = "GET_SOURCE_CAP_EXTENDED ",
-                    [0x12] = "GET_STATUS              ",
-                    [0x13] = "FR_SWAP                 ",
-                    [0x14] = "GET_PPS_STATUS          ",
-                    [0x15] = "GET_COUNTRY_CODES       ",
-                    [0x16] = "GET_SINK_CAP_EXTENDED   ",
-                    [0x17] = "GET_SOURCE_INFO         ",
-                    [0x18] = "GET_REVISION            ",
-                },
-                [1] = { /* Data Message */
-                    [0x01] = "SOURCE_CAPABILITIES", 
-                    [0x02] = "REQUEST            ", 
-                    [0x03] = "BIST               ", 
-                    [0x04] = "SINK_CAPABILITIES  ", 
-                    [0x05] = "BATTERY_STATUS     ", 
-                    [0x06] = "ALERT              ", 
-                    [0x07] = "GET_COUNTRY_INFO   ", 
-                    [0x08] = "ENTER_USB          ", 
-                    [0x09] = "EPR_REQUEST        ", 
-                    [0x0A] = "EPR_MODE           ", 
-                    [0x0B] = "SOURCE_INFO        ", 
-                    [0x0C] = "REVISION           ", 
-                    [0x0F] = "VENDOR_DEFINED     ", 
-                }
-            };
-
             printf("[typec] get_message: ret=%i, header=%x, ndataobj=%u, id=%u, pwrole=%u, specrev=%#x, datarole=%u type=%s/%#x buf=",
                 ret, usb_pd_message_header, PD_HEADER_CNT(usb_pd_message_header), PD_HEADER_ID(usb_pd_message_header),
                  (usb_pd_message_header >> 8) & 0b1,
@@ -1153,8 +1165,8 @@ int main() {
 #define PD_HEADER_SPEC_REV(_val) ((_val &   0b11) <<  6)
 #define PD_HEADER_SET_TYPE(_val) ((_val & 0b1111) <<  0)
 
-                send_reset_message();
-                //ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(0 /*GOODCRC*/), NULL);
+                //send_reset_message();
+                ret = send_message(PD_HEADER_SET_CNT(0) | PD_HEADER_SET_ID(PD_HEADER_ID(usb_pd_message_header)) | PD_HEADER_SPEC_REV(2) | PD_HEADER_TYPE(1 /*GOODCRC*/), NULL);
                 //printf("send_message() ret=%x\n", ret);
 
                 //sleep_us(100);
@@ -1164,7 +1176,7 @@ int main() {
 
                 absolute_time_t after = get_absolute_time();
 
-                //printf("time diff: %llu/%llu %lluus\n", from, after, absolute_time_diff_us(from, after));
+                printf("time diff: %llu/%llu %lluus\n", before, after, absolute_time_diff_us(before, after));
 
                 //sleep_us(100);
 
